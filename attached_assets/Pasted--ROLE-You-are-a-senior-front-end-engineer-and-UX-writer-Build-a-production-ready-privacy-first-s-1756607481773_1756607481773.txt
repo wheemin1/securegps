@@ -1,0 +1,111 @@
+[ROLE]
+You are a senior front-end engineer and UX writer. Build a production-ready, privacy-first single-page web app called “PrivateShare Lite”. It removes image metadata (especially GPS) entirely in the browser. No servers, no uploads, no telemetry. Ship as a static site.
+
+[OBJECTIVE]
+Implement this flow: Drop/choose images → auto-clean EXIF/IPTC/XMP (GPS, device/camera, creation time, software, embedded preview, etc.) → auto-download cleaned files.
+• Single file: download immediately.
+• Multiple files: download a ZIP automatically.
+Everything must execute locally in the browser.
+
+[SCOPE v1]
+Supported input: JPEG/JPG, PNG, WebP.
+Default removal targets:
+  - GPS: latitude/longitude/altitude/timestamps (and related XMP/IPTC fields)
+  - DateTimeOriginal/Created/Modified
+  - Camera/Device model & serial, Software
+  - XMP/IPTC blocks, embedded previews/thumbnails
+ICC profile: default REMOVE to stay lightweight; expose a hidden “Advanced” panel to optionally KEEP ICC for color-critical users.
+HEIC/AVIF: if the browser can decode locally, allow a one-click local convert → JPEG; if not possible, show a friendly unsupported message. Never upload.
+
+[UX REQUIREMENTS]
+Above-the-fold:
+  - Large dropzone with copy:
+      Heading: “Drop images to clean (No upload)”
+      Subtext: “We remove GPS & metadata instantly — all in your browser.”
+  - Secondary “Choose files” button for keyboard/mobile users.
+On drop:
+  - Immediately start processing; show progress: “Cleaning x / y”.
+On completion:
+  - Auto-download output (single or ZIP).
+  - Show a large success check + “All clean. Safe to share.”
+Keep the UI ultra-minimal. Options live behind a small “Advanced ▸” disclosure:
+  - [ ] Keep ICC profile
+  - [ ] Force output to JPEG (tooltip: may increase size for PNG/WebP)
+  - [ ] JPEG/WebP quality slider (default 0.85)
+Tiny link “What gets removed?” → tooltip/modal listing examples (GPS, device/camera, creation time, XMP/IPTC).
+Accessibility: full keyboard navigation, clear focus states, sufficient contrast, aria-live for progress.
+Internationalization: default EN; include a simple language toggle (EN/KO/ES/JA) via JSON messages; persist selection in localStorage.
+
+[NON-FUNCTIONAL / PRIVACY]
+100% client-side. No network calls for processing. No telemetry or analytics by default.
+Show this privacy copy prominently:
+  “All processing happens in your browser. We never upload your files.”
+Disclaimers:
+  “We remove standard metadata (EXIF/IPTC/XMP/GPS), but cannot guarantee removal of every vendor-specific tag. For highly sensitive files, verify before sharing.”
+  “Image content itself may reveal information (e.g., signs/locations) independent of metadata.”
+
+[TECH CHOICES]
+Framework: React + Vite + TypeScript (SPA).
+Image cleaning: decode → re-encode (Canvas/OffscreenCanvas) to strip metadata; PNG/WebP re-encode to drop text/meta chunks.
+ZIP batching: JSZip (lazy-loaded after first drop).
+Workers: use a Web Worker for heavy processing; process in small batches (e.g., 5–10 files) to keep UI responsive.
+Auto-download: programmatic <a download>.
+Error handling: unsupported/corrupted files show per-file warnings; continue with the rest.
+PWA (optional): Service Worker for offline use (can be added later).
+
+[PERFORMANCE]
+Keep initial bundle small (inline SVG icons, system fonts). Lazy-load heavy deps (e.g., JSZip).
+Handle ~10 images of ~10MB each on a mid-range laptop without UI freezing (use Worker + batching).
+
+[SEO / COPY]
+Title/H1: “Remove GPS & Metadata from Photos — No Upload (Drop → Clean → Download)”
+Description: “Strip EXIF/IPTC/XMP & GPS entirely in your browser. Instant, private, free.”
+Minimal FAQ in page + JSON-LD FAQ schema:
+  Q: Do you upload my files? A: No, all processing is local.
+  Q: What’s removed? A: GPS, device/camera, timestamps, XMP/IPTC, previews.
+  Q: Which formats? A: JPEG/JPG, PNG, WebP (HEIC/AVIF if browser supports local decode).
+
+[AD SLOTS (PLACEHOLDERS)]
+Provide non-intrusive containers (fixed height to avoid CLS):
+  - Top banner (e.g., 280px height)
+  - Bottom banner on the completion screen
+Do NOT include any ad scripts; just mark the containers clearly.
+
+[UI TEXT (EN baseline)]
+Hero heading: “Drop images to clean (No upload)”
+Hero subtext: “We remove GPS & metadata instantly — all in your browser.”
+Primary state messages:
+  - Idle: “Drop images here or choose files”
+  - Progress: “Cleaning {current}/{total}…”
+  - Done single: “Done. Safe to share.”
+  - Done multiple: “All clean. Safe to share.”
+Links:
+  - “Advanced ▸”
+  - “What gets removed?”
+
+[NAMING / OUTPUT]
+Single file: {basename}_clean{ext}
+ZIP file: privateshare_clean_{YYYYMMDD_HHMM}.zip
+
+[TEST CASES]
+1) 10 iPhone/Android JPEGs with GPS → ZIP auto-download; all images open; metadata stripped.
+2) Mixed PNG screenshots → fast processing; {basename}_clean.png names.
+3) Mixed WebP → either preserve WebP or force JPEG via Advanced; verify size/quality behavior.
+4) HEIC/AVIF → show local convert if possible; otherwise friendly unsupported notice.
+5) Keyboard-only flow: focus dropzone → Enter to choose files → process → auto-download.
+
+[OUTPUT / STRUCTURE]
+- index.html
+- src/main.tsx, src/App.tsx, src/styles.css
+- src/i18n/{en,ko,es,ja}.json
+- src/utils/image.ts (decode/re-encode/clean)
+- src/utils/zip.ts (lazy-load)
+- public/manifest.webmanifest (optional), public/icons/*
+- README.md (install/build/deploy/privacy/format support)
+
+[DEFINITION OF DONE]
+- “Drop → auto-clean → auto-download” works for single/multiple images with no server calls.
+- Default removes GPS and common metadata; Advanced panel is hidden by default but functional.
+- Clear privacy copy visible; minimal UI; accessible and keyboard-friendly.
+- EN default with language toggle; basic SEO meta + JSON-LD FAQ.
+- Build outputs a static bundle ready for Netlify.
