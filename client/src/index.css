@@ -132,3 +132,7 @@
 .flag-ko { background: linear-gradient(to bottom, #ffffff 0%, #ffffff 33%, #CD2E3A 33%, #CD2E3A 66%, #0047A0 66%); }
 .flag-es { background: linear-gradient(to bottom, #AA151B 0%, #AA151B 25%, #F1BF00 25%, #F1BF00 75%, #AA151B 75%); }
 .flag-ja { background: radial-gradient(circle, #BC002D 30%, #ffffff 30%); }
+
+.scale-102 {
+  transform: scale(1.02);
+}

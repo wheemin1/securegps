@@ -28,29 +28,33 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Top Ad Banner Placeholder */}
-      <div className="bg-muted border-b border-border" style={{ height: '280px' }}>
-        <div className="container mx-auto px-4 h-full flex items-center justify-center">
-          <div className="text-center text-muted-foreground">
-            <div className="text-sm font-medium mb-2">Advertisement Space</div>
-            <div className="text-xs opacity-70">728x90 or responsive banner (280px height)</div>
-          </div>
-        </div>
-      </div>
 
       <main className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Hero Section */}
         <section className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-            {t('hero.title')}
-            <span className="block text-muted-foreground text-2xl md:text-3xl font-medium mt-2">
-              {t('hero.subtitle')}
-            </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+            Remove GPS & metadata from photos
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            {t('hero.description')}
+          <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
+            Drop images or click to choose. No upload — runs in your browser.
           </p>
+          
+          {/* Feature badges bar */}
+          <div className="flex items-center justify-center space-x-6 mb-8 text-sm text-muted-foreground">
+            <div className="flex items-center space-x-2">
+              <Shield className="w-4 h-4 text-primary" />
+              <span className="font-medium">No upload</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Lock className="w-4 h-4 text-primary" />
+              <span className="font-medium">100% private</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Zap className="w-4 h-4 text-primary" />
+              <span className="font-medium">Instant</span>
+            </div>
+          </div>
           
           <div className="bg-accent/50 border border-border rounded-lg p-4 mb-8 max-w-2xl mx-auto">
             <div className="flex items-center justify-center space-x-2 text-sm text-foreground">
@@ -146,19 +150,17 @@ export default function Home() {
 
         {/* FAQ Section */}
         <FAQSection />
-      </main>
-
-      {/* Bottom Ad Banner (only shown after successful processing) */}
-      <section id="completionAdBanner" className="hidden bg-muted border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center">
-          <div className="bg-card border border-border rounded-lg p-8">
+        
+        {/* Ad Banner after FAQ */}
+        <section className="bg-muted border border-border rounded-lg py-8 mb-8">
+          <div className="container mx-auto px-4 text-center">
             <div className="text-muted-foreground">
               <div className="text-sm font-medium mb-2">Advertisement Space</div>
-              <div className="text-xs opacity-70">Completion banner (shown after successful processing)</div>
+              <div className="text-xs opacity-70">728x90 or responsive banner (post-FAQ placement)</div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <footer className="border-t border-border bg-card mt-16">
         <div className="container mx-auto px-4 py-8">

@@ -38,10 +38,10 @@ export function AdvancedPanel() {
               />
               <div>
                 <div className="text-sm font-medium text-foreground">
-                  {t('advanced.keepICC.label')}
+                  Preserve color profile (ICC)
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {t('advanced.keepICC.description')}
+                  Recommended for photos requiring color precision
                 </div>
               </div>
             </label>
@@ -56,10 +56,10 @@ export function AdvancedPanel() {
               />
               <div>
                 <div className="text-sm font-medium text-foreground">
-                  {t('advanced.forceJPEG.label')}
+                  Export all as JPEG (may increase size for PNG/WebP)
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {t('advanced.forceJPEG.description')}
+                  Converts PNG/WebP to JPEG format
                 </div>
               </div>
             </label>
@@ -67,7 +67,7 @@ export function AdvancedPanel() {
             {/* Quality Slider */}
             <div className="space-y-2">
               <label htmlFor="qualitySlider" className="text-sm font-medium text-foreground">
-                {t('advanced.quality.label')} 
+                JPEG/WebP quality (default 85%): 
                 <span className="font-bold" data-testid="text-quality-value">{options.quality}%</span>
               </label>
               <Slider

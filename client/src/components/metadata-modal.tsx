@@ -29,70 +29,32 @@ export function MetadataModal() {
         </DialogHeader>
         
         <div className="space-y-4 text-sm">
-          <div className="grid grid-cols-1 gap-4">
-            {/* GPS & Location Data */}
-            <div className="space-y-2">
-              <h4 className="font-semibold text-foreground flex items-center space-x-2">
-                <X className="w-4 h-4 text-red-500" />
-                <span>{t('metadata.gps.title')}</span>
-              </h4>
-              <ul className="text-muted-foreground space-y-1 ml-6">
-                {Array.isArray(t('metadata.gps.items')) 
-                  ? t('metadata.gps.items').map((item: string, index: number) => (
-                      <li key={index}>• {item}</li>
-                    ))
-                  : <li>• {t('metadata.gps.items')}</li>
-                }
-              </ul>
-            </div>
+          <div className="space-y-3">
+            <p className="text-muted-foreground mb-4">We remove these types of metadata from your images:</p>
             
-            {/* Device Information */}
-            <div className="space-y-2">
-              <h4 className="font-semibold text-foreground flex items-center space-x-2">
-                <X className="w-4 h-4 text-red-500" />
-                <span>{t('metadata.device.title')}</span>
-              </h4>
-              <ul className="text-muted-foreground space-y-1 ml-6">
-                {Array.isArray(t('metadata.device.items')) 
-                  ? t('metadata.device.items').map((item: string, index: number) => (
-                      <li key={index}>• {item}</li>
-                    ))
-                  : <li>• {t('metadata.device.items')}</li>
-                }
-              </ul>
-            </div>
-            
-            {/* Timestamps */}
-            <div className="space-y-2">
-              <h4 className="font-semibold text-foreground flex items-center space-x-2">
-                <X className="w-4 h-4 text-red-500" />
-                <span>{t('metadata.timestamps.title')}</span>
-              </h4>
-              <ul className="text-muted-foreground space-y-1 ml-6">
-                {Array.isArray(t('metadata.timestamps.items')) 
-                  ? t('metadata.timestamps.items').map((item: string, index: number) => (
-                      <li key={index}>• {item}</li>
-                    ))
-                  : <li>• {t('metadata.timestamps.items')}</li>
-                }
-              </ul>
-            </div>
-            
-            {/* Other Metadata */}
-            <div className="space-y-2">
-              <h4 className="font-semibold text-foreground flex items-center space-x-2">
-                <X className="w-4 h-4 text-red-500" />
-                <span>{t('metadata.other.title')}</span>
-              </h4>
-              <ul className="text-muted-foreground space-y-1 ml-6">
-                {Array.isArray(t('metadata.other.items')) 
-                  ? t('metadata.other.items').map((item: string, index: number) => (
-                      <li key={index}>• {item}</li>
-                    ))
-                  : <li>• {t('metadata.other.items')}</li>
-                }
-              </ul>
-            </div>
+            {/* Key examples list */}
+            <ul className="space-y-2 text-muted-foreground">
+              <li className="flex items-center space-x-2">
+                <X className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span><strong>GPS coordinates</strong> - Location where photo was taken</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <X className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span><strong>Device information</strong> - Camera/phone model and serial numbers</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <X className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span><strong>Timestamps</strong> - When photo was taken, created, or modified</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <X className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span><strong>Software details</strong> - Apps and versions used to edit/process</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <X className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span><strong>Embedded previews</strong> - Hidden thumbnail and preview images</span>
+              </li>
+            </ul>
           </div>
           
           <div className="pt-4 border-t border-border">
