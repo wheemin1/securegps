@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remove GPS & Metadata from Photos — No Upload (Drop → Clean → Download) | PrivateShare Lite</title>
+    <meta name="description" content="Strip EXIF/IPTC/XMP & GPS entirely in your browser. Instant, private, free." />
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="PrivateShare Lite - Remove GPS & Metadata from Photos" />
+    <meta property="og:description" content="Strip EXIF/IPTC/XMP & GPS entirely in your browser. Instant, private, free." />
+    <meta property="og:type" content="website" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- JSON-LD FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Do you upload my files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, all processing is local. Your files never leave your browser."
+                }
+            },
+            {
+                "@type": "Question", 
+                "name": "What metadata gets removed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GPS coordinates, device/camera info, timestamps, XMP/IPTC blocks, and embedded previews."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which formats are supported?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "JPEG/JPG, PNG, WebP. HEIC/AVIF if your browser supports local decoding."
+                }
+            }
+        ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+  </body>
+</html>

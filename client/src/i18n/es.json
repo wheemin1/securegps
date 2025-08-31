@@ -1,0 +1,143 @@
+{
+  "app": {
+    "title": "PrivateShare Lite",
+    "tagline": "Eliminación de metadatos de imagen con privacidad primero"
+  },
+  "hero": {
+    "title": "Arrastra imágenes para limpiar",
+    "subtitle": "(Sin subida)",
+    "description": "Eliminamos GPS y metadatos al instante — todo en tu navegador.",
+    "privacy": "Todo el procesamiento ocurre en tu navegador. Nunca subimos tus archivos."
+  },
+  "dropzone": {
+    "title": "Arrastra imágenes aquí o elige archivos",
+    "supportedFormats": "JPEG, PNG, WebP compatibles • Múltiples archivos OK",
+    "chooseFiles": "Elegir Archivos",
+    "features": {
+      "noUpload": "Sin subida",
+      "private": "100% privado",
+      "instant": "Instantáneo"
+    }
+  },
+  "processing": {
+    "cleaning": "Limpiando {current} / {total}...",
+    "removing": "Eliminando GPS y metadatos de tus imágenes",
+    "currentFile": "Procesando: {filename}"
+  },
+  "success": {
+    "allClean": "Todo limpio. Seguro para compartir.",
+    "singleFile": "Imagen limpia descargada: {filename}",
+    "multipleFiles": "Descargadas {count} imágenes limpias en {filename}",
+    "cleanMore": "Limpiar Más Imágenes"
+  },
+  "advanced": {
+    "title": "Avanzado",
+    "keepICC": {
+      "label": "Mantener perfil de color ICC",
+      "description": "Preserva la precisión del color pero aumenta el tamaño del archivo. Recomendado para fotos que requieren precisión de color."
+    },
+    "forceJPEG": {
+      "label": "Forzar salida a JPEG",
+      "description": "Convierte PNG/WebP a JPEG. Puede aumentar el tamaño del archivo para imágenes con transparencia."
+    },
+    "quality": {
+      "label": "Calidad JPEG/WebP:",
+      "smaller": "Archivo más pequeño",
+      "better": "Mejor calidad"
+    }
+  },
+  "metadata": {
+    "title": "¿Qué se elimina?",
+    "gps": {
+      "title": "Datos GPS y de Ubicación",
+      "items": [
+        "Coordenadas de latitud y longitud",
+        "Información de altitud",
+        "Marcas de tiempo GPS"
+      ]
+    },
+    "device": {
+      "title": "Información del Dispositivo",
+      "items": [
+        "Marca y modelo de cámara",
+        "Números de serie del dispositivo",
+        "Información del objetivo",
+        "Versiones de software"
+      ]
+    },
+    "timestamps": {
+      "title": "Marcas de Tiempo",
+      "items": [
+        "Fecha/hora en que se tomó la foto",
+        "Fecha/hora de creación del archivo",
+        "Fecha/hora de modificación del archivo"
+      ]
+    },
+    "other": {
+      "title": "Otros Metadatos",
+      "items": [
+        "Bloques de datos XMP/IPTC",
+        "Imágenes de vista previa incrustadas",
+        "Imágenes en miniatura",
+        "Información de derechos de autor"
+      ]
+    },
+    "preserved": {
+      "title": "Lo que se conserva",
+      "description": "El contenido real de la imagen, las dimensiones y la calidad permanecen sin cambios. Los perfiles de color se eliminan por defecto pero se pueden conservar a través de las opciones Avanzadas."
+    }
+  },
+  "disclaimers": {
+    "important": {
+      "title": "Descargo de Responsabilidad Importante",
+      "content": "Eliminamos metadatos estándar (EXIF/IPTC/XMP/GPS), pero no podemos garantizar la eliminación de todas las etiquetas específicas del proveedor. Para archivos altamente sensibles, verifica antes de compartir."
+    },
+    "content": {
+      "title": "Aviso de Contenido",
+      "content": "El contenido de la imagen en sí puede revelar información (ej: señales, ubicaciones, caras) independiente de los metadatos."
+    }
+  },
+  "features": {
+    "title": "¿Por qué PrivateShare Lite?",
+    "privacy": {
+      "title": "Procesamiento 100% Privado",
+      "description": "Tus imágenes nunca salen de tu dispositivo. Sin subidas, sin servidores, sin recopilación de datos."
+    },
+    "speed": {
+      "title": "Ultrarrápido",
+      "description": "Procesa múltiples imágenes al instante con tecnología de navegador moderna."
+    },
+    "install": {
+      "title": "No Requiere Instalación",
+      "description": "Funciona en cualquier navegador moderno. Guarda en marcadores y úsalo en cualquier lugar, en cualquier momento."
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "upload": {
+      "question": "¿Suben mis archivos?",
+      "answer": "No, todo el procesamiento es local. Tus archivos nunca salen de tu navegador. Usamos tecnologías web modernas para procesar imágenes completamente en tu dispositivo."
+    },
+    "metadata": {
+      "question": "¿Qué metadatos se eliminan?",
+      "answer": "Eliminamos coordenadas GPS, información de dispositivo/cámara, marcas de tiempo, bloques XMP/IPTC, vistas previas/miniaturas incrustadas e información de software. Esto incluye datos de ubicación que podrían revelar dónde se tomaron las fotos."
+    },
+    "formats": {
+      "question": "¿Qué formatos son compatibles?",
+      "answer": "Los formatos JPEG/JPG, PNG y WebP son totalmente compatibles. HEIC y AVIF se pueden procesar si tu navegador admite decodificación local (navegadores y dispositivos más nuevos)."
+    },
+    "limits": {
+      "question": "¿Hay límite de tamaño de archivo o cantidad?",
+      "answer": "No hay límites artificiales. Sin embargo, el procesamiento está limitado por la memoria y el poder de procesamiento de tu dispositivo. Recomendamos procesar lotes de 10-20 imágenes a la vez para un rendimiento óptimo."
+    }
+  },
+  "footer": {
+    "description": "Todo el procesamiento ocurre localmente en tu navegador. Sin subidas, sin seguimiento."
+  },
+  "errors": {
+    "unsupported": "Formato de archivo no compatible: {filename}",
+    "corrupted": "El archivo parece estar corrupto: {filename}",
+    "processing": "Error procesando archivo: {filename}",
+    "generic": "Ocurrió un error al procesar tus imágenes."
+  }
+}

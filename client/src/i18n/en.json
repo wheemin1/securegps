@@ -1,0 +1,143 @@
+{
+  "app": {
+    "title": "PrivateShare Lite",
+    "tagline": "Privacy-first image metadata removal"
+  },
+  "hero": {
+    "title": "Drop images to clean",
+    "subtitle": "(No upload)",
+    "description": "We remove GPS & metadata instantly — all in your browser.",
+    "privacy": "All processing happens in your browser. We never upload your files."
+  },
+  "dropzone": {
+    "title": "Drop images here or choose files",
+    "supportedFormats": "JPEG, PNG, WebP supported • Multiple files OK",
+    "chooseFiles": "Choose Files",
+    "features": {
+      "noUpload": "No upload",
+      "private": "100% private",
+      "instant": "Instant"
+    }
+  },
+  "processing": {
+    "cleaning": "Cleaning {current} / {total}...",
+    "removing": "Removing GPS and metadata from your images",
+    "currentFile": "Processing: {filename}"
+  },
+  "success": {
+    "allClean": "All clean. Safe to share.",
+    "singleFile": "Downloaded cleaned image: {filename}",
+    "multipleFiles": "Downloaded {count} cleaned images in {filename}",
+    "cleanMore": "Clean More Images"
+  },
+  "advanced": {
+    "title": "Advanced",
+    "keepICC": {
+      "label": "Keep ICC color profile",
+      "description": "Preserves color accuracy but increases file size. Recommended for photos requiring color precision."
+    },
+    "forceJPEG": {
+      "label": "Force output to JPEG",
+      "description": "Converts PNG/WebP to JPEG. May increase file size for images with transparency."
+    },
+    "quality": {
+      "label": "JPEG/WebP Quality:",
+      "smaller": "Smaller file",
+      "better": "Better quality"
+    }
+  },
+  "metadata": {
+    "title": "What gets removed?",
+    "gps": {
+      "title": "GPS & Location Data",
+      "items": [
+        "Latitude and longitude coordinates",
+        "Altitude information",
+        "GPS timestamps"
+      ]
+    },
+    "device": {
+      "title": "Device Information",
+      "items": [
+        "Camera make and model",
+        "Device serial numbers",
+        "Lens information",
+        "Software versions"
+      ]
+    },
+    "timestamps": {
+      "title": "Timestamps",
+      "items": [
+        "Date/time photo was taken",
+        "Date/time file was created",
+        "Date/time file was modified"
+      ]
+    },
+    "other": {
+      "title": "Other Metadata",
+      "items": [
+        "XMP/IPTC data blocks",
+        "Embedded preview images",
+        "Thumbnail images",
+        "Copyright information"
+      ]
+    },
+    "preserved": {
+      "title": "What's preserved",
+      "description": "The actual image content, dimensions, and quality remain unchanged. Color profiles are removed by default but can be preserved via Advanced options."
+    }
+  },
+  "disclaimers": {
+    "important": {
+      "title": "Important Disclaimer",
+      "content": "We remove standard metadata (EXIF/IPTC/XMP/GPS), but cannot guarantee removal of every vendor-specific tag. For highly sensitive files, verify before sharing."
+    },
+    "content": {
+      "title": "Content Notice",
+      "content": "Image content itself may reveal information (e.g., signs, locations, faces) independent of metadata."
+    }
+  },
+  "features": {
+    "title": "Why PrivateShare Lite?",
+    "privacy": {
+      "title": "100% Private Processing",
+      "description": "Your images never leave your device. No uploads, no servers, no data collection."
+    },
+    "speed": {
+      "title": "Lightning Fast",
+      "description": "Process multiple images instantly with modern browser technology."
+    },
+    "install": {
+      "title": "No Installation Required",
+      "description": "Works in any modern browser. Bookmark and use anywhere, anytime."
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "upload": {
+      "question": "Do you upload my files?",
+      "answer": "No, all processing is local. Your files never leave your browser. We use modern web technologies to process images entirely on your device."
+    },
+    "metadata": {
+      "question": "What metadata gets removed?",
+      "answer": "We remove GPS coordinates, device/camera information, timestamps, XMP/IPTC blocks, embedded previews/thumbnails, and software information. This includes location data that could reveal where photos were taken."
+    },
+    "formats": {
+      "question": "Which formats are supported?",
+      "answer": "JPEG/JPG, PNG, and WebP formats are fully supported. HEIC and AVIF can be processed if your browser supports local decoding (newer browsers and devices)."
+    },
+    "limits": {
+      "question": "Is there a file size or quantity limit?",
+      "answer": "There are no artificial limits. However, processing is limited by your device's memory and processing power. We recommend processing batches of 10-20 images at a time for optimal performance."
+    }
+  },
+  "footer": {
+    "description": "All processing happens locally in your browser. No uploads, no tracking."
+  },
+  "errors": {
+    "unsupported": "Unsupported file format: {filename}",
+    "corrupted": "File appears to be corrupted: {filename}",
+    "processing": "Error processing file: {filename}",
+    "generic": "An error occurred while processing your images."
+  }
+}
