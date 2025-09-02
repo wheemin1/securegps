@@ -7,7 +7,9 @@
     "title": "이미지를 드롭하여 정리",
     "subtitle": "(업로드 없음)",
     "description": "브라우저에서 GPS 및 메타데이터를 즉시 제거합니다.",
-    "privacy": "모든 처리는 브라우저에서 이루어집니다. 파일을 업로드하지 않습니다."
+    "privacy": "모든 처리는 브라우저에서 이루어집니다. 파일을 업로드하지 않습니다.",
+    "mainTitle": "사진에서 GPS 및 메타데이터 제거",
+    "mainDescription": "이미지를 드롭하거나 클릭하여 선택하세요. 업로드 없음 — 브라우저에서 실행됩니다."
   },
   "dropzone": {
     "title": "이미지를 여기에 드롭하거나 파일 선택",
@@ -22,13 +24,26 @@
   "processing": {
     "cleaning": "정리 중 {current} / {total}...",
     "removing": "이미지에서 GPS 및 메타데이터 제거 중",
-    "currentFile": "처리 중: {filename}"
+    "currentFile": "처리 중: {filename}",
+    "filesCompleted": "파일 완료",
+    "step": {
+      "reading": "메타데이터 읽기",
+      "cleaning": "이미지 정리",
+      "finalizing": "마무리"
+    }
   },
   "success": {
+    "title": "모두 정리됨. 공유하기 안전합니다.",
     "allClean": "모두 정리됨. 공유하기 안전합니다.",
     "singleFile": "정리된 이미지 다운로드: {filename}",
     "multipleFiles": "{filename}에 {count}개의 정리된 이미지 다운로드",
-    "cleanMore": "더 많은 이미지 정리"
+    "cleanMore": "더 많은 이미지 정리",
+    "processMore": "더 많은 이미지 처리",
+    "stats": {
+      "files": "파일 정리됨",
+      "metadata": "메타데이터 제거",
+      "privacy": "개인정보 보호"
+    }
   },
   "advanced": {
     "title": "고급",
@@ -45,6 +60,23 @@
       "smaller": "더 작은 파일",
       "better": "더 좋은 품질"
     }
+  },
+  "preview": {
+    "title": "메타데이터 발견!",
+    "subtitle": "{fileCount}개 파일에서 {count}개의 메타데이터 항목을 발견했습니다. 아래에서 제거될 내용을 확인하세요.",
+    "confirmButton": "메타데이터 제거 ({count}개 항목)",
+    "cancelButton": "취소",
+    "privacyNotice": "모든 처리는 브라우저에서 진행됩니다 - 파일이 기기를 떠나지 않습니다",
+    "gpsFound": "발견됨",
+    "gpsNone": "탐지되지 않음 (있다면 제거될 예정)",
+    "gpsDescription": "위치 데이터가 제거됩니다",
+    "gpsNoDescription": "EXIF/XMP/IPTC 전반을 정리합니다. 탐지되지 않아도 제거 대상으로 처리됩니다",
+    "exifFound": "발견됨",
+    "exifNone": "없음", 
+    "exifDescription": "EXIF 데이터가 제거됩니다",
+    "exifNoDescription": "카메라 데이터가 감지되지 않음",
+    "filesCount": "{count}개 파일 정리 예정",
+    "noMetadata": "메타데이터가 감지되지 않음"
   },
   "metadata": {
     "title": "무엇이 제거되나요?",

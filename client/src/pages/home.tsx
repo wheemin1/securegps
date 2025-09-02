@@ -33,26 +33,26 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
-            Remove GPS & metadata from photos
+            {t('hero.mainTitle') || 'Remove GPS & metadata from photos'}
           </h1>
           
           <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Drop images or click to choose. No upload — runs in your browser.
+            {t('hero.mainDescription') || 'Drop images or click to choose. No upload — runs in your browser.'}
           </p>
           
           {/* Feature badges bar */}
           <div className="flex items-center justify-center space-x-6 mb-8 text-sm text-muted-foreground">
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4 text-primary" />
-              <span className="font-medium">No upload</span>
+              <span className="font-medium">{t('dropzone.features.noUpload')}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Lock className="w-4 h-4 text-primary" />
-              <span className="font-medium">100% private</span>
+              <span className="font-medium">{t('dropzone.features.private')}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Zap className="w-4 h-4 text-primary" />
-              <span className="font-medium">Instant</span>
+              <span className="font-medium">{t('dropzone.features.instant')}</span>
             </div>
           </div>
           

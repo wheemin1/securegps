@@ -126,13 +126,152 @@
   border-radius: 2px;
   display: inline-block;
   margin-right: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
-.flag-en { background: linear-gradient(to bottom, #012169 0%, #012169 33%, #ffffff 33%, #ffffff 66%, #C8102E 66%); }
-.flag-ko { background: linear-gradient(to bottom, #ffffff 0%, #ffffff 33%, #CD2E3A 33%, #CD2E3A 66%, #0047A0 66%); }
-.flag-es { background: linear-gradient(to bottom, #AA151B 0%, #AA151B 25%, #F1BF00 25%, #F1BF00 75%, #AA151B 75%); }
-.flag-ja { background: radial-gradient(circle, #BC002D 30%, #ffffff 30%); }
+/* 미국 국기 (간단한 버전) */
+.flag-en { 
+  background: linear-gradient(to bottom, 
+    #B22234 0%, #B22234 7%, 
+    #FFFFFF 7%, #FFFFFF 14%, 
+    #B22234 14%, #B22234 21%, 
+    #FFFFFF 21%, #FFFFFF 28%, 
+    #B22234 28%, #B22234 35%, 
+    #FFFFFF 35%, #FFFFFF 42%, 
+    #B22234 42%, #B22234 49%, 
+    #FFFFFF 49%, #FFFFFF 56%, 
+    #B22234 56%, #B22234 63%, 
+    #FFFFFF 63%, #FFFFFF 70%, 
+    #B22234 70%, #B22234 77%, 
+    #FFFFFF 77%, #FFFFFF 84%, 
+    #B22234 84%, #B22234 91%, 
+    #FFFFFF 91%, #FFFFFF 100%);
+  position: relative;
+}
+
+.flag-en::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 50%;
+  background: #3C3B6E;
+}
+
+/* 한국 국기 (태극기 - 간소화된 디자인) */
+.flag-ko { 
+  background: #FFFFFF;
+  position: relative;
+  border: 1px solid #ddd;
+}
+
+.flag-ko::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg, #CD2E3A 0deg, #CD2E3A 180deg, #0047A0 180deg, #0047A0 360deg);
+  border-radius: 50%;
+}
+
+.flag-ko::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg, #0047A0 0deg, #0047A0 180deg, #CD2E3A 180deg, #CD2E3A 360deg);
+  border-radius: 50%;
+}
+
+/* 스페인 국기 */
+.flag-es { 
+  background: linear-gradient(to bottom, #AA151B 0%, #AA151B 25%, #F1BF00 25%, #F1BF00 75%, #AA151B 75%); 
+}
+
+/* 일본 국기 */
+.flag-ja { 
+  background: #FFFFFF;
+  position: relative;
+}
+
+.flag-ja::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #BC002D;
+}
 
 .scale-102 {
   transform: scale(1.02);
+}
+
+/* Enhanced progress animations */
+@keyframes progressPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.progress-pulse {
+  animation: progressPulse 2s ease-in-out infinite;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Processing step indicators */
+.step-indicator {
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  transform: scale(1.2);
+  color: hsl(221 83% 53%);
+}
+
+/* Success card animation */
+.success-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.success-stats {
+  animation: fadeInUp 0.8s ease-out;
 }

@@ -7,7 +7,9 @@
     "title": "Arrastra imágenes para limpiar",
     "subtitle": "(Sin subida)",
     "description": "Eliminamos GPS y metadatos al instante — todo en tu navegador.",
-    "privacy": "Todo el procesamiento ocurre en tu navegador. Nunca subimos tus archivos."
+    "privacy": "Todo el procesamiento ocurre en tu navegador. Nunca subimos tus archivos.",
+    "mainTitle": "Eliminar GPS y metadatos de fotos",
+    "mainDescription": "Arrastra imágenes o haz clic para elegir. Sin subida — se ejecuta en tu navegador."
   },
   "dropzone": {
     "title": "Arrastra imágenes aquí o elige archivos",
@@ -45,6 +47,23 @@
       "smaller": "Archivo más pequeño",
       "better": "Mejor calidad"
     }
+  },
+  "preview": {
+    "title": "¡Metadatos encontrados!",
+    "subtitle": "Encontramos {count} elementos de metadatos en {fileCount} archivos. Revisa qué se eliminará a continuación.",
+    "confirmButton": "Eliminar Metadatos ({count} elementos)",
+    "cancelButton": "Cancelar",
+    "privacyNotice": "Todo el procesamiento ocurre en tu navegador - los archivos nunca salen de tu dispositivo",
+    "gpsFound": "Encontrado",
+    "gpsNone": "Ninguno",
+    "gpsDescription": "Los datos de ubicación serán eliminados",
+    "gpsNoDescription": "No se detectaron datos GPS",
+    "exifFound": "Encontrado",
+    "exifNone": "Ninguno",
+    "exifDescription": "Los datos EXIF serán eliminados",
+    "exifNoDescription": "No se detectaron datos de cámara",
+    "filesCount": "{count} archivos para limpiar",
+    "noMetadata": "No se detectaron metadatos"
   },
   "metadata": {
     "title": "¿Qué se elimina?",

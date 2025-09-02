@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface Language {
   code: string;
@@ -14,48 +14,74 @@ export const languages: Language[] = [
 ];
 
 export function useLanguage() {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0]);
+  // 기본값을 명시적으로 설정
+  const getDefaultLanguage = () => {
+    const saved = localStorage.getItem('language');
+    if (saved) {
+      const found = languages.find(l => l.code === saved);
+      if (found) return found;
+    }
+    return languages[1]; // 한국어 기본값
+  };
+
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(getDefaultLanguage);
   const [translations, setTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Load saved language from localStorage
-    const savedLang = localStorage.getItem('language');
-    if (savedLang) {
-      const lang = languages.find(l => l.code === savedLang);
-      if (lang) {
-        setCurrentLanguage(lang);
-      }
-    }
-  }, []);
+  console.log('🌐 useLanguage hook initialized with:', {
+    code: currentLanguage?.code,
+    name: currentLanguage?.name,
+    flag: currentLanguage?.flag
+  });
 
+  // 언어가 변경될 때마다 번역 파일 로드
   useEffect(() => {
-    // Load translations for current language
     const loadTranslations = async () => {
+      console.log('🌐 Loading translations for:', currentLanguage.code);
       setIsLoading(true);
+      
       try {
         const module = await import(`../i18n/${currentLanguage.code}.json`);
+        console.log('🌐 Translations loaded successfully:', currentLanguage.code);
         setTranslations(module.default);
       } catch (error) {
-        console.error('Failed to load translations:', error);
+        console.error('🌐 Failed to load translations for', currentLanguage.code, error);
         // Fallback to English
-        const fallback = await import('../i18n/en.json');
-        setTranslations(fallback.default);
+        try {
+          const fallback = await import('../i18n/en.json');
+          console.log('🌐 Using English fallback translations');
+          setTranslations(fallback.default);
+        } catch (fallbackError) {
+          console.error('🌐 Failed to load fallback translations:', fallbackError);
+          setTranslations({});
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     loadTranslations();
-  }, [currentLanguage]);
+  }, [currentLanguage.code]); // currentLanguage.code로 의존성 변경
 
-  const changeLanguage = (languageCode: string) => {
-    const lang = languages.find(l => l.code === languageCode);
-    if (lang) {
-      setCurrentLanguage(lang);
-      localStorage.setItem('language', languageCode);
+  const changeLanguage = useCallback((languageCode: string) => {
+    console.log('🌐 changeLanguage called with:', languageCode);
+    
+    const newLanguage = languages.find(l => l.code === languageCode);
+    if (!newLanguage) {
+      console.error('🌐 Language not found:', languageCode);
+      return;
     }
-  };
+
+    console.log('🌐 Found language:', newLanguage);
+    
+    // React 상태 업데이트
+    setCurrentLanguage(newLanguage);
+    
+    // localStorage에 저장
+    localStorage.setItem('language', languageCode);
+    
+    console.log('🌐 Language change completed');
+  }, []); // 의존성 배열을 비워서 무한 리렌더링 방지
 
   const t = (key: string, params?: Record<string, string | number>): any => {
     const keys = key.split('.');

@@ -1,0 +1,793 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove GPS & Metadata from Photos — No Upload (Drop → Clean → Download) | PrivateShare Lite</title>
+    <meta name="description" content="Strip EXIF/IPTC/XMP & GPS entirely in your browser. Instant, private, free.">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="PrivateShare Lite - Remove GPS & Metadata from Photos">
+    <meta property="og:description" content="Strip EXIF/IPTC/XMP & GPS entirely in your browser. Instant, private, free.">
+    <meta property="og:type" content="website">
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                }
+            },
+        }
+    };
+    </script>
+    
+    <style>
+        :root {
+            --background: hsl(0 0% 100%);
+            --foreground: hsl(222 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222 84% 4.9%);
+            --primary: hsl(221 83% 53%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(210 40% 96%);
+            --accent-foreground: hsl(222.2 84% 4.9%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(221 83% 53%);
+            --radius: 0.75rem;
+        }
+        
+        .dropzone-pattern {
+            background-image: url("data:image/svg+xml,%3csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='%23e5e7eb' fill-opacity='0.4' fill-rule='evenodd'%3e%3cpath d='m0 40l40-40h-20l-20 20zm40 0v-20l-20 20z'/%3e%3c/g%3e%3c/svg%3e");
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--primary)) var(--progress, 0%), hsl(var(--muted)) var(--progress, 0%), hsl(var(--muted)) 100%);
+        }
+        
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(45deg); }
+            50% { transform: scale(1.2) rotate(45deg); }
+            100% { transform: scale(1) rotate(45deg); }
+        }
+        
+        .checkmark-animate {
+            animation: checkmark 0.6s ease-in-out;
+        }
+        
+        .language-flag {
+            width: 20px;
+            height: 15px;
+            border-radius: 2px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .flag-en { background: linear-gradient(to bottom, #012169 0%, #012169 33%, #ffffff 33%, #ffffff 66%, #C8102E 66%); }
+        .flag-ko { background: linear-gradient(to bottom, #ffffff 0%, #ffffff 33%, #CD2E3A 33%, #CD2E3A 66%, #0047A0 66%); }
+        .flag-es { background: linear-gradient(to bottom, #AA151B 0%, #AA151B 25%, #F1BF00 25%, #F1BF00 75%, #AA151B 75%); }
+        .flag-ja { background: radial-gradient(circle, #BC002D 30%, #ffffff 30%); }
+    </style>
+    
+    <!-- JSON-LD FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Do you upload my files?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, all processing is local. Your files never leave your browser."
+                }
+            },
+            {
+                "@type": "Question", 
+                "name": "What metadata gets removed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "GPS coordinates, device/camera info, timestamps, XMP/IPTC blocks, and embedded previews."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which formats are supported?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "JPEG/JPG, PNG, WebP. HEIC/AVIF if your browser supports local decoding."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body class="bg-background text-foreground font-sans">
+    <!-- @COMPONENT: AppHeader [language selector, privacy messaging] -->
+    <header class="border-b border-border bg-card">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zM12 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zM12 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3z" clip-rule="evenodd"/>
+                    </svg>
+                    <h1 class="text-xl font-bold text-foreground">PrivateShare Lite</h1>
+                </div>
+                
+                <!-- Language Selector -->
+                <div class="relative">
+                    <button id="languageButton" class="flex items-center space-x-2 px-3 py-2 rounded-lg border border-border hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-event="click:toggleLanguageMenu">
+                        <span class="language-flag flag-en"></span>
+                        <span class="text-sm font-medium" data-bind="currentLanguage.name">English</span>
+                        <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Language Dropdown -->
+                    <div id="languageDropdown" class="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50 hidden" data-implementation="Toggle visibility based on languageButton click">
+                        <div class="py-2">
+                            <button class="w-full flex items-center px-4 py-2 text-sm hover:bg-accent transition-colors" data-event="click:setLanguage" data-lang="en">
+                                <span class="language-flag flag-en"></span>
+                                <span>English</span>
+                            </button>
+                            <button class="w-full flex items-center px-4 py-2 text-sm hover:bg-accent transition-colors" data-event="click:setLanguage" data-lang="ko">
+                                <span class="language-flag flag-ko"></span>
+                                <span>한국어</span>
+                            </button>
+                            <button class="w-full flex items-center px-4 py-2 text-sm hover:bg-accent transition-colors" data-event="click:setLanguage" data-lang="es">
+                                <span class="language-flag flag-es"></span>
+                                <span>Español</span>
+                            </button>
+                            <button class="w-full flex items-center px-4 py-2 text-sm hover:bg-accent transition-colors" data-event="click:setLanguage" data-lang="ja">
+                                <span class="language-flag flag-ja"></span>
+                                <span>日本語</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: AppHeader -->
+    
+    <!-- Top Ad Banner Placeholder -->
+    <div class="bg-muted border-b border-border" style="height: 280px;">
+        <div class="container mx-auto px-4 h-full flex items-center justify-center">
+            <div class="text-center text-muted-foreground">
+                <div class="text-sm font-medium mb-2">Advertisement Space</div>
+                <div class="text-xs opacity-70">728x90 or responsive banner (280px height)</div>
+            </div>
+        </div>
+    </div>
+    
+    <main class="container mx-auto px-4 py-12 max-w-4xl">
+        <!-- @COMPONENT: HeroSection [main dropzone, privacy messaging] -->
+        <section class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+                Drop images to clean
+                <span class="block text-muted-foreground text-2xl md:text-3xl font-medium mt-2">(No upload)</span>
+            </h1>
+            
+            <p class="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                We remove GPS & metadata instantly — all in your browser.
+            </p>
+            
+            <div class="bg-accent/50 border border-border rounded-lg p-4 mb-8 max-w-2xl mx-auto">
+                <div class="flex items-center justify-center space-x-2 text-sm text-foreground">
+                    <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="font-medium">All processing happens in your browser. We never upload your files.</span>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: HeroSection -->
+        
+        <!-- @COMPONENT: DropzoneArea [file drop/selection interface] -->
+        <section class="mb-8" data-implementation="Main file processing interface">
+            <!-- Idle State -->
+            <div id="dropzoneIdle" class="dropzone-container">
+                <div class="border-2 border-dashed border-border rounded-2xl p-12 text-center hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 dropzone-pattern bg-muted/20" 
+                     data-event="drop:handleFileDrop" data-event="dragover:handleDragOver" tabindex="0" role="button" aria-label="Drop images here or press Enter to choose files">
+                    <div class="space-y-6">
+                        <div class="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-2xl font-semibold text-foreground mb-2" data-bind="ui.dropzoneTitle">Drop images here or choose files</h2>
+                            <p class="text-muted-foreground mb-6" data-bind="ui.supportedFormats">JPEG, PNG, WebP supported • Multiple files OK</p>
+                            
+                            <button class="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" 
+                                    data-event="click:openFileDialog" data-implementation="Trigger file input dialog">
+                                Choose Files
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-center space-x-6 text-sm text-muted-foreground">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>No upload</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>100% private</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Instant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Processing State -->
+            <div id="dropzoneProcessing" class="dropzone-container hidden">
+                <div class="border-2 border-primary rounded-2xl p-12 text-center bg-primary/5">
+                    <div class="space-y-6">
+                        <div class="mx-auto w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-2xl font-semibold text-foreground mb-2">
+                                <span data-bind="processing.statusText">Cleaning 3 / 10</span>...
+                            </h2>
+                            <p class="text-muted-foreground mb-6">Removing GPS and metadata from your images</p>
+                            
+                            <!-- Progress Bar -->
+                            <div class="w-full bg-muted rounded-full h-3 mb-4 overflow-hidden">
+                                <div class="progress-bar h-full rounded-full transition-all duration-300" style="--progress: 30%"></div>
+                            </div>
+                            
+                            <div class="text-sm text-muted-foreground" aria-live="polite">
+                                <span data-bind="processing.currentFile">Processing: IMG_1234.jpg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Success State -->
+            <div id="dropzoneSuccess" class="dropzone-container hidden">
+                <div class="border-2 border-green-500 rounded-2xl p-12 text-center bg-green-50">
+                    <div class="space-y-6">
+                        <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-green-600 checkmark-animate" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-2xl font-semibold text-green-800 mb-2" data-bind="success.message">All clean. Safe to share.</h2>
+                            <p class="text-green-700 mb-6" data-bind="success.details">Downloaded 10 cleaned images in privateshare_clean_20241221_1430.zip</p>
+                            
+                            <button class="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 mr-4" 
+                                    data-event="click:resetDropzone" data-implementation="Reset to initial state for new files">
+                                Clean More Images
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hidden File Input -->
+            <input type="file" id="fileInput" multiple accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/avif" class="hidden" data-event="change:handleFileSelect" />
+        </section>
+        <!-- @END_COMPONENT: DropzoneArea -->
+        
+        <!-- @COMPONENT: AdvancedPanel [collapsible options] -->
+        <section class="mb-12">
+            <button id="advancedToggle" class="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded" 
+                    data-event="click:toggleAdvanced" data-implementation="Toggle advanced panel visibility">
+                <span class="text-sm font-medium">Advanced</span>
+                <svg id="advancedChevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+            
+            <div id="advancedPanel" class="hidden mt-4 p-6 bg-card border border-border rounded-lg space-y-4" data-implementation="Collapsible panel for advanced options">
+                <div class="space-y-4">
+                    <!-- Keep ICC Profile Option -->
+                    <label class="flex items-start space-x-3 cursor-pointer">
+                        <input type="checkbox" id="keepICC" class="mt-1 w-4 h-4 text-primary border-border rounded focus:ring-ring focus:ring-2" data-bind="options.keepICC">
+                        <div>
+                            <div class="text-sm font-medium text-foreground">Keep ICC color profile</div>
+                            <div class="text-xs text-muted-foreground">Preserves color accuracy but increases file size. Recommended for photos requiring color precision.</div>
+                        </div>
+                    </label>
+                    
+                    <!-- Force JPEG Option -->
+                    <label class="flex items-start space-x-3 cursor-pointer">
+                        <input type="checkbox" id="forceJPEG" class="mt-1 w-4 h-4 text-primary border-border rounded focus:ring-ring focus:ring-2" data-bind="options.forceJPEG">
+                        <div>
+                            <div class="text-sm font-medium text-foreground">Force output to JPEG</div>
+                            <div class="text-xs text-muted-foreground">Converts PNG/WebP to JPEG. May increase file size for images with transparency.</div>
+                        </div>
+                    </label>
+                    
+                    <!-- Quality Slider -->
+                    <div class="space-y-2">
+                        <label for="qualitySlider" class="text-sm font-medium text-foreground">JPEG/WebP Quality: <span id="qualityValue" data-bind="options.quality">85</span>%</label>
+                        <input type="range" id="qualitySlider" min="50" max="100" value="85" 
+                               class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
+                               data-bind="options.qualitySlider" data-event="input:updateQuality">
+                        <div class="flex justify-between text-xs text-muted-foreground">
+                            <span>Smaller file</span>
+                            <span>Better quality</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: AdvancedPanel -->
+        
+        <!-- @COMPONENT: InfoSection [metadata info and privacy details] -->
+        <section class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="space-y-6">
+                <div>
+                    <button id="metadataInfoButton" class="flex items-center space-x-2 text-primary hover:text-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded" 
+                            data-event="click:showMetadataInfo" data-implementation="Open metadata info modal">
+                        <span class="text-sm font-medium underline">What gets removed?</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4 text-sm">
+                    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div class="flex items-start space-x-2">
+                            <svg class="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <div class="font-medium text-yellow-800 mb-1">Important Disclaimer</div>
+                                <div class="text-yellow-700">We remove standard metadata (EXIF/IPTC/XMP/GPS), but cannot guarantee removal of every vendor-specific tag. For highly sensitive files, verify before sharing.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex items-start space-x-2">
+                            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <div class="font-medium text-blue-800 mb-1">Content Notice</div>
+                                <div class="text-blue-700">Image content itself may reveal information (e.g., signs, locations, faces) independent of metadata.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <h3 class="text-lg font-semibold text-foreground">Why PrivateShare Lite?</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-medium text-foreground">100% Private Processing</div>
+                            <div class="text-sm text-muted-foreground">Your images never leave your device. No uploads, no servers, no data collection.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-medium text-foreground">Lightning Fast</div>
+                            <div class="text-sm text-muted-foreground">Process multiple images instantly with modern browser technology.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-medium text-foreground">No Installation Required</div>
+                            <div class="text-sm text-muted-foreground">Works in any modern browser. Bookmark and use anywhere, anytime.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: InfoSection -->
+        
+        <!-- @COMPONENT: FAQSection [frequently asked questions] -->
+        <section class="mb-12">
+            <h3 class="text-2xl font-bold text-foreground mb-8 text-center">Frequently Asked Questions</h3>
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <details class="group border border-border rounded-lg overflow-hidden">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-accent/50 transition-colors">
+                        <span class="font-medium text-foreground">Do you upload my files?</span>
+                        <svg class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </summary>
+                    <div class="px-6 pb-6 text-muted-foreground">
+                        No, all processing is local. Your files never leave your browser. We use modern web technologies to process images entirely on your device.
+                    </div>
+                </details>
+                
+                <details class="group border border-border rounded-lg overflow-hidden">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-accent/50 transition-colors">
+                        <span class="font-medium text-foreground">What metadata gets removed?</span>
+                        <svg class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </summary>
+                    <div class="px-6 pb-6 text-muted-foreground">
+                        We remove GPS coordinates, device/camera information, timestamps, XMP/IPTC blocks, embedded previews/thumbnails, and software information. This includes location data that could reveal where photos were taken.
+                    </div>
+                </details>
+                
+                <details class="group border border-border rounded-lg overflow-hidden">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-accent/50 transition-colors">
+                        <span class="font-medium text-foreground">Which formats are supported?</span>
+                        <svg class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </summary>
+                    <div class="px-6 pb-6 text-muted-foreground">
+                        JPEG/JPG, PNG, and WebP formats are fully supported. HEIC and AVIF can be processed if your browser supports local decoding (newer browsers and devices).
+                    </div>
+                </details>
+                
+                <details class="group border border-border rounded-lg overflow-hidden">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-accent/50 transition-colors">
+                        <span class="font-medium text-foreground">Is there a file size or quantity limit?</span>
+                        <svg class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </summary>
+                    <div class="px-6 pb-6 text-muted-foreground">
+                        There are no artificial limits. However, processing is limited by your device's memory and processing power. We recommend processing batches of 10-20 images at a time for optimal performance.
+                    </div>
+                </details>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: FAQSection -->
+    </main>
+    
+    <!-- @COMPONENT: CompletionAdBanner [bottom advertisement space] -->
+    <section id="completionAdBanner" class="hidden bg-muted border-t border-border py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="bg-card border border-border rounded-lg p-8">
+                <div class="text-muted-foreground">
+                    <div class="text-sm font-medium mb-2">Advertisement Space</div>
+                    <div class="text-xs opacity-70">Completion banner (shown after successful processing)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: CompletionAdBanner -->
+    
+    <!-- @COMPONENT: MetadataInfoModal [information overlay] -->
+    <div id="metadataModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" data-implementation="Modal showing metadata removal details">
+        <div class="bg-card border border-border rounded-2xl p-8 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-foreground">What metadata gets removed?</h3>
+                <button id="closeMetadataModal" class="text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded" 
+                        data-event="click:closeMetadataModal">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="space-y-4 text-sm">
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="space-y-2">
+                        <h4 class="font-semibold text-foreground flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L5.05 4.05zM4.343 4.343L15.657 15.657a9 9 0 11-11.314-11.314z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>GPS & Location Data</span>
+                        </h4>
+                        <ul class="text-muted-foreground space-y-1 ml-6">
+                            <li>• Latitude and longitude coordinates</li>
+                            <li>• Altitude information</li>
+                            <li>• GPS timestamps</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <h4 class="font-semibold text-foreground flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L5.05 4.05zM4.343 4.343L15.657 15.657a9 9 0 11-11.314-11.314z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Device Information</span>
+                        </h4>
+                        <ul class="text-muted-foreground space-y-1 ml-6">
+                            <li>• Camera make and model</li>
+                            <li>• Device serial numbers</li>
+                            <li>• Lens information</li>
+                            <li>• Software versions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <h4 class="font-semibold text-foreground flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L5.05 4.05zM4.343 4.343L15.657 15.657a9 9 0 11-11.314-11.314z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Timestamps</span>
+                        </h4>
+                        <ul class="text-muted-foreground space-y-1 ml-6">
+                            <li>• Date/time photo was taken</li>
+                            <li>• Date/time file was created</li>
+                            <li>• Date/time file was modified</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <h4 class="font-semibold text-foreground flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L5.05 4.05zM4.343 4.343L15.657 15.657a9 9 0 11-11.314-11.314z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Other Metadata</span>
+                        </h4>
+                        <ul class="text-muted-foreground space-y-1 ml-6">
+                            <li>• XMP/IPTC data blocks</li>
+                            <li>• Embedded preview images</li>
+                            <li>• Thumbnail images</li>
+                            <li>• Copyright information</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="pt-4 border-t border-border">
+                    <div class="flex items-start space-x-2">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <div class="font-medium text-foreground">What's preserved</div>
+                            <div class="text-muted-foreground">The actual image content, dimensions, and quality remain unchanged. Color profiles are removed by default but can be preserved via Advanced options.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: MetadataInfoModal -->
+    
+    <footer class="border-t border-border bg-card mt-16">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center text-sm text-muted-foreground">
+                <p class="mb-2">PrivateShare Lite - Privacy-first image metadata removal</p>
+                <p>All processing happens locally in your browser. No uploads, no tracking.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // TODO: Implement file processing logic, ZIP creation, and download handling
+        // TODO: Implement web worker for image processing
+        // TODO: Implement metadata removal algorithms
+        // TODO: Implement internationalization system
+        
+        (() => {
+            // Basic UI interactions for demonstration
+            const languageButton = document.getElementById('languageButton');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const advancedToggle = document.getElementById('advancedToggle');
+            const advancedPanel = document.getElementById('advancedPanel');
+            const advancedChevron = document.getElementById('advancedChevron');
+            const metadataInfoButton = document.getElementById('metadataInfoButton');
+            const metadataModal = document.getElementById('metadataModal');
+            const closeMetadataModal = document.getElementById('closeMetadataModal');
+            const qualitySlider = document.getElementById('qualitySlider');
+            const qualityValue = document.getElementById('qualityValue');
+            
+            // Language dropdown toggle
+            languageButton?.addEventListener('click', () => {
+                languageDropdown?.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!languageButton?.contains(e.target) && !languageDropdown?.contains(e.target)) {
+                    languageDropdown?.classList.add('hidden');
+                }
+            });
+            
+            // Advanced panel toggle
+            advancedToggle?.addEventListener('click', () => {
+                const isHidden = advancedPanel?.classList.contains('hidden');
+                advancedPanel?.classList.toggle('hidden');
+                advancedChevron?.style.setProperty('transform', isHidden ? 'rotate(90deg)' : 'rotate(0deg)');
+            });
+            
+            // Metadata info modal
+            metadataInfoButton?.addEventListener('click', () => {
+                metadataModal?.classList.remove('hidden');
+            });
+            
+            closeMetadataModal?.addEventListener('click', () => {
+                metadataModal?.classList.add('hidden');
+            });
+            
+            // Close modal on backdrop click
+            metadataModal?.addEventListener('click', (e) => {
+                if (e.target === metadataModal) {
+                    metadataModal.classList.add('hidden');
+                }
+            });
+            
+            // Quality slider
+            qualitySlider?.addEventListener('input', (e) => {
+                qualityValue.textContent = e.target.value;
+            });
+            
+            // Dropzone interactions (placeholder)
+            const dropzoneIdle = document.getElementById('dropzoneIdle');
+            const dropzoneProcessing = document.getElementById('dropzoneProcessing');
+            const dropzoneSuccess = document.getElementById('dropzoneSuccess');
+            const fileInput = document.getElementById('fileInput');
+            
+            // File input trigger
+            dropzoneIdle?.addEventListener('click', () => {
+                fileInput?.click();
+            });
+            
+            // Keyboard support for dropzone
+            dropzoneIdle?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileInput?.click();
+                }
+            });
+            
+            // Demo state transitions (for mockup purposes)
+            let currentState = 'idle';
+            
+            function simulateProcessing() {
+                if (currentState !== 'idle') return;
+                
+                currentState = 'processing';
+                dropzoneIdle?.classList.add('hidden');
+                dropzoneProcessing?.classList.remove('hidden');
+                
+                // Simulate progress
+                let progress = 0;
+                const progressBar = document.querySelector('.progress-bar');
+                const interval = setInterval(() => {
+                    progress += 10;
+                    progressBar?.style.setProperty('--progress', `${progress}%`);
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            currentState = 'success';
+                            dropzoneProcessing?.classList.add('hidden');
+                            dropzoneSuccess?.classList.remove('hidden');
+                            document.getElementById('completionAdBanner')?.classList.remove('hidden');
+                        }, 500);
+                    }
+                }, 300);
+            }
+            
+            function resetToIdle() {
+                currentState = 'idle';
+                dropzoneSuccess?.classList.add('hidden');
+                dropzoneProcessing?.classList.add('hidden');
+                dropzoneIdle?.classList.remove('hidden');
+                document.getElementById('completionAdBanner')?.classList.add('hidden');
+                
+                // Reset progress
+                const progressBar = document.querySelector('.progress-bar');
+                progressBar?.style.setProperty('--progress', '0%');
+            }
+            
+            // File input change handler (demo)
+            fileInput?.addEventListener('change', (e) => {
+                if (e.target.files?.length > 0) {
+                    simulateProcessing();
+                }
+            });
+            
+            // Reset button
+            document.querySelector('[data-event="click:resetDropzone"]')?.addEventListener('click', resetToIdle);
+            
+            // Drag and drop handlers (demo)
+            dropzoneIdle?.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.currentTarget.style.borderColor = 'hsl(var(--primary))';
+                e.currentTarget.style.backgroundColor = 'hsl(var(--primary) / 0.1)';
+            });
+            
+            dropzoneIdle?.addEventListener('dragleave', (e) => {
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.backgroundColor = '';
+            });
+            
+            dropzoneIdle?.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.backgroundColor = '';
+                
+                if (e.dataTransfer?.files?.length > 0) {
+                    simulateProcessing();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

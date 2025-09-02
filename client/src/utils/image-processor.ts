@@ -123,12 +123,19 @@ export function generateZipFilename(): string {
 }
 
 export async function downloadFile(blob: Blob, filename: string): Promise<void> {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  try {
+    console.log(`📥 Starting download: ${filename} (${blob.size} bytes)`);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    console.log(`✅ Download initiated successfully: ${filename}`);
+  } catch (error) {
+    console.error('❌ Download failed:', error);
+    throw error;
+  }
 }

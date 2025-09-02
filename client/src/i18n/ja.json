@@ -7,7 +7,9 @@
     "title": "画像をドロップして清浄化",
     "subtitle": "（アップロードなし）",
     "description": "GPSとメタデータを即座に削除 — すべてブラウザ内で。",
-    "privacy": "すべての処理はブラウザ内で行われます。ファイルをアップロードしません。"
+    "privacy": "すべての処理はブラウザ内で行われます。ファイルをアップロードしません。",
+    "mainTitle": "写真からGPSとメタデータを削除",
+    "mainDescription": "画像をドロップまたはクリックして選択してください。アップロードなし — ブラウザで実行されます。"
   },
   "dropzone": {
     "title": "画像をここにドロップまたはファイル選択",
@@ -45,6 +47,23 @@
       "smaller": "小さいファイル",
       "better": "高品質"
     }
+  },
+  "preview": {
+    "title": "メタデータが発見されました！",
+    "subtitle": "{fileCount}個のファイルから{count}個のメタデータ項目が見つかりました。以下で削除される内容をご確認ください。",
+    "confirmButton": "メタデータを削除 ({count}項目)",
+    "cancelButton": "キャンセル",
+    "privacyNotice": "すべての処理はブラウザ内で行われます - ファイルがデバイスから離れることはありません",
+    "gpsFound": "発見",
+    "gpsNone": "なし",
+    "gpsDescription": "位置データが削除されます",
+    "gpsNoDescription": "GPSデータは検出されませんでした",
+    "exifFound": "発見",
+    "exifNone": "なし",
+    "exifDescription": "EXIFデータが削除されます", 
+    "exifNoDescription": "カメラデータは検出されませんでした",
+    "filesCount": "{count}個のファイルを清浄化予定",
+    "noMetadata": "メタデータは検出されませんでした"
   },
   "metadata": {
     "title": "何が削除されますか？",

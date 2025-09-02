@@ -7,7 +7,9 @@
     "title": "Drop images to clean",
     "subtitle": "(No upload)",
     "description": "We remove GPS & metadata instantly — all in your browser.",
-    "privacy": "All processing happens in your browser. We never upload your files."
+    "privacy": "All processing happens in your browser. We never upload your files.",
+    "mainTitle": "Remove GPS & metadata from photos",
+    "mainDescription": "Drop images or click to choose. No upload — runs in your browser."
   },
   "dropzone": {
     "title": "Drop images here or choose files",
@@ -22,13 +24,26 @@
   "processing": {
     "cleaning": "Cleaning {current} / {total}...",
     "removing": "Removing GPS and metadata from your images",
-    "currentFile": "Processing: {filename}"
+    "currentFile": "Processing: {filename}",
+    "filesCompleted": "files completed",
+    "step": {
+      "reading": "Reading metadata",
+      "cleaning": "Cleaning image",
+      "finalizing": "Finalizing"
+    }
   },
   "success": {
+    "title": "All clean. Safe to share.",
     "allClean": "All clean. Safe to share.",
     "singleFile": "Downloaded cleaned image: {filename}",
     "multipleFiles": "Downloaded {count} cleaned images in {filename}",
-    "cleanMore": "Clean More Images"
+    "cleanMore": "Clean More Images",
+    "processMore": "Process more images",
+    "stats": {
+      "files": "Files cleaned",
+      "metadata": "Metadata removed",
+      "privacy": "Privacy safe"
+    }
   },
   "advanced": {
     "title": "Advanced",
@@ -45,6 +60,26 @@
       "smaller": "Smaller file",
       "better": "Better quality"
     }
+  },
+  "preview": {
+    "title": "Metadata Found!",
+    "subtitle": "We found {count} metadata items in your {fileCount} files. Review what will be removed below.",
+    "confirmButton": "Remove Metadata ({count} items)",
+    "cancelButton": "Cancel",
+    "privacyNotice": "All processing happens in your browser - files never leave your device",
+    "gpsTitle": "GPS Location",
+    "gpsFound": "Found",
+    "gpsNone": "Not detected (will be removed if present)",
+    "gpsDescription": "Location data will be removed",
+    "gpsNoDescription": "EXIF/XMP/IPTC metadata will be cleaned. Undetected items are also processed for removal",
+    "exifTitle": "Camera Data",
+    "exifFound": "Found", 
+    "exifNone": "None",
+    "exifDescription": "EXIF data will be removed",
+    "exifNoDescription": "No camera data detected",
+    "filesTitle": "Files",
+    "filesCount": "{count} Files to be cleaned",
+    "noMetadata": "No metadata detected"
   },
   "metadata": {
     "title": "What gets removed?",
