@@ -6,14 +6,14 @@ export function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const { currentLanguage, changeLanguage, languages } = useLanguage();
 
-  console.log('🏳️ LanguageSelector render - Current language:', {
-    code: currentLanguage?.code,
-    name: currentLanguage?.name,
-    flag: currentLanguage?.flag
-  });
+  const handleLanguageClick = (languageCode: string) => {
+    console.log('🎯 Language button clicked:', languageCode);
+    changeLanguage(languageCode);
+    setIsOpen(false);
+  };
 
   return (
-    <div className="relative" key={currentLanguage?.code}>
+    <div className="relative">
       <Button
         variant="outline"
         size="sm"
@@ -37,11 +37,7 @@ export function LanguageSelector() {
                 <button
                   key={language.code}
                   className="w-full flex items-center px-4 py-2 text-sm hover:bg-accent transition-colors"
-                  onClick={() => {
-                    console.log('🎯 Language button clicked:', language.code, language.name);
-                    changeLanguage(language.code);
-                    setIsOpen(false);
-                  }}
+                  onClick={() => handleLanguageClick(language.code)}
                   data-testid={`button-language-${language.code}`}
                 >
                   <span className={`language-flag ${language.flag}`} />

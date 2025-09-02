@@ -13,52 +13,58 @@ export const languages: Language[] = [
   { code: 'ja', name: '日本語', flag: 'flag-ja' },
 ];
 
-export function useLanguage() {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
+// 초기 언어 가져오기 (한 번만 실행)
+const getInitialLanguage = (): Language => {
+  try {
     const saved = localStorage.getItem('language');
     if (saved) {
       const found = languages.find(l => l.code === saved);
-      if (found) return found;
+      if (found) {
+        console.log('🌐 Found saved language:', found.name);
+        return found;
+      }
     }
-    return languages[1]; // 한국어 기본값
-  });
+  } catch (error) {
+    console.warn('🌐 Error reading from localStorage:', error);
+  }
+  console.log('🌐 Using default language: 한국어');
+  return languages[1]; // 한국어 기본값
+};
+
+export function useLanguage() {
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(getInitialLanguage);
   const [translations, setTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log('🌐 useLanguage hook initialized with:', {
-    code: currentLanguage?.code,
-    name: currentLanguage?.name,
-    flag: currentLanguage?.flag
-  });
-
-  // 언어가 변경될 때마다 번역 파일 로드
-  useEffect(() => {
-    const loadTranslations = async () => {
-      console.log('🌐 Loading translations for:', currentLanguage.code);
-      setIsLoading(true);
-      
+  // 언어가 변경될 때마다 번역 파일 로드 (useCallback으로 안정화)
+  const loadTranslations = useCallback(async (languageCode: string) => {
+    console.log('🌐 Loading translations for:', languageCode);
+    setIsLoading(true);
+    
+    try {
+      const module = await import(`../i18n/${languageCode}.json`);
+      console.log('🌐 Translations loaded successfully:', languageCode);
+      setTranslations(module.default);
+    } catch (error) {
+      console.error('🌐 Failed to load translations for', languageCode, error);
+      // Fallback to English
       try {
-        const module = await import(`../i18n/${currentLanguage.code}.json`);
-        console.log('🌐 Translations loaded successfully:', currentLanguage.code);
-        setTranslations(module.default);
-      } catch (error) {
-        console.error('🌐 Failed to load translations for', currentLanguage.code, error);
-        // Fallback to English
-        try {
-          const fallback = await import('../i18n/en.json');
-          console.log('🌐 Using English fallback translations');
-          setTranslations(fallback.default);
-        } catch (fallbackError) {
-          console.error('🌐 Failed to load fallback translations:', fallbackError);
-          setTranslations({});
-        }
-      } finally {
-        setIsLoading(false);
+        const fallback = await import('../i18n/en.json');
+        console.log('🌐 Using English fallback translations');
+        setTranslations(fallback.default);
+      } catch (fallbackError) {
+        console.error('🌐 Failed to load fallback translations:', fallbackError);
+        setTranslations({});
       }
-    };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-    loadTranslations();
-  }, [currentLanguage.code]); // currentLanguage.code로 의존성 변경
+  // 초기 로드 및 언어 변경 시에만 실행
+  useEffect(() => {
+    loadTranslations(currentLanguage.code);
+  }, [currentLanguage.code, loadTranslations]);
 
   const changeLanguage = useCallback((languageCode: string) => {
     console.log('🌐 changeLanguage called with:', languageCode);
@@ -75,12 +81,16 @@ export function useLanguage() {
     setCurrentLanguage(newLanguage);
     
     // localStorage에 저장
-    localStorage.setItem('language', languageCode);
+    try {
+      localStorage.setItem('language', languageCode);
+    } catch (error) {
+      console.warn('🌐 Error saving to localStorage:', error);
+    }
     
     console.log('🌐 Language change completed');
-  }, []); // 의존성 배열을 비워서 무한 리렌더링 방지
+  }, []);
 
-  const t = (key: string, params?: Record<string, string | number>): any => {
+  const t = useCallback((key: string, params?: Record<string, string | number>): any => {
     const keys = key.split('.');
     let value = translations;
     
@@ -107,7 +117,7 @@ export function useLanguage() {
     }
 
     return result;
-  };
+  }, [translations]);
 
   return {
     currentLanguage,
