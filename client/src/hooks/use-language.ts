@@ -14,17 +14,14 @@ export const languages: Language[] = [
 ];
 
 export function useLanguage() {
-  // 기본값을 명시적으로 설정
-  const getDefaultLanguage = () => {
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('language');
     if (saved) {
       const found = languages.find(l => l.code === saved);
       if (found) return found;
     }
     return languages[1]; // 한국어 기본값
-  };
-
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(getDefaultLanguage);
+  });
   const [translations, setTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
 
