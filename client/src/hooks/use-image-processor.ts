@@ -136,16 +136,8 @@ export function useImageProcessor() {
     // Extract metadata from all files
     const previewData = await Promise.all(
       supportedFiles.map(async (file) => {
-        // Temporary inline metadata extraction for testing
-        const metadata = {
-          fileName: file.name,
-          fileSize: file.size,
-          fileType: file.type,
-          hasExif: file.type === 'image/jpeg', // Assume JPEG has EXIF
-          hasGps: file.type === 'image/jpeg' && file.name.includes('KakaoTalk'), // Test case
-          metadataFound: file.type === 'image/jpeg' ? ['EXIF', 'GPS (test)'] : []
-        };
-        console.log('🔍 Temporary metadata for', file.name, metadata);
+        const metadata = await extractMetadata(file);
+        console.log('🔍 Metadata extracted for', file.name, metadata);
         return metadata;
       })
     );
