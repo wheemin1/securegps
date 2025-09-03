@@ -188,10 +188,9 @@ export function Dropzone() {
             
             <Button 
               onClick={reset} 
-              variant="outline" 
-              className="border-green-500 text-green-700 hover:bg-green-100 dark:text-green-300 dark:hover:bg-green-900 fade-in-up"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
             >
-              <Upload className="w-4 h-4 mr-2" />
+              <Upload className="w-5 h-5 mr-2" />
               {t('success.processMore') || 'Process more images'}
             </Button>
           </div>
@@ -238,9 +237,10 @@ export function Dropzone() {
             
             <Button 
               onClick={openFileDialog}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
               data-testid="button-choose-files"
             >
+              <Upload className="w-5 h-5 mr-2" />
               {t('dropzone.chooseFiles')}
             </Button>
           </div>

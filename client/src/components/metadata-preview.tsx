@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, MapPin, Camera, FileImage, HardDrive, Calendar, Shield, Trash2 } from 'lucide-react';
 import { useLanguage } from '@/hooks/use-language';
+import { useEffect } from 'react';
 
 interface MetadataPreviewProps {
   files: File[];
@@ -14,6 +15,18 @@ interface MetadataPreviewProps {
 
 export function MetadataPreview({ files, metadata, onConfirm, onCancel }: MetadataPreviewProps) {
   const { t } = useLanguage();
+
+  // ESC 키로 취소 기능
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onCancel]);
 
   const totalMetadataItems = metadata.reduce((sum, meta) => sum + meta.metadataFound.length, 0);
   const hasGps = metadata.some(meta => meta.hasGps);
@@ -34,10 +47,10 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
             <h2 className="text-2xl font-semibold text-green-800 dark:text-green-200 mb-2">
-              파일이 안전합니다!
+              {t('preview.safeTitle')}
             </h2>
             <p className="text-green-700 dark:text-green-300">
-              {files.length}개 파일에서 메타데이터가 발견되지 않았습니다. 이미 안전한 파일입니다.
+              {t('preview.safeSubtitle', { fileCount: files.length })}
             </p>
           </div>
 
@@ -47,17 +60,17 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center space-x-2 text-sm">
                   <MapPin className="w-4 h-4 text-green-600" />
-                  <span>GPS 위치</span>
+                  <span>{t('preview.gpsTitle')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-semibold">
                   <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-300">
-                    없음
+                    {t('preview.gpsNone')}
                   </Badge>
                 </div>
                 <CardDescription className="text-xs mt-1">
-                  GPS 위치 정보가 없습니다
+                  {t('preview.gpsNoDescription')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -66,17 +79,17 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center space-x-2 text-sm">
                   <Camera className="w-4 h-4 text-green-600" />
-                  <span>카메라 데이터</span>
+                  <span>{t('preview.cameraTitle')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-semibold">
                   <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-300">
-                    없음
+                    {t('preview.cameraNone')}
                   </Badge>
                 </div>
                 <CardDescription className="text-xs mt-1">
-                  EXIF 데이터가 없습니다
+                  {t('preview.cameraNoDescription')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -85,7 +98,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center space-x-2 text-sm">
                   <FileImage className="w-4 h-4 text-green-600" />
-                  <span>파일</span>
+                  <span>{t('preview.filesTitle')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -93,7 +106,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                   {files.length}
                 </div>
                 <CardDescription className="text-xs mt-1">
-                  안전한 파일
+                  {t('preview.safeFiles')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -130,7 +143,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
 
                         <div className="flex items-center space-x-1 text-green-600 dark:text-green-400">
                           <Shield className="w-3 h-3" />
-                          <span className="text-xs">메타데이터가 감지되지 않음</span>
+                          <span className="text-xs">{t('preview.noMetadataDetected')}</span>
                         </div>
                       </div>
                     </div>
@@ -140,33 +153,29 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             })}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center space-x-4 pt-4">
-            <Button
-              onClick={onCancel}
-              variant="outline"
-              className="px-6"
-            >
-              취소
-            </Button>
+          {/* Action Button - Single Primary CTA */}
+          <div className="flex justify-center pt-4">
             <Button
               onClick={() => onConfirm(files)}
-              className="px-6 bg-green-600 hover:bg-green-700 text-white"
+              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold"
             >
-              <Shield className="w-4 h-4 mr-2" />
-              파일 그대로 다운로드
+              <Shield className="w-5 h-5 mr-2" />
+              {t('preview.safeDownload')}
             </Button>
           </div>
 
           {/* Privacy Notice */}
           <div className="text-center">
-            <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3">
+            <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-2">
               <div className="flex items-center justify-center space-x-2 text-green-800 dark:text-green-200">
                 <Shield className="w-4 h-4" />
                 <span className="text-sm font-medium">
-                  이미 안전한 파일입니다 - 추가 처리가 필요하지 않습니다
+                  {t('preview.safeNotice')}
                 </span>
               </div>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Press ESC to go back
             </div>
           </div>
         </div>
@@ -204,7 +213,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                 {hasGpsLocation && gpsMetadata?.location ? (
                   <div>
                     <Badge variant="destructive" className="text-xs">
-                      {t('preview.gpsFound')} - Location Data
+                      {t('preview.gpsFound')} - {t('preview.gpsLocationData')}
                     </Badge>
                     <div className="text-xs text-muted-foreground mt-1">
                       Lat: {gpsMetadata.location.latitude.toFixed(6)}<br/>
@@ -213,7 +222,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                   </div>
                 ) : hasGps ? (
                   <Badge variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
-                    GPS Tags Only (No Coordinates)
+                    {t('preview.gpsTagsOnly')}
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-xs">
@@ -231,23 +240,23 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2 text-sm">
                 <Camera className={`w-4 h-4 ${hasExif ? 'text-yellow-600' : 'text-gray-400'}`} />
-                <span>Camera Data</span>
+                <span>{t('preview.cameraTitle')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-lg font-semibold">
                 {hasExif ? (
                   <Badge variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
-                    Found
+                    {t('preview.cameraFound')}
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-xs">
-                    None
+                    {t('preview.cameraNone')}
                   </Badge>
                 )}
               </div>
               <CardDescription className="text-xs mt-1">
-                {hasExif ? "EXIF data will be removed" : "No camera data detected"}
+                {hasExif ? t('preview.cameraDescription') : t('preview.cameraNoDescription')}
               </CardDescription>
             </CardContent>
           </Card>
@@ -256,7 +265,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2 text-sm">
                 <FileImage className="w-4 h-4 text-blue-600" />
-                <span>Files</span>
+                <span>{t('preview.filesTitle')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -264,7 +273,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                 {files.length}
               </div>
               <CardDescription className="text-xs mt-1">
-                {files.length === 1 ? 'File' : 'Files'} to be cleaned
+                {t('preview.filesToClean')}
               </CardDescription>
             </CardContent>
           </Card>
@@ -317,7 +326,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                       {meta.metadataFound.length === 0 && (
                         <div className="flex items-center space-x-1 text-green-600 dark:text-green-400">
                           <Shield className="w-3 h-3" />
-                          <span className="text-xs">No metadata detected</span>
+                          <span className="text-xs">{t('preview.noMetadata')}</span>
                         </div>
                       )}
                     </div>
@@ -328,36 +337,32 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
           })}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex justify-center space-x-4 pt-4">
-          <Button
-            onClick={onCancel}
-            variant="outline"
-            className="px-6"
-          >
-            {t('preview.cancelButton')}
-          </Button>
+        {/* Action Button - Single Primary CTA */}
+        <div className="flex justify-center pt-4">
           <Button
             onClick={() => {
               console.log('Confirm button clicked!');
               onConfirm(files);
             }}
-            className="px-6 bg-orange-600 hover:bg-orange-700 text-white"
+            className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white text-lg font-semibold"
           >
-            <Trash2 className="w-4 h-4 mr-2" />
+            <Trash2 className="w-5 h-5 mr-2" />
             {t('preview.confirmButton', { count: totalMetadataItems })}
           </Button>
         </div>
 
         {/* Privacy Notice */}
         <div className="text-center">
-          <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3">
+          <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-2">
             <div className="flex items-center justify-center space-x-2 text-green-800 dark:text-green-200">
               <Shield className="w-4 h-4" />
               <span className="text-sm font-medium">
                 {t('preview.privacyNotice')}
               </span>
             </div>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Press ESC to go back
           </div>
         </div>
       </div>
