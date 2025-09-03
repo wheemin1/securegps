@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { ProcessingOptions, ProcessingState, FileProcessingResult } from '@/types';
 import { isFormatSupported, generateZipFilename, downloadFile } from '@/utils/image-processor';
 import { createZipFile } from '@/utils/zip-handler';
-import { extractMetadata } from '../utils/metadata-extractor';
+import { extractMetadata } from '@/utils/metadata-extractor';
 import { useToast } from '@/hooks/use-toast';
 
 export function useImageProcessor() {
