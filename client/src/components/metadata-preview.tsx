@@ -23,6 +23,157 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   // GPS가 있는 첫 번째 파일의 위치 정보 가져오기
   const gpsMetadata = metadata.find(meta => meta.hasGps && meta.location);
 
+  // 메타데이터가 없는 경우의 UI
+  if (totalMetadataItems === 0) {
+    return (
+      <div className="border-2 border-green-500 rounded-2xl p-6 bg-green-50 dark:bg-green-950">
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="text-center">
+            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
+              <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
+            <h2 className="text-2xl font-semibold text-green-800 dark:text-green-200 mb-2">
+              파일이 안전합니다!
+            </h2>
+            <p className="text-green-700 dark:text-green-300">
+              {files.length}개 파일에서 메타데이터가 발견되지 않았습니다. 이미 안전한 파일입니다.
+            </p>
+          </div>
+
+          {/* Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-green-200 bg-green-50 dark:bg-green-950">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center space-x-2 text-sm">
+                  <MapPin className="w-4 h-4 text-green-600" />
+                  <span>GPS 위치</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-semibold">
+                  <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-300">
+                    없음
+                  </Badge>
+                </div>
+                <CardDescription className="text-xs mt-1">
+                  GPS 위치 정보가 없습니다
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="border-green-200 bg-green-50 dark:bg-green-950">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center space-x-2 text-sm">
+                  <Camera className="w-4 h-4 text-green-600" />
+                  <span>카메라 데이터</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-semibold">
+                  <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-300">
+                    없음
+                  </Badge>
+                </div>
+                <CardDescription className="text-xs mt-1">
+                  EXIF 데이터가 없습니다
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="border-green-200 bg-green-50 dark:bg-green-950">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center space-x-2 text-sm">
+                  <FileImage className="w-4 h-4 text-green-600" />
+                  <span>파일</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-semibold">
+                  {files.length}
+                </div>
+                <CardDescription className="text-xs mt-1">
+                  안전한 파일
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Detailed File List */}
+          <div className="max-h-64 overflow-y-auto space-y-2">
+            {files.map((file, index) => {
+              const meta = metadata[index];
+              return (
+                <Card key={file.name} className="border border-green-200 bg-white dark:bg-gray-800">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <FileImage className="w-4 h-4 text-gray-500" />
+                          <span className="font-medium text-sm truncate">{file.name}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {meta.fileType.replace('image/', '')}
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
+                          <div className="flex items-center space-x-1">
+                            <HardDrive className="w-3 h-3" />
+                            <span>{(file.size / 1024).toFixed(1)}KB</span>
+                          </div>
+                          {meta.dimensions && (
+                            <div className="flex items-center space-x-1">
+                              <span>{meta.dimensions.width}×{meta.dimensions.height}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex items-center space-x-1 text-green-600 dark:text-green-400">
+                          <Shield className="w-3 h-3" />
+                          <span className="text-xs">메타데이터가 감지되지 않음</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-center space-x-4 pt-4">
+            <Button
+              onClick={onCancel}
+              variant="outline"
+              className="px-6"
+            >
+              취소
+            </Button>
+            <Button
+              onClick={() => onConfirm(files)}
+              className="px-6 bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              파일 그대로 다운로드
+            </Button>
+          </div>
+
+          {/* Privacy Notice */}
+          <div className="text-center">
+            <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3">
+              <div className="flex items-center justify-center space-x-2 text-green-800 dark:text-green-200">
+                <Shield className="w-4 h-4" />
+                <span className="text-sm font-medium">
+                  이미 안전한 파일입니다 - 추가 처리가 필요하지 않습니다
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="border-2 border-orange-500 rounded-2xl p-6 bg-orange-50 dark:bg-orange-950">
       <div className="space-y-6">
