@@ -37,8 +37,8 @@ const getInitialLanguage = (): Language => {
   } catch (error) {
     console.warn('🌐 Error reading from localStorage:', error);
   }
-  console.log('🌐 Using default language: 한국어');
-  return languages[1]; // 한국어 기본값
+  console.log('🌐 Using default language: English');
+  return languages[0]; // 영어 기본값
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
