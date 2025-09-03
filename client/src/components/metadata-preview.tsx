@@ -17,7 +17,11 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
 
   const totalMetadataItems = metadata.reduce((sum, meta) => sum + meta.metadataFound.length, 0);
   const hasGps = metadata.some(meta => meta.hasGps);
+  const hasGpsLocation = metadata.some(meta => meta.hasGps && meta.location);
   const hasExif = metadata.some(meta => meta.hasExif);
+
+  // GPS가 있는 첫 번째 파일의 위치 정보 가져오기
+  const gpsMetadata = metadata.find(meta => meta.hasGps && meta.location);
 
   return (
     <div className="border-2 border-orange-500 rounded-2xl p-6 bg-orange-50 dark:bg-orange-950">
@@ -46,9 +50,19 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             </CardHeader>
             <CardContent>
               <div className="text-lg font-semibold">
-                {hasGps ? (
-                  <Badge variant="destructive" className="text-xs">
-                    {t('preview.gpsFound')}
+                {hasGpsLocation && gpsMetadata?.location ? (
+                  <div>
+                    <Badge variant="destructive" className="text-xs">
+                      {t('preview.gpsFound')} - Location Data
+                    </Badge>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Lat: {gpsMetadata.location.latitude.toFixed(6)}<br/>
+                      Lon: {gpsMetadata.location.longitude.toFixed(6)}
+                    </div>
+                  </div>
+                ) : hasGps ? (
+                  <Badge variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
+                    GPS Tags Only (No Coordinates)
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-xs">

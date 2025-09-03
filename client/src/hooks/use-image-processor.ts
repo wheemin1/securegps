@@ -41,6 +41,31 @@ export function useImageProcessor() {
         
         if (type === 'PROCESSING_COMPLETE' && blob && filename) {
           console.log('Processing completed successfully for:', id);
+          
+          // 처리된 파일의 메타데이터를 재검사
+          const verifyCleanedFile = async () => {
+            try {
+              const cleanedFile = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+              const cleanedMetadata = await extractMetadata(cleanedFile);
+              console.log('🔍 Cleaned file metadata verification:', {
+                filename,
+                hasGps: cleanedMetadata.hasGps,
+                hasExif: cleanedMetadata.hasExif,
+                metadataTypes: cleanedMetadata.metadataFound
+              });
+              
+              if (cleanedMetadata.hasGps || cleanedMetadata.metadataFound.length > 0) {
+                console.warn('⚠️ Warning: Processed file still contains metadata!', cleanedMetadata);
+              } else {
+                console.log('✅ Confirmed: Processed file is clean of metadata');
+              }
+            } catch (error) {
+              console.error('Error verifying cleaned file:', error);
+            }
+          };
+          
+          verifyCleanedFile();
+          
           const result: FileProcessingResult = {
             originalFile: processingResults.current.find(r => r.originalFile.name === id)?.originalFile!,
             cleanedBlob: blob,
