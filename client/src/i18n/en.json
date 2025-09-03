@@ -4,21 +4,21 @@
     "tagline": "Privacy-first image metadata removal"
   },
   "hero": {
-    "title": "Drop images to clean",
-    "subtitle": "(No upload)",
-    "description": "We remove GPS & metadata instantly — all in your browser.",
-    "privacy": "All processing happens in your browser. We never upload your files.",
-    "mainTitle": "Remove GPS & metadata from photos",
-    "mainDescription": "Drop images or click to choose. No upload — runs in your browser."
+    "title": "Drop images to clean GPS metadata",
+    "subtitle": "(No upload required)",
+    "description": "Strip GPS location data and personal metadata instantly — all processing happens locally in your browser for maximum privacy.",
+    "privacy": "100% private: All processing happens in your browser. Your photos never leave your device.",
+    "mainTitle": "Remove GPS Location & Metadata from Photos Online",
+    "mainDescription": "Free privacy tool to strip GPS coordinates, EXIF data, and metadata from images. No upload required — works entirely in your browser."
   },
   "dropzone": {
-    "title": "Drop images here or choose files",
-    "supportedFormats": "JPEG, PNG, WebP supported • Multiple files OK",
-    "chooseFiles": "Choose Files",
+    "title": "Drop Photos Here to Remove GPS & Metadata",
+    "supportedFormats": "Supports JPEG, PNG, WebP • Batch processing available • No file size limits",
+    "chooseFiles": "Select Photos to Clean",
     "features": {
       "noUpload": "No upload",
       "private": "100% private",
-      "instant": "Instant"
+      "instant": "Instant results"
     }
   },
   "processing": {
@@ -157,22 +157,38 @@
     }
   },
   "faq": {
-    "title": "Frequently Asked Questions",
+    "title": "Frequently Asked Questions About Photo Metadata Removal",
     "upload": {
-      "question": "Do you upload my files?",
-      "answer": "No, all processing is local. Your files never leave your browser. We use modern web technologies to process images entirely on your device."
+      "question": "Do you upload my photos or store them anywhere?",
+      "answer": "Absolutely not. All photo processing happens entirely in your browser using advanced Web Worker technology. Your photos never leave your device, are never uploaded to any server, and we cannot see or access your images in any way. This ensures complete privacy and security."
     },
     "metadata": {
-      "question": "What metadata gets removed?",
-      "answer": "We remove GPS coordinates, device/camera information, timestamps, XMP/IPTC blocks, embedded previews/thumbnails, and software information. This includes location data that could reveal where photos were taken."
+      "question": "What types of metadata and GPS data get removed from my photos?",
+      "answer": "Our tool removes all potentially identifying metadata including: GPS coordinates (latitude/longitude), location names, device information (camera make/model, phone details), timestamps (when photo was taken/modified), EXIF technical data (camera settings, lens info), XMP and IPTC data blocks, embedded thumbnail images, software information, and user comments. This comprehensive cleaning protects your privacy completely."
     },
     "formats": {
-      "question": "Which formats are supported?",
-      "answer": "JPEG/JPG, PNG, and WebP formats are fully supported. HEIC and AVIF can be processed if your browser supports local decoding (newer browsers and devices)."
+      "question": "Which photo formats can I clean? Does it work with iPhone photos?",
+      "answer": "We support JPEG/JPG (most common), PNG, and WebP formats completely. For iPhone HEIC photos and newer AVIF format, processing depends on your browser's built-in support. Most modern browsers and devices can handle HEIC files. You can also convert HEIC to JPEG first for guaranteed compatibility."
     },
     "limits": {
-      "question": "Is there a file size or quantity limit?",
-      "answer": "There are no artificial limits. However, processing is limited by your device's memory and processing power. We recommend processing batches of 10-20 images at a time for optimal performance."
+      "question": "Are there any limits on file size or number of photos I can process?",
+      "answer": "No artificial limits exist - our tool is completely free with unlimited usage. Processing is only limited by your device's available memory and processing power. For best performance, we recommend processing 10-20 photos at a time, especially for large files or older devices."
+    },
+    "safety": {
+      "question": "Is it safe to use this tool with sensitive or private photos?",
+      "answer": "Yes, completely safe. Since all processing happens locally in your browser with no internet connection required for the cleaning process, your private photos remain 100% on your device. We cannot access, view, or store your images. This makes it safer than online services that upload your photos."
+    },
+    "quality": {
+      "question": "Will cleaning metadata reduce my photo quality or file size?",
+      "answer": "Removing metadata typically reduces file size slightly (usually 1-5%) without affecting image quality at all. The visual content remains identical - we only remove invisible data tags. In rare cases with heavily embedded metadata, you might see larger size reductions."
+    },
+    "detection": {
+      "question": "How can I tell if my photos contain GPS location data?",
+      "answer": "Our tool automatically scans and shows you exactly what metadata exists in your photos before cleaning. You'll see a detailed preview showing GPS coordinates (if present), camera information, and other metadata. Photos taken with location services enabled usually contain GPS data."
+    },
+    "download": {
+      "question": "How do I get my cleaned photos back?",
+      "answer": "After processing, you'll get an instant download of your cleaned photos. Single photos download individually, while multiple photos are packaged in a convenient ZIP file. The cleaned images are identical to your originals except with all metadata removed."
     }
   },
   "footer": {

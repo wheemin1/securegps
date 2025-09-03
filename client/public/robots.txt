@@ -1,16 +1,52 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemap location
 Sitemap: https://privateshare-lite.netlify.app/sitemap.xml
 
-# Allow crawling of main pages
+# Allow crawling of main pages and SEO routes
 Allow: /
 Allow: /index.html
+Allow: /remove-gps
+Allow: /metadata-remover
+Allow: /photo-privacy
+Allow: /exif-remover
 
-# Block unnecessary files
+# Allow important files
+Allow: /robots.txt
+Allow: /sitemap.xml
+Allow: /og-image.jpg
+Allow: /site.webmanifest
+
+# Block development and system files
 Disallow: /src/
 Disallow: /node_modules/
 Disallow: /.git/
 Disallow: /dist/
 Disallow: /build/
+Disallow: /*.json$
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /vite.config.*
+Disallow: /package*.json
+Disallow: /tsconfig*.json
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
+
+# Special rules for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Special rules for Bing
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 1
+
+# Block AI training bots if desired
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /

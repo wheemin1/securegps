@@ -22,9 +22,29 @@ export function FAQSection() {
       testId: 'faq-formats'
     },
     {
+      question: t('faq.safety.question'),
+      answer: t('faq.safety.answer'),
+      testId: 'faq-safety'
+    },
+    {
+      question: t('faq.detection.question'),
+      answer: t('faq.detection.answer'),
+      testId: 'faq-detection'
+    },
+    {
+      question: t('faq.quality.question'),
+      answer: t('faq.quality.answer'),
+      testId: 'faq-quality'
+    },
+    {
       question: t('faq.limits.question'),
       answer: t('faq.limits.answer'),
       testId: 'faq-limits'
+    },
+    {
+      question: t('faq.download.question'),
+      answer: t('faq.download.answer'),
+      testId: 'faq-download'
     }
   ];
 
