@@ -1,0 +1,30 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Shield Icon -->
+  <g transform="translate(500, 180)">
+    <path d="M100 40C100 40 80 30 60 30C40 30 20 40 20 40V80C20 120 60 140 100 140C140 140 180 120 180 80V40C180 40 160 30 140 30C120 30 100 40 100 40Z" fill="white" fill-opacity="0.9"/>
+    <circle cx="100" cy="85" r="25" fill="#3b82f6"/>
+    <path d="M90 85L95 90L110 75" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="600" y="350" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="52" font-weight="bold">PrivateShare Lite</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="400" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="28" opacity="0.9">Remove GPS &amp; Metadata from Photos</text>
+  
+  <!-- Features -->
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" opacity="0.8">🔒 No Upload • ⚡ Instant • 🛡️ 100% Private</text>
+  
+  <!-- URL -->
+  <text x="600" y="520" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" opacity="0.7">privateshare-lite.netlify.app</text>
+</svg>

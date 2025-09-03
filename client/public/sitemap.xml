@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <url>
+        <loc>https://privateshare-lite.netlify.app/</loc>
+        <lastmod>2025-01-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://privateshare-lite.netlify.app/og-image.jpg</image:loc>
+            <image:title>PrivateShare Lite - Remove GPS and Metadata from Photos</image:title>
+            <image:caption>Free online tool to remove GPS location and metadata from photos without uploading files</image:caption>
+        </image:image>
+    </url>
+</urlset>

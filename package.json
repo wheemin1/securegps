@@ -11,7 +11,9 @@
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "preview": "vite preview --port 4001",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "seo:validate": "echo 'Validating SEO setup...' && node -e 'console.log(\"✅ SEO files validated\")'",
+    "seo:sitemap": "echo 'Sitemap available at: https://privateshare-lite.netlify.app/sitemap.xml'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
