@@ -31,18 +31,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          worker: ['./client/src/workers/image-worker.ts']
         }
       }
     },
     sourcemap: false,
     minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    }
   },
   server: {
     fs: {
