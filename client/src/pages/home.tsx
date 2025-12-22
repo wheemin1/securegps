@@ -29,29 +29,29 @@ export default function Home() {
       </header>
 
 
-      <main className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Hero Section */}
-        <section className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
-            {t('hero.mainTitle') || 'Remove GPS & metadata from photos'}
+      <main className="container mx-auto px-4 py-6 md:py-12 max-w-4xl pb-32 md:pb-12">
+        {/* Hero Section - Mobile Optimized */}
+        <section className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-3 md:mb-4 leading-tight">
+            {t('hero.mainTitle') || 'Remove Location from Photo'}
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-            {t('hero.mainDescription') || 'Drop images or click to choose. No upload — runs in your browser.'}
+          <p className="text-base md:text-xl text-muted-foreground mb-4 md:mb-6 max-w-2xl mx-auto px-2">
+            {t('hero.mainDescription') || 'Delete GPS & metadata instantly. Works on your phone. No upload.'}
           </p>
           
-          {/* Feature badges bar */}
-          <div className="flex items-center justify-center space-x-6 mb-8 text-sm text-muted-foreground">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-4 h-4 text-primary" />
+          {/* Feature badges bar - Mobile Responsive */}
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 mb-6 md:mb-8 text-xs md:text-sm text-muted-foreground px-2">
+            <div className="flex items-center space-x-1.5 md:space-x-2">
+              <Shield className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0" />
               <span className="font-medium">{t('dropzone.features.noUpload')}</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <Lock className="w-4 h-4 text-primary" />
+            <div className="flex items-center space-x-1.5 md:space-x-2">
+              <Lock className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0" />
               <span className="font-medium">{t('dropzone.features.private')}</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-primary" />
+            <div className="flex items-center space-x-1.5 md:space-x-2">
+              <Zap className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0" />
               <span className="font-medium">{t('dropzone.features.instant')}</span>
             </div>
           </div>

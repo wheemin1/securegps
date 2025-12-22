@@ -1,48 +1,48 @@
 {
   "app": {
-    "title": "PrivateShare Lite",
-    "tagline": "Privacy-first image metadata removal"
+    "title": "SecureNote",
+    "tagline": "Remove location from photos online"
   },
   "hero": {
-    "title": "Drop images to clean GPS metadata",
-    "subtitle": "(No upload required)",
-    "description": "Strip GPS location data and personal metadata instantly — all processing happens locally in your browser for maximum privacy.",
-    "privacy": "100% private: All processing happens in your browser. Your photos never leave your device.",
-    "mainTitle": "Remove GPS Location & Metadata from Photos Online",
-    "mainDescription": "Free privacy tool to strip GPS coordinates, EXIF data, and metadata from images. No upload required — works entirely in your browser."
+    "title": "Remove location from your photos",
+    "subtitle": "(Works on your phone)",
+    "description": "Delete GPS location and metadata from images instantly. 100% private — no upload, works offline in your browser.",
+    "privacy": "100% Private: Works in your browser. Photos never leave your phone.",
+    "mainTitle": "Remove Location from Photo Online",
+    "mainDescription": "Delete GPS & metadata instantly. Works on your phone. No upload needed."
   },
   "dropzone": {
-    "title": "Drop Photos Here to Remove GPS & Metadata",
-    "supportedFormats": "Supports JPEG, PNG, WebP • Batch processing available • No file size limits",
-    "chooseFiles": "Select Photos to Clean",
+    "title": "Tap to Remove Location from Photos",
+    "supportedFormats": "JPEG, PNG, WebP • Works on phone & desktop • No limits",
+    "chooseFiles": "Select Photos",
     "features": {
       "noUpload": "No upload",
-      "private": "100% private",
-      "instant": "Instant results"
+      "private": "Private",
+      "instant": "Instant"
     }
   },
   "processing": {
-    "cleaning": "Cleaning {current} / {total}...",
-    "removing": "Removing GPS and metadata from your images",
+    "cleaning": "Removing location {current}/{total}",
+    "removing": "Deleting GPS data from your photos",
     "currentFile": "Processing: {filename}",
-    "filesCompleted": "files completed",
+    "filesCompleted": "done",
     "step": {
-      "reading": "Reading metadata",
-      "cleaning": "Cleaning image",
-      "finalizing": "Finalizing"
+      "reading": "Scanning",
+      "cleaning": "Removing",
+      "finalizing": "Done"
     }
   },
   "success": {
-    "title": "All clean. Safe to share.",
-    "allClean": "All clean. Safe to share.",
-    "singleFile": "Downloaded cleaned image: {filename}",
-    "multipleFiles": "Downloaded {count} cleaned images in {filename}",
-    "cleanMore": "Clean More Images",
-    "processMore": "Process more images",
+    "title": "Location removed. Safe to share.",
+    "allClean": "Location removed. Safe to share.",
+    "singleFile": "Downloaded: {filename}",
+    "multipleFiles": "Downloaded {count} photos in {filename}",
+    "cleanMore": "Remove More",
+    "processMore": "Remove from more photos",
     "stats": {
-      "files": "Files cleaned",
-      "metadata": "Metadata removed",
-      "privacy": "Privacy safe"
+      "files": "Photos cleaned",
+      "metadata": "GPS removed",
+      "privacy": "Safe to share"
     }
   },
   "advanced": {

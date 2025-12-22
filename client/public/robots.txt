@@ -2,21 +2,20 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://privateshare-lite.netlify.app/sitemap.xml
+Sitemap: https://securenote-gps.netlify.app/sitemap.xml
 
 # Allow crawling of main pages and SEO routes
 Allow: /
 Allow: /index.html
-Allow: /remove-gps
-Allow: /metadata-remover
-Allow: /photo-privacy
-Allow: /exif-remover
 
 # Allow important files
 Allow: /robots.txt
 Allow: /sitemap.xml
 Allow: /og-image.jpg
 Allow: /site.webmanifest
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.webp
 
 # Block development and system files
 Disallow: /src/
@@ -27,14 +26,11 @@ Disallow: /build/
 Disallow: /*.json$
 Disallow: /*.ts$
 Disallow: /*.tsx$
-Disallow: /vite.config.*
-Disallow: /package*.json
-Disallow: /tsconfig*.json
 
 # Crawl delay for polite crawling
-Crawl-delay: 1
+Crawl-delay: 0.5
 
-# Special rules for Google
+# Special rules for Google (target US market)
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
@@ -42,10 +38,28 @@ Crawl-delay: 0
 # Special rules for Bing
 User-agent: Bingbot  
 Allow: /
-Crawl-delay: 1
+Crawl-delay: 0.5
 
-# Block AI training bots if desired
+# Mobile crawler optimization
+User-agent: Googlebot-Mobile
+Allow: /
+Crawl-delay: 0
+
+# Allow social media crawlers for better sharing
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Block AI training bots
 User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
 Disallow: /
 
 User-agent: Google-Extended

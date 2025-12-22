@@ -275,3 +275,92 @@
 .success-stats {
   animation: fadeInUp 0.8s ease-out;
 }
+
+/* Mobile Touch Optimization */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger tap targets for mobile */
+  button, a, input[type="file"], [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent text selection on tap */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+  
+  input, textarea {
+    user-select: text;
+  }
+  
+  /* Smooth scrolling for mobile */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Remove hover effects on touch devices */
+  *:hover {
+    transition: none !important;
+  }
+}
+
+/* iOS Safe Area for notches */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  /* Reduce padding on mobile */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Optimize font sizes for mobile */
+  h1 {
+    font-size: clamp(1.75rem, 5vw, 3rem);
+  }
+  
+  /* Stack elements vertically on small screens */
+  .md\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Full-width buttons on mobile */
+  button[type="button"], button[type="submit"] {
+    width: 100%;
+  }
+}
+
+/* Touch-friendly dropzone */
+@media (pointer: coarse) {
+  [data-dropzone] {
+    min-height: 200px;
+    padding: 2rem 1rem;
+  }
+}
+
+/* Performance: Reduce animations on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Accessibility: High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary: hsl(221 100% 40%);
+    --border: hsl(0 0% 20%);
+  }
+}
