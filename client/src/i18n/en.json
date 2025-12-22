@@ -1,24 +1,24 @@
 {
   "app": {
     "title": "SecureNote",
-    "tagline": "Remove location from photos online"
+    "tagline": "Anonymous photo privacy tool"
   },
   "hero": {
-    "title": "Remove location from your photos",
-    "subtitle": "(Works on your phone)",
-    "description": "Delete GPS location and metadata from images instantly. 100% private — no upload, works offline in your browser.",
-    "privacy": "100% Private: Works in your browser. Photos never leave your phone.",
-    "mainTitle": "Remove Location from Photo Online",
-    "mainDescription": "Delete GPS & metadata instantly. Works on your phone. No upload needed."
+    "title": "Remove Location from Photos Online",
+    "subtitle": "100% Private & Anonymous",
+    "description": "Delete GPS location and metadata from images instantly. Anonymous & private — no server upload, works offline in your browser.",
+    "privacy": "🔒 100% Private & Anonymous: Photos never leave your device. Zero tracking.",
+    "mainTitle": "Remove Location from Photo Online — Free & Private",
+    "mainDescription": "Delete GPS data instantly. Anonymous processing. Works on phone & desktop. No upload."
   },
   "dropzone": {
     "title": "Tap to Remove Location from Photos",
-    "supportedFormats": "JPEG, PNG, WebP • Works on phone & desktop • No limits",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Private & Anonymous • No limits",
     "chooseFiles": "Select Photos",
     "features": {
-      "noUpload": "No upload",
-      "private": "Private",
-      "instant": "Instant"
+      "noUpload": "No Server Upload",
+      "private": "100% Anonymous",
+      "instant": "Instant Processing"
     }
   },
   "processing": {
@@ -33,16 +33,16 @@
     }
   },
   "success": {
-    "title": "Location removed. Safe to share.",
-    "allClean": "Location removed. Safe to share.",
-    "singleFile": "Downloaded: {filename}",
-    "multipleFiles": "Downloaded {count} photos in {filename}",
-    "cleanMore": "Remove More",
-    "processMore": "Remove from more photos",
+    "title": "✅ Location Removed — Now Anonymous & Safe to Share",
+    "allClean": "✅ Location removed. Anonymous & safe to share.",
+    "singleFile": "✅ Downloaded anonymously: {filename}",
+    "multipleFiles": "✅ {count} photos anonymized in {filename}",
+    "cleanMore": "Remove More Locations",
+    "processMore": "Anonymize more photos",
     "stats": {
-      "files": "Photos cleaned",
-      "metadata": "GPS removed",
-      "privacy": "Safe to share"
+      "files": "Photos anonymized",
+      "metadata": "GPS data removed",
+      "privacy": "100% Private & Safe"
     }
   },
   "advanced": {
