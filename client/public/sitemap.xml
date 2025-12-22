@@ -9,7 +9,7 @@
         <priority>1.0</priority>
         <mobile:mobile/>
         <image:image>
-            <image:loc>https://securegps.netlify.app/og-image.jpg</image:loc>
+            <image:loc>https://securegps.netlify.app/og-image.svg</image:loc>
             <image:title>SecureNote - Remove Location from Photo Online</image:title>
             <image:caption>Remove GPS location and metadata from photos online free. Works on phone and desktop. No upload, 100% private processing in browser. Delete EXIF data instantly.</image:caption>
         </image:image>
