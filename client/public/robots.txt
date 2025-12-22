@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://securenote-gps.netlify.app/sitemap.xml
+Sitemap: https://securegps.netlify.app/sitemap.xml
 
 # Allow crawling of main pages and SEO routes
 Allow: /
