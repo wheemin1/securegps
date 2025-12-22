@@ -4,10 +4,29 @@ import { AdvancedPanel } from '@/components/advanced-panel';
 import { MetadataModal } from '@/components/metadata-modal';
 import { FAQSection } from '@/components/faq-section';
 import { useLanguage } from '@/hooks/use-language';
-import { Shield, Zap, Monitor, Lock, AlertTriangle, Info } from 'lucide-react';
+import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const { t } = useLanguage();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isPWA, setIsPWA] = useState(false);
+
+  useEffect(() => {
+    // Check if running as PWA
+    setIsPWA(window.matchMedia('(display-mode: standalone)').matches);
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -15,13 +34,30 @@ export default function Home() {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zM12 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zM12 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3z" clipRule="evenodd"/>
               </svg>
-              <h1 className="text-xl font-bold text-foreground" data-testid="text-app-title">
-                {t('app.title')}
-              </h1>
+              <div>
+                <h1 className="text-xl font-bold text-foreground" data-testid="text-app-title">
+                  {t('app.title')}
+                </h1>
+                {isPWA && (
+                  <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+                    {isOnline ? (
+                      <>
+                        <Wifi className="w-3 h-3 text-green-500" />
+                        <span>Works offline</span>
+                      </>
+                    ) : (
+                      <>
+                        <WifiOff className="w-3 h-3 text-orange-500" />
+                        <span>Offline mode</span>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
             <LanguageSelector />
           </div>

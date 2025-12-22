@@ -194,6 +194,26 @@
   "footer": {
     "description": "All processing happens locally in your browser. No uploads, no tracking."
   },
+  "pwa": {
+    "install": {
+      "title": "Install SecureNote",
+      "description": "Get instant access from your home screen. Works offline, 100% private.",
+      "installButton": "Install App",
+      "notNow": "Not now",
+      "worksOffline": "Works offline",
+      "noAds": "No ads",
+      "private": "Private"
+    },
+    "update": {
+      "title": "New version available",
+      "description": "Update now for the latest features",
+      "updateButton": "Update"
+    },
+    "offline": {
+      "mode": "Offline mode",
+      "ready": "Works offline"
+    }
+  },
   "errors": {
     "unsupported": "Unsupported file format: {filename}",
     "corrupted": "File appears to be corrupted: {filename}",
