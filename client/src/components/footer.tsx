@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { Shield } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -9,13 +8,9 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="font-semibold text-lg mb-3">SecureGPS</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Eliminate GPS tracking risks from photos instantly. 100% offline, client-side processing.
             </p>
-            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-              <Shield className="w-3 h-3 text-blue-600" />
-              <span>Built by Former EOD Expert</span>
-            </div>
           </div>
           
           {/* Legal Links */}
