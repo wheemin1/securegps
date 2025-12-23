@@ -1,31 +1,31 @@
 {
   "app": {
     "title": "SecureGPS",
-    "tagline": "Anonymous photo privacy tool"
+    "tagline": "Eliminate Digital Traces - EOD Expert Verified"
   },
   "hero": {
-    "title": "Remove Location from Photos Online",
-    "subtitle": "100% Private & Anonymous",
-    "description": "Delete GPS location and metadata from images instantly. Anonymous & private — no server upload, works offline in your browser.",
-    "privacy": "🔒 100% Private & Anonymous: Photos never leave your device. Zero tracking.",
-    "mainTitle": "Remove Location from Photo Online — Free & Private",
-    "mainDescription": "Delete GPS data instantly. Anonymous processing. Works on phone & desktop. No upload."
+    "title": "Eliminate Digital Traces from Photos",
+    "subtitle": "100% Offline Processing - Zero Server Upload",
+    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
+    "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
+    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
+    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
   },
   "dropzone": {
-    "title": "Tap to Remove Location from Photos",
-    "supportedFormats": "JPEG, PNG, WebP • 100% Private & Anonymous • No limits",
+    "title": "Eliminate Tracking Risks from Photos",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
     "chooseFiles": "Select Photos",
     "features": {
-      "noUpload": "No Server Upload",
-      "private": "100% Anonymous",
+      "noUpload": "Zero Upload",
+      "private": "100% Offline",
       "instant": "Instant Processing"
     }
   },
   "processing": {
-    "cleaning": "Removing location {current}/{total}",
-    "removing": "Deleting GPS data from your photos",
+    "cleaning": "Eliminating tracking data {current}/{total}",
+    "removing": "Removing GPS and tracking metadata",
     "currentFile": "Processing: {filename}",
-    "filesCompleted": "done",
+    "filesCompleted": "secured",
     "step": {
       "reading": "Scanning",
       "cleaning": "Removing",
@@ -33,12 +33,12 @@
     }
   },
   "success": {
-    "title": "✅ Location Removed — Now Anonymous & Safe to Share",
-    "allClean": "✅ Location removed. Anonymous & safe to share.",
-    "singleFile": "✅ Downloaded anonymously: {filename}",
-    "multipleFiles": "✅ {count} photos anonymized in {filename}",
-    "cleanMore": "Remove More Locations",
-    "processMore": "Anonymize more photos",
+    "title": "✅ Tracking Risks Eliminated — Safe to Share",
+    "allClean": "✅ All tracking data removed. Safe to share.",
+    "singleFile": "✅ Secured: {filename}",
+    "multipleFiles": "✅ {count} photos secured in {filename}",
+    "cleanMore": "Secure More Photos",
+    "processMore": "Secure more photos",
     "stats": {
       "files": "Photos anonymized",
       "metadata": "GPS data removed",
@@ -62,16 +62,16 @@
     }
   },
   "preview": {
-    "title": "Metadata Found!",
-    "subtitle": "We found {count} metadata items in your {fileCount} files. Review what will be removed below.",
-    "confirmButton": "Remove Metadata ({count} items)",
+    "title": "⚠️ Tracking Risk Detected",
+    "subtitle": "Found {count} metadata items in {fileCount} files that could expose your location. Review below.",
+    "confirmButton": "Eliminate Tracking Data ({count} items)",
     "cancelButton": "Cancel",
     "privacyNotice": "All processing happens in your browser - files never leave your device",
     "gpsTitle": "GPS Location",
-    "gpsFound": "Found",
-    "gpsNone": "None",
-    "gpsDescription": "Location data will be removed",
-    "gpsNoDescription": "No GPS location information",
+    "gpsFound": "⚠️ Tracking Risk",
+    "gpsNone": "Safe",
+    "gpsDescription": "Location data will be eliminated",
+    "gpsNoDescription": "No GPS tracking data",
     "gpsTagsOnly": "GPS Tags Only (No Coordinates)",
     "gpsLocationData": "Location Data",
     "cameraTitle": "Camera Data",

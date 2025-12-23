@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { Shield } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -8,9 +9,13 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="font-semibold text-lg mb-3">SecureGPS</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Remove GPS and metadata from photos instantly. 100% private, client-side processing.
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+              Eliminate GPS tracking risks from photos instantly. 100% offline, client-side processing.
             </p>
+            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+              <Shield className="w-3 h-3 text-blue-600" />
+              <span>Built by Former EOD Expert</span>
+            </div>
           </div>
           
           {/* Legal Links */}
@@ -56,7 +61,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} SecureGPS. All processing happens locally in your browser. No uploads, no tracking.
+            © {new Date().getFullYear()} SecureGPS. 100% offline processing in your browser. Zero uploads, zero tracking.
           </p>
         </div>
       </div>
