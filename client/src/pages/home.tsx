@@ -5,15 +5,23 @@ import { MetadataModal } from '@/components/metadata-modal';
 import { FAQSection } from '@/components/faq-section';
 import Footer from '@/components/footer';
 import { useLanguage } from '@/hooks/use-language';
-import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff, ShieldCheck, MapPin, Camera, Eye } from 'lucide-react';
+import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff, ShieldCheck, MapPin, Camera, Eye, Download } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 export default function Home() {
   const { t } = useLanguage();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isPWA, setIsPWA] = useState(false);
   const [showDisclaimers, setShowDisclaimers] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   useEffect(() => {
     // Check if running as PWA
@@ -25,11 +33,41 @@ export default function Home() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+    // PWA install prompt handler
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Hide button after installation
+    window.addEventListener('appinstalled', () => {
+      setShowInstallButton(false);
+      setDeferredPrompt(null);
+    });
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      console.log('PWA installed');
+    }
+
+    setDeferredPrompt(null);
+    setShowInstallButton(false);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -62,7 +100,20 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <LanguageSelector />
+            <div className="flex items-center space-x-3">
+              {showInstallButton && !isPWA && (
+                <Button
+                  onClick={handleInstallClick}
+                  size="sm"
+                  variant="outline"
+                  className="hidden md:flex items-center space-x-2"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Install App</span>
+                </Button>
+              )}
+              <LanguageSelector />
+            </div>
           </div>
         </div>
       </header>
