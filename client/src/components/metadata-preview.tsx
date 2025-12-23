@@ -39,7 +39,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   // 메타데이터가 없는 경우의 UI
   if (totalMetadataItems === 0) {
     return (
-      <div className="border-2 border-green-500 rounded-2xl p-6 bg-green-50 dark:bg-green-950">
+      <div className="rounded-2xl p-6 bg-green-50/50 dark:bg-green-950/50">
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center">
@@ -184,7 +184,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   }
 
   return (
-    <div className="border-2 border-orange-500 rounded-2xl p-6 bg-orange-50 dark:bg-orange-950">
+    <div className="rounded-2xl p-6 bg-orange-50/50 dark:bg-orange-950/50">
       <div className="space-y-6">
         {/* Header */}
         <div className="text-center">
@@ -280,7 +280,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
         </div>
 
         {/* Detailed File List */}
-        <div className="max-h-64 overflow-y-auto space-y-2">
+        <div className="max-h-64 overflow-y-auto space-y-4">
           {files.map((file, index) => {
             const meta = metadata[index];
             return (

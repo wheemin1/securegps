@@ -16,10 +16,10 @@ export function AdvancedPanel() {
       <Button
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 text-muted-foreground hover:text-foreground p-0 h-auto"
+        className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 px-4 py-2 rounded-full text-sm font-medium h-auto transition-all"
         data-testid="button-advanced-toggle"
       >
-        <span className="text-sm font-medium">{t('advanced.title')}</span>
+        <span>{t('advanced.title')}</span>
         <ChevronRight 
           className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-90' : ''}`} 
         />
