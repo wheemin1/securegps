@@ -200,12 +200,12 @@ export function Dropzone() {
   }
 
   return (
-    <div className="dropzone-container">
+    <div className="dropzone-container relative">
       <div 
-        className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-200 dropzone-pattern cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+        className={`group relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 glass dark:glass-dark ${
           isDragOver 
-            ? 'border-primary bg-primary/10 scale-102 shadow-lg' 
-            : 'border-border hover:border-primary/50 hover:bg-primary/5 bg-muted/20'
+            ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/50 scale-[1.02] shadow-xl' 
+            : 'border-white/20 dark:border-white/10 hover:border-blue-500/50 backdrop-blur-sm'
         }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -219,50 +219,60 @@ export function Dropzone() {
         aria-label={t('dropzone.title')}
         data-testid="dropzone-area"
       >
-        <div className="space-y-6">
-          <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-            <Upload className="w-8 h-8 text-primary" />
+        {/* Gradient Glow Effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
+        
+        {/* Main Content */}
+        <div className="relative space-y-6">
+          <div className="w-20 h-20 mx-auto rounded-full gradient-blue flex items-center justify-center shadow-lg">
+            <Upload className="w-10 h-10 text-white" />
           </div>
           
           <div>
-            <h2 className="text-2xl font-semibold text-foreground mb-2" data-testid="text-dropzone-title">
-              {t('dropzone.title')}
+            <h2 className="text-2xl font-bold mb-2" data-testid="text-dropzone-title">
+              Drop Photos Here
             </h2>
-            <p className="text-muted-foreground mb-2" data-testid="text-supported-formats">
-              {t('dropzone.supportedFormats')}
-            </p>
-            <p className="text-xs text-muted-foreground mb-6">
-              Tip: You can also paste images with Ctrl/⌘+V
+            <p className="text-sm text-muted-foreground mb-6">
+              or tap to select from your device
             </p>
             
             <Button 
               onClick={openFileDialog}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
               data-testid="button-choose-files"
             >
               <Upload className="w-5 h-5 mr-2" />
-              {t('dropzone.chooseFiles')}
+              Select Photos
             </Button>
           </div>
           
-          <div className="flex items-center justify-center space-x-6 text-sm text-muted-foreground">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-4 h-4" />
-              <span>{t('dropzone.features.noUpload')}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Lock className="w-4 h-4" />
-              <span>{t('dropzone.features.private')}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Zap className="w-4 h-4" />
-              <span>{t('dropzone.features.instant')}</span>
-            </div>
+          {/* Format Badges */}
+          <div className="flex justify-center gap-2">
+            <span className="px-3 py-1 bg-white/50 dark:bg-black/30 backdrop-blur-sm text-xs rounded-full font-medium">
+              JPG
+            </span>
+            <span className="px-3 py-1 bg-white/50 dark:bg-black/30 backdrop-blur-sm text-xs rounded-full font-medium">
+              PNG
+            </span>
+            <span className="px-3 py-1 bg-white/50 dark:bg-black/30 backdrop-blur-sm text-xs rounded-full font-medium">
+              WebP
+            </span>
           </div>
           
-          {/* HEIC/AVIF notice */}
-          <div className="text-xs text-muted-foreground mt-4">
-            HEIC/AVIF support depends on your browser. If unsupported, we'll suggest a safe JPEG convert.
+          {/* Trust Badges - Subtle */}
+          <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground/60">
+            <div className="flex items-center gap-1.5">
+              <Shield className="w-4 h-4 text-green-600" />
+              <span>Private</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Lock className="w-4 h-4 text-blue-600" />
+              <span>Offline</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-purple-600" />
+              <span>Instant</span>
+            </div>
           </div>
         </div>
       </div>

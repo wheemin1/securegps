@@ -4,13 +4,15 @@ import { AdvancedPanel } from '@/components/advanced-panel';
 import { MetadataModal } from '@/components/metadata-modal';
 import { FAQSection } from '@/components/faq-section';
 import { useLanguage } from '@/hooks/use-language';
-import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff } from 'lucide-react';
+import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff, ShieldCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function Home() {
   const { t } = useLanguage();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isPWA, setIsPWA] = useState(false);
+  const [showDisclaimers, setShowDisclaimers] = useState(false);
 
   useEffect(() => {
     // Check if running as PWA
@@ -66,38 +68,29 @@ export default function Home() {
 
 
       <main className="container mx-auto px-4 py-6 md:py-12 max-w-4xl pb-32 md:pb-12">
-        {/* Hero Section - Mobile Optimized */}
+        {/* Hero Section - Redesigned with Gradient Title */}
         <section className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-3 md:mb-4 leading-tight">
-            {t('hero.mainTitle') || 'Remove Location from Photo'}
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight gradient-text-blue">
+            Make Your Photos Anonymous
           </h1>
           
-          <p className="text-base md:text-xl text-muted-foreground mb-4 md:mb-6 max-w-2xl mx-auto px-2">
-            {t('hero.mainDescription') || 'Delete GPS & metadata instantly. Works on your phone. No upload.'}
+          <p className="text-lg md:text-xl text-muted-foreground/80 mb-6 md:mb-8 max-w-2xl mx-auto">
+            Remove GPS & Metadata instantly • 100% On-device • Zero tracking
           </p>
           
-          {/* Feature badges bar - Mobile Responsive */}
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 mb-6 md:mb-8 text-xs md:text-sm text-muted-foreground px-2">
-            <div className="flex items-center space-x-1.5 md:space-x-2">
-              <Shield className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0" />
-              <span className="font-medium">{t('dropzone.features.noUpload')}</span>
+          {/* Feature Badges - Bento Grid Style */}
+          <div className="grid grid-cols-3 gap-2 md:gap-3 max-w-2xl mx-auto mb-8">
+            <div className="bento-card group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-100 dark:border-green-900/50 p-3 md:p-4">
+              <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-green-600 mb-2" />
+              <p className="text-xs md:text-sm font-semibold text-green-700 dark:text-green-400">100% Private</p>
             </div>
-            <div className="flex items-center space-x-1.5 md:space-x-2">
-              <Lock className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0" />
-              <span className="font-medium">{t('dropzone.features.private')}</span>
+            <div className="bento-card group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-100 dark:border-blue-900/50 p-3 md:p-4">
+              <WifiOff className="w-5 h-5 md:w-6 md:h-6 text-blue-600 mb-2" />
+              <p className="text-xs md:text-sm font-semibold text-blue-700 dark:text-blue-400">Works Offline</p>
             </div>
-            <div className="flex items-center space-x-1.5 md:space-x-2">
-              <Zap className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0" />
-              <span className="font-medium">{t('dropzone.features.instant')}</span>
-            </div>
-          </div>
-          
-          <div className="bg-accent/50 border border-border rounded-lg p-4 mb-8 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center space-x-2 text-sm text-foreground">
-              <Shield className="w-5 h-5 text-primary" />
-              <span className="font-medium" data-testid="text-privacy-message">
-                {t('hero.privacy')}
-              </span>
+            <div className="bento-card group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border border-purple-100 dark:border-purple-900/50 p-3 md:p-4">
+              <Zap className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mb-2" />
+              <p className="text-xs md:text-sm font-semibold text-purple-700 dark:text-purple-400">Instant</p>
             </div>
           </div>
         </section>
@@ -117,34 +110,15 @@ export default function Home() {
               <MetadataModal />
             </div>
             
-            <div className="space-y-4 text-sm">
-              <div className="p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                <div className="flex items-start space-x-2">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">
-                      {t('disclaimers.important.title')}
-                    </div>
-                    <div className="text-yellow-700 dark:text-yellow-300">
-                      {t('disclaimers.important.content')}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-                <div className="flex items-start space-x-2">
-                  <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-medium text-blue-800 dark:text-blue-200 mb-1">
-                      {t('disclaimers.content.title')}
-                    </div>
-                    <div className="text-blue-700 dark:text-blue-300">
-                      {t('disclaimers.content.content')}
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* Simplified Disclaimers - Dialog Trigger */}
+            <div className="text-center mt-6">
+              <button 
+                onClick={() => setShowDisclaimers(true)}
+                className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 transition-colors underline underline-offset-4"
+              >
+                <Info className="w-3 h-3" />
+                Safety & Limitations
+              </button>
             </div>
           </div>
           
@@ -210,6 +184,39 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Disclaimers Dialog */}
+      <Dialog open={showDisclaimers} onOpenChange={setShowDisclaimers}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Safety Information</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex gap-3 p-4 bg-yellow-50 dark:bg-yellow-950/50 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-200 mb-2">
+                  {t('disclaimers.important.title')}
+                </h4>
+                <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                  {t('disclaimers.important.content')}
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 p-4 bg-blue-50 dark:bg-blue-950/50 rounded-lg border border-blue-200 dark:border-blue-800">
+              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">
+                  {t('disclaimers.content.title')}
+                </h4>
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  {t('disclaimers.content.content')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

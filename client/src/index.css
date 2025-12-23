@@ -364,3 +364,98 @@
     --border: hsl(0 0% 20%);
   }
 }
+/* ========================================
+   Gradient & Glassmorphism Utilities
+   ======================================== */
+
+/* Gradient Backgrounds */
+.gradient-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+}
+
+.gradient-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+}
+
+.gradient-green {
+  background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+}
+
+.gradient-orange {
+  background: linear-gradient(135deg, #f97316 0%, #facc15 100%);
+}
+
+/* Gradient Text */
+.gradient-text-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Effects */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-dark {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient Glow Effect */
+.gradient-glow {
+  position: relative;
+}
+
+.gradient-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #3b82f6, #6366f1, #8b5cf6);
+  opacity: 0.2;
+  filter: blur(8px);
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.gradient-glow:hover::before {
+  opacity: 0.4;
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Bento Grid Hover Effects */
+.bento-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
