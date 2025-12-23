@@ -14,7 +14,9 @@ export function useImageProcessor() {
     progress: 0,
     message: '',
     selectedFiles: [],
-    previewData: []
+    previewData: [],
+    queuedFiles: [],
+    queuedMetadata: []
   });
   
   const [options, setOptions] = useState<ProcessingOptions>({
@@ -159,6 +161,59 @@ export function useImageProcessor() {
     console.log('setState called with selectedFiles:', supportedFiles);
   }, [toast]);
 
+  const addFilesToQueue = useCallback(async (files: File[]) => {
+    const supportedFiles = files.filter(isFormatSupported);
+    
+    if (supportedFiles.length === 0) {
+      toast({
+        title: 'No supported files',
+        description: 'Please select valid image files (JPG, PNG, or WebP)',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const newMetadata = await Promise.all(
+      supportedFiles.map(file => extractMetadata(file))
+    );
+
+    setState(prev => ({
+      ...prev,
+      status: 'queued',
+      queuedFiles: [...(prev.queuedFiles || []), ...supportedFiles],
+      queuedMetadata: [...(prev.queuedMetadata || []), ...newMetadata],
+      message: `${(prev.queuedFiles?.length || 0) + supportedFiles.length} photos ready to clean`
+    }));
+  }, [toast]);
+
+  const removeFileFromQueue = useCallback((index: number) => {
+    setState(prev => {
+      const newQueuedFiles = [...(prev.queuedFiles || [])];
+      const newQueuedMetadata = [...(prev.queuedMetadata || [])];
+      newQueuedFiles.splice(index, 1);
+      newQueuedMetadata.splice(index, 1);
+      
+      return {
+        ...prev,
+        status: newQueuedFiles.length === 0 ? 'idle' : 'queued',
+        queuedFiles: newQueuedFiles,
+        queuedMetadata: newQueuedMetadata,
+        message: newQueuedFiles.length === 0 ? '' : `${newQueuedFiles.length} photos ready to clean`
+      };
+    });
+  }, []);
+
+  const startBatchProcessing = useCallback(() => {
+    if (!state.queuedFiles || state.queuedFiles.length === 0) return;
+    
+    setState(prev => ({
+      ...prev,
+      status: 'preview',
+      selectedFiles: prev.queuedFiles,
+      previewData: prev.queuedMetadata
+    }));
+  }, [state.queuedFiles, state.queuedMetadata]);
+
   const confirmProcessing = useCallback(async (filesToProcess?: File[]) => {
     console.log('confirmProcessing called with files:', filesToProcess);
     console.log('current state:', state);
@@ -180,7 +235,9 @@ export function useImageProcessor() {
       currentFile: selectedFiles[0].name,
       processed: 0,
       progress: 0,
-      message: `Cleaning ${0} / ${selectedFiles.length}...`
+      message: `Cleaning ${0} / ${selectedFiles.length}...`,
+      queuedFiles: [],
+      queuedMetadata: []
     }));
 
     // Initialize results array
@@ -320,6 +377,9 @@ export function useImageProcessor() {
     state,
     options,
     previewFiles,
+    addFilesToQueue,
+    removeFileFromQueue,
+    startBatchProcessing,
     confirmProcessing,
     reset,
     updateOptions
