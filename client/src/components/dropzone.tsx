@@ -73,86 +73,102 @@ export function Dropzone() {
 
   if (state.status === 'queued' && state.queuedFiles && state.queuedMetadata) {
     return (
-      <div className="toss-card p-6 space-y-6">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'} Ready
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Add more or start processing
-          </p>
-        </div>
+      <>
+        <div className="toss-card p-6 space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'} Ready
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Add more or start processing
+            </p>
+          </div>
 
-        <div className="space-y-2 max-h-80 overflow-y-auto">
-          {state.queuedFiles.map((file, index) => {
-            const meta = state.queuedMetadata![index];
-            const hasWarning = meta.metadataFound.length > 0;
-            
-            return (
-              <div 
-                key={`${file.name}-${index}`}
-                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    hasWarning ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-blue-100 dark:bg-blue-900/30'
-                  }`}>
-                    {hasWarning ? (
-                      <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                    ) : (
-                      <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                      {file.name}
-                    </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                      <span>{(file.size / 1024).toFixed(1)} KB</span>
-                      <span>•</span>
-                      <span>{meta.fileType.replace('image/', '').toUpperCase()}</span>
-                      {hasWarning && (
-                        <>
-                          <span>•</span>
-                          <span className="text-orange-600 dark:text-orange-400 font-medium">
-                            {meta.metadataFound.length} metadata
-                          </span>
-                        </>
+          <div className="space-y-2 max-h-80 overflow-y-auto">
+            {state.queuedFiles.map((file, index) => {
+              const meta = state.queuedMetadata![index];
+              const hasWarning = meta.metadataFound.length > 0;
+              
+              return (
+                <div 
+                  key={`${file.name}-${index}`}
+                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      hasWarning ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-blue-100 dark:bg-blue-900/30'
+                    }`}>
+                      {hasWarning ? (
+                        <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                      ) : (
+                        <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
                       )}
                     </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        {file.name}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                        <span>{(file.size / 1024).toFixed(1)} KB</span>
+                        <span>•</span>
+                        <span>{meta.fileType.replace('image/', '').toUpperCase()}</span>
+                        {hasWarning && (
+                          <>
+                            <span>•</span>
+                            <span className="text-orange-600 dark:text-orange-400 font-medium">
+                              {meta.metadataFound.length} metadata
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
+                  
+                  <button
+                    onClick={() => removeFileFromQueue(index)}
+                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
+                    aria-label="Remove file"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
-                
-                <button
-                  onClick={() => removeFileFromQueue(index)}
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
-                  aria-label="Remove file"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        <div className="space-y-3">
-          <Button
-            onClick={startBatchProcessing}
-            className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-base font-semibold rounded-xl shadow-sm transition-colors"
-          >
-            Clean {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'}
-          </Button>
-          
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full h-14 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-base font-medium rounded-xl transition-colors"
-          >
-            + Add More Photos
-          </button>
+          <div className="space-y-3">
+            <Button
+              onClick={startBatchProcessing}
+              className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-base font-semibold rounded-xl shadow-sm transition-colors"
+            >
+              Clean {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'}
+            </Button>
+            
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full h-14 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-base font-medium rounded-xl transition-colors"
+            >
+              + Add More Photos
+            </button>
+          </div>
         </div>
-      </div>
+        
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files) {
+              handleFileSelect(Array.from(e.target.files));
+            }
+          }}
+          data-testid="input-file-select"
+        />
+      </>
     );
   }
 
