@@ -3,8 +3,9 @@ import { Dropzone } from '@/components/dropzone';
 import { AdvancedPanel } from '@/components/advanced-panel';
 import { MetadataModal } from '@/components/metadata-modal';
 import { FAQSection } from '@/components/faq-section';
+import Footer from '@/components/footer';
 import { useLanguage } from '@/hooks/use-language';
-import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff, ShieldCheck } from 'lucide-react';
+import { Shield, Zap, Monitor, Lock, AlertTriangle, Info, Wifi, WifiOff, ShieldCheck, MapPin, Camera, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
@@ -163,29 +164,134 @@ export default function Home() {
         {/* FAQ Section */}
         <FAQSection />
         
-        {/* Ad Banner after FAQ */}
+        {/* Educational Content Section */}
+        <section id="why-remove-metadata" className="container mx-auto px-4 mb-12">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+            <h2 className="text-3xl font-bold mb-6">Why Remove GPS and Metadata from Photos?</h2>
+            
+            <div className="prose prose-gray max-w-none space-y-6">
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold flex items-center gap-2">
+                  <MapPin className="w-6 h-6 text-red-600" />
+                  The Hidden Privacy Risk in Your Photos
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Every time you take a photo with your smartphone or digital camera, the device automatically embeds hidden metadata—including GPS coordinates that reveal your exact location. This invisible data, known as EXIF (Exchangeable Image File Format), can expose where you live, work, travel, and spend time. When you share photos on social media, job applications, dating apps, or online marketplaces, you may unintentionally broadcast your home address, workplace location, or daily routines to strangers.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  According to privacy researchers, over 70% of smartphone users are unaware that their photos contain GPS coordinates. This metadata can be extracted in seconds using free online tools or command-line programs. Stalkers, identity thieves, burglars, and malicious actors routinely scrape public photos from social media platforms to harvest location data, creating serious safety and security risks for individuals and families.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold flex items-center gap-2">
+                  <Camera className="w-6 h-6 text-blue-600" />
+                  What Metadata Do Photos Actually Contain?
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Digital photos store far more than just pixels. Common metadata fields include:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                  <li><strong>GPS Coordinates:</strong> Latitude and longitude showing exactly where the photo was taken, accurate to within meters</li>
+                  <li><strong>Date and Time:</strong> Precise timestamp of when the photo was captured, including timezone</li>
+                  <li><strong>Device Information:</strong> Camera model, smartphone brand, serial numbers</li>
+                  <li><strong>Camera Settings:</strong> Aperture, shutter speed, ISO, focal length, flash usage</li>
+                  <li><strong>Software Details:</strong> Photo editing apps used, file modification history</li>
+                  <li><strong>Copyright and Author:</strong> Names, emails, or usernames embedded by cameras or editing software</li>
+                  <li><strong>Embedded Thumbnails:</strong> Small preview images that may show unedited versions of cropped photos</li>
+                </ul>
+                <p className="text-gray-700 leading-relaxed">
+                  For iPhones and Android devices, GPS data is enabled by default in the camera app. Unless you've specifically disabled location services for your camera, every photo you take includes a digital breadcrumb trail of your movements.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold flex items-center gap-2">
+                  <Eye className="w-6 h-6 text-orange-600" />
+                  Real-World Privacy Threats
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  The consequences of exposed photo metadata are not theoretical—they're happening every day:
+                </p>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-4">
+                  <ul className="list-disc list-inside text-gray-700 space-y-2">
+                    <li><strong>Home Address Exposure:</strong> Posting a photo of your new car, pet, or home improvement project can reveal your residential address to anyone who views it</li>
+                    <li><strong>Workplace Stalking:</strong> Photos taken at your office or during lunch breaks can expose your employer's location, putting you at risk for workplace harassment</li>
+                    <li><strong>Travel Security:</strong> Vacation photos shared while you're away tell burglars your home is empty and show when you'll return</li>
+                    <li><strong>Dating App Safety:</strong> Profile photos with embedded GPS coordinates can reveal where you live or frequent, compromising personal safety</li>
+                    <li><strong>Job Application Privacy:</strong> Resumes with photos containing metadata can leak personal information to potential employers before you consent to share it</li>
+                    <li><strong>Child Safety:</strong> Family photos shared on social media can expose school locations, daily routines, and home addresses—critical information for predators</li>
+                  </ul>
+                </div>
+                <p className="text-gray-700 leading-relaxed">
+                  In documented cases, journalists, activists, and abuse survivors have been tracked down through photo metadata. Even celebrities and politicians have accidentally revealed private locations by sharing photos with GPS data intact.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold flex items-center gap-2">
+                  <ShieldCheck className="w-6 h-6 text-green-600" />
+                  Why SecureGPS Is the Safest Solution
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Unlike other metadata removal tools that require uploading your photos to third-party servers, SecureGPS processes everything directly in your web browser. Here's why this matters:
+                </p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">
+                  <ul className="list-disc list-inside text-gray-700 space-y-2">
+                    <li><strong>100% Client-Side Processing:</strong> Your photos never leave your device. All metadata removal happens locally using JavaScript and Web Workers—no server uploads, no cloud storage, no third-party access</li>
+                    <li><strong>Zero Data Collection:</strong> We don't log your IP address, track your activity, or store any information about you or your photos. There are no user accounts, no analytics on your images</li>
+                    <li><strong>Works Offline:</strong> Once loaded, SecureGPS can process photos even without an internet connection, perfect for sensitive environments</li>
+                    <li><strong>Instant Processing:</strong> Batch process multiple photos in seconds without waiting for uploads or downloads</li>
+                    <li><strong>Cross-Platform:</strong> Works on iPhone, Android, Windows, Mac, Linux, and Chromebook—anywhere you have a modern web browser</li>
+                    <li><strong>No Installation Required:</strong> No apps to download, no software to trust, no permissions to grant. Just visit the website and start cleaning photos immediately</li>
+                    <li><strong>Open Source Transparency:</strong> Our code is available on GitHub for security researchers and privacy advocates to audit</li>
+                  </ul>
+                </div>
+                <p className="text-gray-700 leading-relaxed">
+                  Most online tools claim to delete metadata, but they require uploading your private photos to their servers first. Once uploaded, you have no control over whether those servers log your images, metadata, or IP addresses. Some services even retain copies for "quality assurance" or "training purposes." With SecureGPS, your photos stay on your device—the way privacy should work.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold">Best Practices for Photo Privacy</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  For maximum protection, follow these privacy guidelines:
+                </p>
+                <ol className="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                  <li><strong>Remove metadata before sharing:</strong> Use SecureGPS on every photo before posting to social media, dating apps, job sites, or online marketplaces</li>
+                  <li><strong>Disable camera GPS:</strong> Turn off location services for your camera app in iPhone Settings → Privacy → Location Services → Camera or Android Settings → Apps → Camera → Permissions</li>
+                  <li><strong>Check existing photos:</strong> Your old photo library may contain thousands of images with embedded GPS data. Batch process them with SecureGPS before archiving or sharing</li>
+                  <li><strong>Beware of cropped images:</strong> Simply cropping a photo doesn't remove metadata—the GPS coordinates and camera info remain in the file</li>
+                  <li><strong>Educate family members:</strong> Teach children and elderly relatives about metadata risks, especially when sharing photos of home, school, or daily routines</li>
+                  <li><strong>Verify removal:</strong> After processing, use SecureGPS's built-in metadata viewer to confirm all sensitive data has been stripped</li>
+                </ol>
+              </div>
+
+              <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 my-6">
+                <h3 className="text-xl font-semibold mb-3">Take Action Now</h3>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  Don't wait until your privacy is compromised. Every photo you share without removing metadata is a potential security risk. SecureGPS makes it fast, free, and easy to protect yourself and your family.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  Scroll up to start removing GPS coordinates and metadata from your photos in seconds—completely free, no registration required, 100% private.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Ad Banner after Educational Content */}
         <section className="bg-muted border border-border rounded-lg py-8 mb-8">
           <div className="container mx-auto px-4 text-center">
             <div className="text-muted-foreground">
               <div className="text-sm font-medium mb-2">Advertisement Space</div>
-              <div className="text-xs opacity-70">728x90 or responsive banner (post-FAQ placement)</div>
+              <div className="text-xs opacity-70">728x90 or responsive banner (post-content placement)</div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border bg-card mt-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center text-sm text-muted-foreground">
-            <p className="mb-2" data-testid="text-footer-title">
-              {t('app.title')} - {t('app.tagline')}
-            </p>
-            <p data-testid="text-footer-description">
-              {t('footer.description')}
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Disclaimers Dialog */}
       <Dialog open={showDisclaimers} onOpenChange={setShowDisclaimers}>

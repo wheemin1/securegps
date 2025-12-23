@@ -1,7 +1,7 @@
 {
-    "name": "SecureNote - Remove Location from Photo",
-    "short_name": "SecureNote",
-    "description": "Remove GPS location and metadata from photos instantly. Works offline on your phone.",
+    "name": "SecureGPS - Remove GPS from Photos",
+    "short_name": "SecureGPS",
+    "description": "Remove GPS location and metadata from photos instantly. 100% private, client-side processing.",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

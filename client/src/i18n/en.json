@@ -192,7 +192,8 @@
     }
   },
   "footer": {
-    "description": "All processing happens locally in your browser. No uploads, no tracking."
+    "description": "All processing happens locally in your browser. No uploads, no tracking.",
+    "backToHome": "Back to Home"
   },
   "pwa": {
     "install": {
