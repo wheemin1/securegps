@@ -32,6 +32,18 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   const hasGps = metadata.some(meta => meta.hasGps);
   const hasGpsLocation = metadata.some(meta => meta.hasGps && meta.location);
   const hasExif = metadata.some(meta => meta.hasExif);
+  
+  // 기타 메타데이터 계산 (GPS/EXIF 제외)
+  const otherMetadata = metadata.reduce((sum, meta) => {
+    const otherTypes = meta.metadataFound.filter(
+      type => !type.includes('GPS') && !type.includes('EXIF') && !type.includes('Camera')
+    );
+    return sum + otherTypes.length;
+  }, 0);
+  
+  // 중요한 메타데이터가 있는지 확인
+  const hasCriticalMetadata = hasGps || hasExif;
+  const hasOnlyOtherMetadata = !hasCriticalMetadata && otherMetadata > 0;
 
   // GPS가 있는 첫 번째 파일의 위치 정보 가져오기
   const gpsMetadata = metadata.find(meta => meta.hasGps && meta.location);
@@ -184,18 +196,43 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   }
 
   return (
-    <div className="rounded-2xl p-6 bg-orange-50/50 dark:bg-orange-950/50">
+    <div className={`rounded-2xl p-6 ${
+      hasOnlyOtherMetadata 
+        ? 'bg-blue-50/50 dark:bg-blue-950/30' 
+        : 'bg-orange-50/50 dark:bg-orange-950/50'
+    }`}>
       <div className="space-y-6">
         {/* Header */}
         <div className="text-center">
-          <div className="mx-auto w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mb-4">
-            <AlertTriangle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+          <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+            hasOnlyOtherMetadata
+              ? 'bg-blue-100 dark:bg-blue-900'
+              : 'bg-orange-100 dark:bg-orange-900'
+          }`}>
+            {hasOnlyOtherMetadata ? (
+              <Shield className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            ) : (
+              <AlertTriangle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+            )}
           </div>
-          <h2 className="text-2xl font-semibold text-orange-800 dark:text-orange-200 mb-2">
-            {t('preview.title')}
+          <h2 className={`text-2xl font-semibold mb-2 ${
+            hasOnlyOtherMetadata
+              ? 'text-blue-800 dark:text-blue-200'
+              : 'text-orange-800 dark:text-orange-200'
+          }`}>
+            {hasOnlyOtherMetadata 
+              ? 'Location Safe, Minor Data Found'
+              : t('preview.title')
+            }
           </h2>
-          <p className="text-orange-700 dark:text-orange-300">
-            {t('preview.subtitle', { count: totalMetadataItems, fileCount: files.length })}
+          <p className={hasOnlyOtherMetadata
+              ? 'text-blue-700 dark:text-blue-300'
+              : 'text-orange-700 dark:text-orange-300'
+          }>
+            {hasOnlyOtherMetadata
+              ? `No GPS or camera info, but found ${otherMetadata} other metadata items (XMP, IPTC, etc.)`
+              : t('preview.subtitle', { count: totalMetadataItems, fileCount: files.length })
+            }
           </p>
         </div>
 
@@ -344,10 +381,17 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               console.log('Confirm button clicked!');
               onConfirm(files);
             }}
-            className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white text-lg font-semibold"
+            className={`w-full md:w-auto h-14 px-8 text-white text-base font-semibold rounded-xl shadow-sm transition-colors ${
+              hasOnlyOtherMetadata
+                ? 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
+                : 'bg-orange-600 hover:bg-orange-700 active:bg-orange-800'
+            }`}
           >
             <Trash2 className="w-5 h-5 mr-2" />
-            {t('preview.confirmButton', { count: totalMetadataItems })}
+            {hasOnlyOtherMetadata
+              ? `Clean ${otherMetadata} Minor Items`
+              : t('preview.confirmButton', { count: totalMetadataItems })
+            }
           </Button>
         </div>
 
