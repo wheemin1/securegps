@@ -56,7 +56,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border-green-200 bg-green-50 dark:bg-green-950">
+            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center space-x-2 text-sm">
                   <MapPin className="w-4 h-4 text-green-600" />
@@ -65,7 +65,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-semibold">
-                  <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-300">
+                  <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
                     {t('preview.gpsNone')}
                   </Badge>
                 </div>
@@ -75,7 +75,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               </CardContent>
             </Card>
 
-            <Card className="border-green-200 bg-green-50 dark:bg-green-950">
+            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center space-x-2 text-sm">
                   <Camera className="w-4 h-4 text-green-600" />
@@ -84,7 +84,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-semibold">
-                  <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-300">
+                  <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
                     {t('preview.cameraNone')}
                   </Badge>
                 </div>
@@ -94,7 +94,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               </CardContent>
             </Card>
 
-            <Card className="border-green-200 bg-green-50 dark:bg-green-950">
+            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center space-x-2 text-sm">
                   <FileImage className="w-4 h-4 text-green-600" />
@@ -201,7 +201,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className={hasGps ? "border-red-200 bg-red-50 dark:bg-red-950" : "border-gray-200"}>
+          <Card className={hasGps ? "border-none bg-red-50/80 dark:bg-red-950/30 shadow-sm" : "border-none bg-white dark:bg-gray-800 shadow-sm"}>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2 text-sm">
                 <MapPin className={`w-4 h-4 ${hasGps ? 'text-red-600' : 'text-gray-400'}`} />
@@ -236,7 +236,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             </CardContent>
           </Card>
 
-          <Card className={hasExif ? "border-yellow-200 bg-yellow-50 dark:bg-yellow-950" : "border-gray-200"}>
+          <Card className={hasExif ? "border-none bg-yellow-50/80 dark:bg-yellow-950/30 shadow-sm" : "border-none bg-white dark:bg-gray-800 shadow-sm"}>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2 text-sm">
                 <Camera className={`w-4 h-4 ${hasExif ? 'text-yellow-600' : 'text-gray-400'}`} />
@@ -261,7 +261,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             </CardContent>
           </Card>
 
-          <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950">
+          <Card className="border-none bg-blue-50/80 dark:bg-blue-950/30 shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2 text-sm">
                 <FileImage className="w-4 h-4 text-blue-600" />

@@ -84,10 +84,10 @@ export function Dropzone() {
 
   if (state.status === 'processing') {
     return (
-      <div className="border-2 border-primary rounded-2xl p-12 text-center bg-primary/5 fade-in-up">
+      <div className="rounded-2xl p-8 md:p-12 text-center bg-blue-50/50 dark:bg-blue-950/30 toss-card fade-in-up">
         <div className="space-y-6">
-          <div className="mx-auto w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
-            <Trash2 className="w-8 h-8 text-primary progress-pulse" />
+          <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center">
+            <Trash2 className="w-8 h-8 text-blue-600 dark:text-blue-400 progress-pulse" />
           </div>
           
           <div>
@@ -142,9 +142,9 @@ export function Dropzone() {
 
   if (state.status === 'success') {
     return (
-      <div className="border-2 border-green-500 rounded-2xl p-8 text-center bg-green-50 dark:bg-green-950 success-card">
+      <div className="rounded-2xl p-8 text-center bg-green-50/50 dark:bg-green-950/30 success-card">
         <div className="space-y-6">
-          <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+          <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-2xl flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
           
@@ -157,7 +157,7 @@ export function Dropzone() {
             </p>
             
             {/* Enhanced Result feedback card */}
-            <div className="bg-white dark:bg-green-900/50 border border-green-200 dark:border-green-800 rounded-lg p-6 mb-6 mx-auto max-w-md success-stats">
+            <div className="bg-white dark:bg-gray-800 border-none rounded-xl p-6 mb-6 mx-auto max-w-md shadow-sm success-stats">
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-800 dark:text-green-200 mb-1">
@@ -188,7 +188,7 @@ export function Dropzone() {
             
             <Button 
               onClick={reset} 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
+              className="w-full md:w-auto h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 text-base font-semibold rounded-xl shadow-sm transition-colors"
             >
               <Upload className="w-5 h-5 mr-2" />
               {t('success.processMore') || 'Process more images'}
