@@ -202,10 +202,10 @@ export function Dropzone() {
   return (
     <div className="dropzone-container relative">
       <div 
-        className={`group relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 glass dark:glass-dark ${
+        className={`toss-card cursor-pointer transition-all ${
           isDragOver 
-            ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/50 scale-[1.02] shadow-xl' 
-            : 'border-white/20 dark:border-white/10 hover:border-blue-500/50 backdrop-blur-sm'
+            ? 'shadow-lg border-blue-500 bg-blue-50 dark:bg-blue-950/30 scale-[0.99]' 
+            : 'hover:shadow-md active:scale-[0.99]'
         }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -216,64 +216,34 @@ export function Dropzone() {
         onPaste={handlePaste}
         tabIndex={0}
         role="button"
-        aria-label={t('dropzone.title')}
+        aria-label="Tap to select photos"
         data-testid="dropzone-area"
       >
-        {/* Gradient Glow Effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
-        
-        {/* Main Content */}
-        <div className="relative space-y-6">
-          <div className="w-20 h-20 mx-auto rounded-full gradient-blue flex items-center justify-center shadow-lg">
-            <Upload className="w-10 h-10 text-white" />
+        <div className="text-center space-y-4 py-8">
+          {/* Icon */}
+          <div className="w-16 h-16 mx-auto bg-blue-50 dark:bg-blue-950/20 rounded-2xl flex items-center justify-center">
+            <Upload className="w-8 h-8 text-blue-600" />
           </div>
           
+          {/* Text */}
           <div>
-            <h2 className="text-2xl font-bold mb-2" data-testid="text-dropzone-title">
-              Drop Photos Here
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1" data-testid="text-dropzone-title">
+              Tap to select photos
             </h2>
-            <p className="text-sm text-muted-foreground mb-6">
-              or tap to select from your device
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              JPG, PNG, WebP supported
             </p>
-            
-            <Button 
-              onClick={openFileDialog}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
-              data-testid="button-choose-files"
-            >
-              <Upload className="w-5 h-5 mr-2" />
-              Select Photos
-            </Button>
           </div>
           
-          {/* Format Badges */}
-          <div className="flex justify-center gap-2">
-            <span className="px-3 py-1 bg-white/50 dark:bg-black/30 backdrop-blur-sm text-xs rounded-full font-medium">
-              JPG
-            </span>
-            <span className="px-3 py-1 bg-white/50 dark:bg-black/30 backdrop-blur-sm text-xs rounded-full font-medium">
-              PNG
-            </span>
-            <span className="px-3 py-1 bg-white/50 dark:bg-black/30 backdrop-blur-sm text-xs rounded-full font-medium">
-              WebP
-            </span>
-          </div>
-          
-          {/* Trust Badges - Subtle */}
-          <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground/60">
-            <div className="flex items-center gap-1.5">
-              <Shield className="w-4 h-4 text-green-600" />
-              <span>Private</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Lock className="w-4 h-4 text-blue-600" />
-              <span>Offline</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-purple-600" />
-              <span>Instant</span>
-            </div>
-          </div>
+          {/* Button */}
+          <button 
+            type="button"
+            onClick={(e) => { e.stopPropagation(); openFileDialog(); }}
+            className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-xl transition-colors shadow-sm"
+            data-testid="button-choose-files"
+          >
+            Select Photos
+          </button>
         </div>
       </div>
       

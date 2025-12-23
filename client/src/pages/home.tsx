@@ -67,30 +67,32 @@ export default function Home() {
       </header>
 
 
-      <main className="container mx-auto px-4 py-6 md:py-12 max-w-4xl pb-32 md:pb-12">
-        {/* Hero Section - Redesigned with Gradient Title */}
-        <section className="text-center mb-8 md:mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight gradient-text-blue">
+      <main className="container mx-auto px-4 py-8 md:py-12 max-w-lg pb-32 md:pb-12">
+        {/* Hero Section - Toss Style (Ultra Clean) */}
+        <section className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white leading-tight">
             Make Your Photos Anonymous
           </h1>
           
-          <p className="text-lg md:text-xl text-muted-foreground/80 mb-6 md:mb-8 max-w-2xl mx-auto">
-            Remove GPS & Metadata instantly • 100% On-device • Zero tracking
+          <p className="text-base text-gray-500 dark:text-gray-400 mb-6">
+            Remove GPS & metadata. 100% on-device.
           </p>
           
-          {/* Feature Badges - Bento Grid Style */}
-          <div className="grid grid-cols-3 gap-2 md:gap-3 max-w-2xl mx-auto mb-8">
-            <div className="bento-card group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-100 dark:border-green-900/50 p-3 md:p-4">
-              <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-green-600 mb-2" />
-              <p className="text-xs md:text-sm font-semibold text-green-700 dark:text-green-400">100% Private</p>
+          {/* Trust Badges - Toss Style (Inline, Minimal) */}
+          <div className="flex items-center justify-center gap-3 text-sm text-gray-600 dark:text-gray-400 mb-8">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-blue-600" />
+              <span>Secure</span>
             </div>
-            <div className="bento-card group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-100 dark:border-blue-900/50 p-3 md:p-4">
-              <WifiOff className="w-5 h-5 md:w-6 md:h-6 text-blue-600 mb-2" />
-              <p className="text-xs md:text-sm font-semibold text-blue-700 dark:text-blue-400">Works Offline</p>
+            <span className="text-gray-300 dark:text-gray-600">|</span>
+            <div className="flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-blue-600" />
+              <span>Fast</span>
             </div>
-            <div className="bento-card group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border border-purple-100 dark:border-purple-900/50 p-3 md:p-4">
-              <Zap className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mb-2" />
-              <p className="text-xs md:text-sm font-semibold text-purple-700 dark:text-purple-400">Instant</p>
+            <span className="text-gray-300 dark:text-gray-600">|</span>
+            <div className="flex items-center gap-1.5">
+              <WifiOff className="w-4 h-4 text-blue-600" />
+              <span>Offline</span>
             </div>
           </div>
         </section>
