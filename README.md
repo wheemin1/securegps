@@ -15,7 +15,7 @@
 ## 🚀 라이브 데모
 
 ### Netlify 배포된 사이트
-[https://your-app-name.netlify.app](https://your-app-name.netlify.app)
+[https://your-app-name.netlify.app](https://securegps.netlify.app/)
 
 ## 🛠️ 기술 스택
 
