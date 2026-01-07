@@ -55,15 +55,7 @@
    VITE_API_URL=https://your-backend-if-needed.com
    ```
 
-### 수동 배포
 
-```bash
-# 프로덕션 빌드
-npm run build:client
-
-# Netlify CLI로 배포 (선택사항)
-npx netlify deploy --prod --dir=dist/public
-```
 
 ## 📝 빌드 스크립트
 
@@ -127,24 +119,6 @@ npx netlify deploy --prod --dir=dist/public
    - 팝업 차단 설정 확인
    - 다운로드 권한 허용
 
-## 📄 라이선스
 
-MIT License - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
-
-## 🤝 기여하기
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📞 지원
-
-문제나 제안사항이 있으시면:
-- [GitHub Issues](https://github.com/wheemin1/securegps/issues)에 등록
-- [GitHub Discussions](https://github.com/wheemin1/securegps/discussions)에 참여
-
----
 
 **보안과 개인정보 보호를 최우선으로 하는 이미지 메타데이터 제거 도구**
