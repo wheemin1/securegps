@@ -24,7 +24,13 @@
   "processing": {
     "cleaning": "清浄化中 {current} / {total}...",
     "removing": "画像からGPSとメタデータを削除中",
-    "currentFile": "処理中: {filename}"
+    "currentFile": "処理中: {filename}",
+    "filesCompleted": "完了",
+    "step": {
+      "reading": "メタデータ読み取り",
+      "cleaning": "画像清浄化",
+      "finalizing": "仕上げ"
+    }
   },
   "success": {
     "allClean": "すべて清浄化完了。共有安全。",
@@ -117,7 +123,7 @@
     }
   },
   "features": {
-    "title": "なぜPrivateShare Lite？",
+    "title": "なぜSecureGPS？",
     "privacy": {
       "title": "100%プライベート処理",
       "description": "画像がデバイスから離れることはありません。アップロード、サーバー、データ収集なし。"

@@ -119,7 +119,7 @@ export function generateZipFilename(): string {
   const now = new Date();
   const date = now.toISOString().slice(0, 10).replace(/-/g, '');
   const time = now.toTimeString().slice(0, 5).replace(':', '');
-  return `privateshare_clean_${date}_${time}.zip`;
+  return `securegps_clean_${date}_${time}.zip`;
 }
 
 export async function downloadFile(blob: Blob, filename: string): Promise<void> {

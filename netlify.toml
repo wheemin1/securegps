@@ -8,18 +8,11 @@
   # Node.js 버전 설정
   environment = { NODE_VERSION = "18" }
 
-# SPA 라우팅을 위한 리다이렉트 설정
+# SPA(Single Page App) catch-all rewrite
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# API 경로는 서버리스 함수로 처리하지 않고 외부 서버로 프록시
-[[redirects]]
-  from = "/api/*"
-  to = "https://your-backend-url.com/api/:splat"
-  status = 200
-  force = true
 
 # 보안 헤더 설정
 [[headers]]
@@ -29,7 +22,7 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://replit.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https:; worker-src 'self' blob:;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagservices.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; worker-src 'self' blob:;"
 
 # 웹 워커 파일에 대한 MIME 타입 설정
 [[headers]]

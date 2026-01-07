@@ -24,7 +24,13 @@
   "processing": {
     "cleaning": "Limpiando {current} / {total}...",
     "removing": "Eliminando GPS y metadatos de tus imágenes",
-    "currentFile": "Procesando: {filename}"
+    "currentFile": "Procesando: {filename}",
+    "filesCompleted": "archivos completados",
+    "step": {
+      "reading": "Leyendo metadatos",
+      "cleaning": "Limpiando imagen",
+      "finalizing": "Finalizando"
+    }
   },
   "success": {
     "allClean": "Todo limpio. Seguro para compartir.",
@@ -117,7 +123,7 @@
     }
   },
   "features": {
-    "title": "¿Por qué PrivateShare Lite?",
+    "title": "¿Por qué SecureGPS?",
     "privacy": {
       "title": "Procesamiento 100% Privado",
       "description": "Tus imágenes nunca salen de tu dispositivo. Sin subidas, sin servidores, sin recopilación de datos."

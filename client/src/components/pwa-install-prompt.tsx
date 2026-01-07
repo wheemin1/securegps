@@ -92,7 +92,7 @@ export function PWAInstallPrompt() {
           
           <div className="flex-1">
             <h3 className="font-semibold text-foreground mb-1">
-              Install SecureNote
+              Install SecureGPS
             </h3>
             <p className="text-sm text-muted-foreground mb-3">
               Get instant access from your home screen. Works offline, 100% private.
@@ -126,7 +126,7 @@ export function PWAInstallPrompt() {
           </span>
           <span className="flex items-center">
             <span className="w-2 h-2 bg-blue-500 rounded-full mr-1.5"></span>
-            No ads
+            No upload
           </span>
           <span className="flex items-center">
             <span className="w-2 h-2 bg-purple-500 rounded-full mr-1.5"></span>

@@ -10,11 +10,11 @@ export default defineConfig({
     runtimeErrorOverlay(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png'],
+      includeAssets: ['og-image.svg'],
       manifest: {
-        name: 'SecureNote - Anonymous Photo GPS Remover',
-        short_name: 'SecureNote',
-        description: 'Remove GPS location and metadata from photos. 100% private, works offline on your phone.',
+        name: 'SecureGPS',
+        short_name: 'SecureGPS',
+        description: 'Stop Photo Tracking & Remove Location Offline',
         theme_color: '#3b82f6',
         background_color: '#ffffff',
         display: 'standalone',
@@ -24,16 +24,10 @@ export default defineConfig({
         categories: ['photo', 'privacy', 'utilities', 'productivity'],
         icons: [
           {
-            src: '/android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: '/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
+            src: '/og-image.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any'
           }
         ],
         shortcuts: [
@@ -42,7 +36,7 @@ export default defineConfig({
             short_name: 'Remove GPS',
             description: 'Remove GPS from photos instantly',
             url: '/?action=remove',
-            icons: [{ src: '/android-chrome-192x192.png', sizes: '192x192' }]
+            icons: [{ src: '/og-image.svg', sizes: 'any', type: 'image/svg+xml' }]
           }
         ]
       },

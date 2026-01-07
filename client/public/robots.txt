@@ -4,14 +4,14 @@ Allow: /
 # Sitemap location
 Sitemap: https://securegps.netlify.app/sitemap.xml
 
-# Allow crawling of main pages and SEO routes
+# Allow crawling of main pages
 Allow: /
 Allow: /index.html
 
 # Allow important files
 Allow: /robots.txt
 Allow: /sitemap.xml
-Allow: /og-image.jpg
+Allow: /og-image.png
 Allow: /site.webmanifest
 Allow: /*.png
 Allow: /*.jpg
@@ -30,7 +30,7 @@ Disallow: /*.tsx$
 # Crawl delay for polite crawling
 Crawl-delay: 0.5
 
-# Special rules for Google (target US market)
+# Special rules for Google
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0

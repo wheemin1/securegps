@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="google-site-verification" content="CXwW2ROvezFAamVFZYXX26sxDGQ9YjNOHBPFGM7LA6U" />
-    
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9247464363490578"
      crossorigin="anonymous"></script>
@@ -30,6 +30,7 @@
     <meta name="geo.region" content="US-CA;US-NY;US-TX;GB;AU;CA;CO;PK;PH;MY;IN" />
     <meta name="geo.placename" content="United States, United Kingdom, Canada, Australia, Colombia, Pakistan, Philippines, Malaysia, India, Global" />
     <meta name="language" content="English" />
+
     
     <!-- Additional SEO Meta Tags -->
     <meta name="rating" content="general" />
@@ -70,10 +71,7 @@
     <meta name="application-name" content="SecureGPS" />
     
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/og-image.svg" />
     <link rel="manifest" href="/site.webmanifest" />
     
     <!-- Preconnect for Performance -->
@@ -180,7 +178,7 @@
         "name": "SecureGPS",
         "url": "https://securegps.netlify.app/",
         "logo": "https://securegps.netlify.app/og-image.png",
-        "description": "Privacy-focused photo metadata removal tool",
+        "description": "Privacy-focused photo GPS/metadata removal tool",
         "foundingDate": "2024",
         "specialty": ["Photo Privacy", "Metadata Removal", "GPS Data Protection"],
         "knowsAbout": [
@@ -228,7 +226,7 @@
                 "name": "Is this tool completely free?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes, SecureGPS is completely free to use with no limits on file size or number of images processed."
+                    "text": "Yes, SecureGPS is free to use with no server upload required."
                 }
             },
             {
@@ -246,7 +244,33 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+
+        <footer aria-label="SecureGPS safety guide" style="padding: 40px 20px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; margin-top: 50px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="font-size: 18px; font-weight: 700; margin: 0 0 15px;">Why you should remove GPS from photos for safety</h2>
+                <p style="margin: 0 0 15px;">
+                    In today’s digital age, sharing a photo can unintentionally share your exact physical location. Most smartphones (iPhone and Android) automatically embed
+                    GPS coordinates (geotags) into EXIF metadata. This hidden data can be used for tracking, doxxing, or stalking—especially when images are shared publicly
+                    or forwarded without context.
+                </p>
+                <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">How SecureGPS protects you (offline, no upload)</h3>
+                <p style="margin: 0 0 15px;">
+                    SecureGPS processes images locally on your device. Unlike online converters that upload files to a server, your photos never leave your browser.
+                    Cleaning happens through safe re-encoding, which removes common metadata containers such as:
+                </p>
+                <ul style="margin: 0 0 15px; padding-left: 20px;">
+                    <li><strong>GPS coordinates</strong> (latitude/longitude/altitude) that can pinpoint your home or workplace.</li>
+                    <li><strong>EXIF camera metadata</strong> (device model, timestamps, camera settings).</li>
+                    <li><strong>XMP/IPTC tags</strong> that may include editing history or additional identifiers.</li>
+                </ul>
+                <p style="margin: 0;">
+                    Whether you’re sharing from the Philippines, Malaysia, Colombia, Pakistan, India—or anywhere globally—SecureGPS helps reduce location exposure before
+                    you post or send a photo.
+                </p>
+                <p style="font-size: 12px; margin: 30px 0 0; padding-top: 20px; border-top: 1px solid currentColor;">
+                    © 2026 SecureGPS. All processing is done locally in your browser.
+                </p>
+            </div>
+        </footer>
   </body>
 </html>

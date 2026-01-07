@@ -1,6 +1,6 @@
 # Overview
 
-This is a privacy-first single-page web application called "PrivateShare Lite" that removes image metadata (especially GPS data) entirely in the browser. The application processes JPEG, PNG, and WebP images locally without any file uploads, stripping EXIF, IPTC, and XMP metadata to protect user privacy. It features a simple drop-and-download workflow with support for multiple files, automatic ZIP creation, and internationalization.
+This is a privacy-first single-page web application called "SecureGPS" that removes image metadata (especially GPS data) entirely in the browser. The application processes JPEG, PNG, and WebP images locally without any file uploads, stripping EXIF, IPTC, and XMP metadata to protect user privacy. It features a simple drop-and-download workflow with support for multiple files, automatic ZIP creation, and internationalization.
 
 # User Preferences
 

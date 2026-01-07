@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "SecureGPS",
-    "tagline": "Eliminate Digital Traces - EOD Expert Verified"
+    "tagline": "Privacy-first image metadata removal"
   },
   "hero": {
     "title": "Eliminate Digital Traces from Photos",
@@ -142,7 +142,7 @@
     }
   },
   "features": {
-    "title": "Why PrivateShare Lite?",
+    "title": "Why SecureGPS?",
     "privacy": {
       "title": "100% Private Processing",
       "description": "Your images never leave your device. No uploads, no servers, no data collection."
@@ -197,12 +197,12 @@
   },
   "pwa": {
     "install": {
-      "title": "Install SecureNote",
+      "title": "Install SecureGPS",
       "description": "Get instant access from your home screen. Works offline, 100% private.",
       "installButton": "Install App",
       "notNow": "Not now",
       "worksOffline": "Works offline",
-      "noAds": "No ads",
+      "noAds": "No upload",
       "private": "Private"
     },
     "update": {

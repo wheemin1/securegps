@@ -1,4 +1,4 @@
-# SecureNote - GPS 메타데이터 제거 도구
+# SecureGPS - GPS 메타데이터 제거 도구
 
 개인정보 보호를 위한 이미지 GPS 메타데이터 제거 및 처리 도구입니다.
 
@@ -14,7 +14,7 @@
 
 ## 🚀 사이드 URL
 
-### 배포된 사이트
+### Netlify 배포된 사이트
 [https://securegps.netlify.app/](https://securegps.netlify.app/)
 
 ## 🛠️ 기술 스택

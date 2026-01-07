@@ -17,6 +17,10 @@ function Router() {
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
+      <Route path="/remove-gps" component={Home} />
+      <Route path="/metadata-remover" component={Home} />
+      <Route path="/photo-privacy" component={Home} />
+      <Route path="/exif-remover" component={Home} />
       <Route component={NotFound} />
     </Switch>
   );
