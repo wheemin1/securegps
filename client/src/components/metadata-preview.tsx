@@ -256,6 +256,32 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                       Lat: {gpsMetadata.location.latitude.toFixed(6)}<br/>
                       Lon: {gpsMetadata.location.longitude.toFixed(6)}
                     </div>
+
+                    {/* Fear visualization (offline-safe) */}
+                    <div className="mt-3">
+                      <div className="relative overflow-hidden rounded-lg border border-red-200 dark:border-red-900 bg-red-50/40 dark:bg-red-950/20">
+                        <div className="absolute inset-0">
+                          <div className="w-full h-full bg-[radial-gradient(circle_at_20%_30%,rgba(239,68,68,0.25),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(59,130,246,0.22),transparent_50%),linear-gradient(135deg,rgba(148,163,184,0.25),rgba(226,232,240,0.10))]" style={{ filter: 'blur(1.5px)' }} />
+                          <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)', backgroundSize: '18px 18px', filter: 'blur(0.8px)' }} />
+                        </div>
+                        <div className="relative aspect-[16/9] flex items-center justify-center">
+                          <div className="absolute top-2 left-2 px-2 py-1 rounded bg-red-600 text-white text-[10px] font-semibold tracking-wide">
+                            YOUR LOCATION EXPOSED
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <div className="w-9 h-9 rounded-full bg-red-600/15 border border-red-500/30 flex items-center justify-center">
+                              <MapPin className="w-5 h-5 text-red-600" />
+                            </div>
+                            <div className="mt-1 text-[10px] text-red-700 dark:text-red-300 font-medium">
+                              Precise GPS embedded
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-1 text-[10px] text-muted-foreground">
+                        Map preview is blurred for safety.
+                      </div>
+                    </div>
                   </div>
                 ) : hasGps ? (
                   <Badge variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
@@ -379,12 +405,18 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
           <Button
             onClick={() => {
               console.log('Confirm button clicked!');
+              if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                // Small haptic to make it feel like an app
+                navigator.vibrate(40);
+              }
               onConfirm(files);
             }}
             className={`w-full md:w-auto h-14 px-8 text-white text-base font-semibold rounded-xl shadow-sm transition-colors ${
               hasOnlyOtherMetadata
                 ? 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
-                : 'bg-orange-600 hover:bg-orange-700 active:bg-orange-800'
+                : (hasCriticalMetadata
+                    ? 'bg-red-600 hover:bg-red-700 active:bg-red-800'
+                    : 'bg-orange-600 hover:bg-orange-700 active:bg-orange-800')
             }`}
           >
             <Trash2 className="w-5 h-5 mr-2" />

@@ -4,13 +4,36 @@ import { Progress } from '@/components/ui/progress';
 import { useImageProcessor } from '@/hooks/use-image-processor';
 import { useLanguage } from '@/hooks/use-language';
 import { MetadataPreview } from '@/components/metadata-preview';
-import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download, Smartphone } from 'lucide-react';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 export function Dropzone() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { state, previewFiles, addFilesToQueue, removeFileFromQueue, startBatchProcessing, confirmProcessing, downloadResults, reset } = useImageProcessor();
   const { t } = useLanguage();
   const [isDragOver, setIsDragOver] = useState(false);
+
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showInstallSheet, setShowInstallSheet] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   const terminalSteps = useMemo(
     () => [
@@ -280,7 +303,7 @@ export function Dropzone() {
 
   if (state.status === 'result') {
     return (
-      <div className="rounded-2xl p-8 text-center bg-green-50/50 dark:bg-green-950/30 success-card">
+      <div className="rounded-2xl p-8 text-center bg-green-50/50 dark:bg-green-950/30 success-card relative">
         <div className="space-y-6">
           <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-2xl flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
@@ -295,7 +318,15 @@ export function Dropzone() {
             </p>
 
             <Button
-              onClick={downloadResults}
+              onClick={async () => {
+                if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                  navigator.vibrate(30);
+                }
+                await downloadResults();
+                if (!isStandalone && installPrompt) {
+                  setShowInstallSheet(true);
+                }
+              }}
               className="w-full md:w-auto h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 text-base font-semibold rounded-xl shadow-sm transition-colors"
             >
               <Download className="w-5 h-5 mr-2" />
@@ -342,8 +373,104 @@ export function Dropzone() {
                 {t('success.processMore') || 'Process more images'}
               </Button>
             </div>
+
+            {/* Deletion Log (receipt) */}
+            {state.deletionLog && state.deletionLog.some(section => section.entries.length > 0) && (
+              <div className="mt-6 mx-auto max-w-md text-left">
+                <div className="rounded-xl bg-white/70 dark:bg-gray-900/40 border border-border p-4">
+                  <div className="text-sm font-semibold text-foreground mb-2">Deletion Log</div>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="log">
+                      <AccordionTrigger className="py-2 text-sm">
+                        View what was removed
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2">
+                        <div className="space-y-4">
+                          {state.deletionLog.map((section) => (
+                            <div key={section.fileName} className="rounded-lg border border-border bg-background/40 p-3">
+                              <div className="text-xs font-semibold text-foreground mb-2 truncate">
+                                {section.fileName}
+                              </div>
+                              <div className="space-y-2">
+                                {section.entries.length === 0 ? (
+                                  <div className="text-xs text-muted-foreground">No sensitive metadata detected.</div>
+                                ) : (
+                                  section.entries.map((entry) => (
+                                    <div key={`${entry.label}-${entry.before}`} className="text-xs flex items-center justify-between gap-3">
+                                      <div className="text-muted-foreground">{entry.label}</div>
+                                      <div className="font-mono text-right">
+                                        <span className="text-foreground/80">{entry.before}</span>
+                                        <span className="text-muted-foreground"> → </span>
+                                        <span className="text-red-600 font-semibold">REMOVED</span>
+                                      </div>
+                                    </div>
+                                  ))
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Post-download PWA install bottom sheet */}
+        {showInstallSheet && !isStandalone && installPrompt && (
+          <div className="fixed inset-x-0 bottom-0 z-50 p-4">
+            <div className="mx-auto max-w-md rounded-2xl border border-border bg-card shadow-xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Smartphone className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-foreground mb-1">
+                    Use SecureGPS offline next time?
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Install the app for faster access and offline mode.
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowInstallSheet(false)}
+                  className="text-muted-foreground hover:text-foreground text-sm"
+                  aria-label="Dismiss"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="mt-3 flex gap-2">
+                <Button
+                  size="sm"
+                  className="flex-1"
+                  onClick={async () => {
+                    try {
+                      await installPrompt.prompt();
+                      await installPrompt.userChoice;
+                    } finally {
+                      setInstallPrompt(null);
+                      setShowInstallSheet(false);
+                    }
+                  }}
+                >
+                  Install App
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setShowInstallSheet(false)}
+                >
+                  Not now
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

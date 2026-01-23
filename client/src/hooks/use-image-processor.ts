@@ -30,6 +30,44 @@ export function useImageProcessor() {
   const processingResults = useRef<FileProcessingResult[]>([]);
   const downloadableRef = useRef<{ blob: Blob; filename: string; kind: 'single' | 'zip'; count: number } | null>(null);
 
+  const buildDeletionLog = useCallback((files: File[], previewData?: FileMetadata[]) => {
+    if (!previewData || previewData.length === 0) return [];
+
+    return files.map((file, index) => {
+      const meta = previewData[index];
+      const entries: Array<{ label: string; before: string }> = [];
+
+      if (meta?.hasGps) {
+        if (meta.location) {
+          entries.push({ label: 'GPS Latitude', before: meta.location.latitude.toFixed(6) });
+          entries.push({ label: 'GPS Longitude', before: meta.location.longitude.toFixed(6) });
+        } else {
+          entries.push({ label: 'GPS Tags', before: 'Present' });
+        }
+      }
+
+      if (meta?.cameraInfo) {
+        entries.push({ label: 'Device / Camera', before: meta.cameraInfo });
+      }
+
+      if (meta?.dateTimeOriginal) {
+        entries.push({ label: 'Date Taken', before: meta.dateTimeOriginal });
+      }
+
+      const otherTypes = (meta?.metadataFound || []).filter(
+        (type) => !type.includes('GPS')
+      );
+      if (otherTypes.length > 0) {
+        entries.push({ label: 'Other Metadata', before: otherTypes.join(', ') });
+      }
+
+      return {
+        fileName: meta?.fileName || file.name,
+        entries
+      };
+    });
+  }, []);
+
   const initWorker = useCallback(() => {
     if (!workerRef.current) {
       workerRef.current = new Worker(
@@ -232,6 +270,8 @@ export function useImageProcessor() {
     const minDelayMs = 1500 + Math.floor(Math.random() * 1000);
     const processingStartedAt = Date.now();
 
+    const deletionLog = buildDeletionLog(selectedFiles, state.previewData);
+
     // Initialize processing state
     setState(prev => ({
       ...prev,
@@ -331,6 +371,9 @@ export function useImageProcessor() {
             total: selectedFiles.length,
             progress: 100,
             message: 'Ready. Review the result and download when you are ready.',
+            selectedFiles,
+            previewData: state.previewData,
+            deletionLog,
             download: {
               kind: 'single',
               filename: successfulResults[0].filename,
@@ -358,6 +401,9 @@ export function useImageProcessor() {
             total: selectedFiles.length,
             progress: 100,
             message: 'Ready. Review the result and download when you are ready.',
+            selectedFiles,
+            previewData: state.previewData,
+            deletionLog,
             download: {
               kind: 'zip',
               filename: zipFilename,
@@ -376,7 +422,7 @@ export function useImageProcessor() {
     } else {
       setState(prev => ({ ...prev, status: 'error', message: 'No files were successfully processed.' }));
     }
-  }, [options, toast, initWorker]);
+  }, [buildDeletionLog, options, state.previewData, toast, initWorker]);
 
   const downloadResults = useCallback(async () => {
     const downloadable = downloadableRef.current;

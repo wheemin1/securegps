@@ -20,6 +20,10 @@ export interface ProcessingState {
     filename: string;
     count: number;
   };
+  deletionLog?: Array<{
+    fileName: string;
+    entries: Array<{ label: string; before: string }>;
+  }>;
 }
 
 export interface Language {
