@@ -1,0 +1,86 @@
+{
+  "app": {
+    "title": "SecureGPS",
+    "tagline": "Privacy-first image metadata removal"
+  },
+  "meta": {
+    "title": "SecureGPS — Remover GPS e metadados (100% offline)",
+    "description": "Remova GPS, EXIF e metadados de rastreamento das fotos no navegador. Processamento 100% offline. Zero upload."
+  },
+  "hero": {
+    "title": "Eliminate Digital Traces from Photos",
+    "subtitle": "100% Offline Processing - Zero Server Upload",
+    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
+    "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
+    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
+    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
+  },
+  "dropzone": {
+    "title": "Eliminate Tracking Risks from Photos",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
+    "chooseFiles": "Select Photos",
+    "features": {
+      "noUpload": "Zero Upload",
+      "private": "100% Offline",
+      "instant": "Instant Processing"
+    }
+  },
+  "processing": {
+    "cleaning": "Eliminating tracking data {current}/{total}",
+    "removing": "Removing GPS and tracking metadata",
+    "currentFile": "Processing: {filename}",
+    "filesCompleted": "secured",
+    "step": {
+      "reading": "Scanning",
+      "cleaning": "Removing",
+      "finalizing": "Done"
+    }
+  },
+  "success": {
+    "title": "✅ Tracking Risks Eliminated — Safe to Share",
+    "allClean": "✅ All tracking data removed. Safe to share.",
+    "singleFile": "✅ Secured: {filename}",
+    "multipleFiles": "✅ {count} photos secured in {filename}",
+    "cleanMore": "Secure More Photos",
+    "processMore": "Secure more photos",
+    "stats": {
+      "files": "Photos anonymized",
+      "metadata": "GPS data removed",
+      "privacy": "100% Private & Safe"
+    }
+  },
+  "advanced": {
+    "title": "Advanced",
+    "keepICC": {
+      "label": "Keep ICC color profile",
+      "description": "Preserves color accuracy but increases file size. Recommended for photos requiring color precision."
+    },
+    "forceJPEG": {
+      "label": "Force output to JPEG",
+      "description": "Converts PNG/WebP to JPEG. May increase file size for images with transparency."
+    },
+    "quality": {
+      "label": "JPEG/WebP Quality:",
+      "smaller": "Smaller file",
+      "better": "Better quality"
+    }
+  },
+  "preview": {
+    "title": "⚠️ Tracking Risk Detected",
+    "subtitle": "Found {count} metadata items in {fileCount} files that could expose your location. Review below.",
+    "confirmButton": "Eliminate Tracking Data ({count} items)",
+    "cancelButton": "Cancel",
+    "privacyNotice": "All processing happens in your browser - files never leave your device",
+    "gpsTitle": "GPS Location",
+    "gpsFound": "⚠️ Tracking Risk",
+    "gpsNone": "Safe",
+    "gpsDescription": "Location data will be eliminated",
+    "gpsNoDescription": "No GPS tracking data",
+    "gpsTagsOnly": "GPS Tags Only (No Coordinates)",
+    "gpsLocationData": "Location Data",
+    "cameraTitle": "Camera Data",
+    "cameraFound": "Found",
+    "cameraNone": "None",
+    "cameraDescription": "EXIF data will be removed"
+  }
+}

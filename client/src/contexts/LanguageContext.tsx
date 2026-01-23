@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { DEFAULT_LANG_URL, LANGUAGES } from '@/lib/constants';
 
 export interface Language {
   code: string;
@@ -6,12 +7,11 @@ export interface Language {
   flag: string;
 }
 
-export const languages: Language[] = [
-  { code: 'en', name: 'English', flag: 'flag-en' },
-  { code: 'ko', name: '한국어', flag: 'flag-ko' },
-  { code: 'es', name: 'Español', flag: 'flag-es' },
-  { code: 'ja', name: '日本語', flag: 'flag-ja' },
-];
+export const languages: Language[] = Object.values(LANGUAGES).map((lang) => ({
+  code: lang.url,
+  name: lang.label,
+  flag: lang.flag,
+}));
 
 interface LanguageContextType {
   currentLanguage: Language;
@@ -38,7 +38,7 @@ const getInitialLanguage = (): Language => {
     console.warn('🌐 Error reading from localStorage:', error);
   }
   console.log('🌐 Using default language: English');
-  return languages[0]; // 영어 기본값
+  return languages.find((l) => l.code === DEFAULT_LANG_URL) ?? languages[0];
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

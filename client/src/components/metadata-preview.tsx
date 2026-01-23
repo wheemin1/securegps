@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 
 function DangerMap({ lat, lng }: { lat: number; lng: number }) {
+  const { t } = useLanguage();
   return (
     <div className="relative w-full h-64 rounded-xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950 group">
       {/* Background live map (non-interactive) */}
@@ -38,10 +39,10 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 bg-red-600 rounded-full animate-ping opacity-50" />
         </div>
         <div className="mt-3 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-xl shadow-[0_0_20px_rgba(220,38,38,0.8)] border-2 border-white tracking-widest uppercase">
-          Your Location Exposed
+          {t('dangerMap.title')}
         </div>
         <div className="mt-3 bg-black/80 text-red-200 font-mono text-xs px-3 py-1 rounded border border-red-500/40 font-bold">
-          LAT: {lat.toFixed(5)} | LON: {lng.toFixed(5)}
+          {t('dangerMap.coords', { lat: lat.toFixed(5), lng: lng.toFixed(5) })}
         </div>
         <a
           href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`}
@@ -49,7 +50,7 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
           rel="noreferrer"
           className="mt-3 text-xs text-white/90 underline underline-offset-4 hover:text-white"
         >
-          View on map
+          {t('dangerMap.viewOnMap')}
         </a>
       </div>
 
@@ -68,6 +69,21 @@ interface MetadataPreviewProps {
 
 export function MetadataPreview({ files, metadata, onConfirm, onCancel }: MetadataPreviewProps) {
   const { t } = useLanguage();
+
+  const translateMetadataType = (metaType: string) => {
+    switch (metaType) {
+      case 'GPS (found in EXIF)':
+        return t('metadata.types.gpsExif');
+      case 'GPS (found in XMP)':
+        return t('metadata.types.gpsXmp');
+      case 'PNG text chunks':
+        return t('metadata.types.pngText');
+      case 'WebP metadata':
+        return t('metadata.types.webp');
+      default:
+        return metaType;
+    }
+  };
 
   // ESC 키로 취소 기능
   useEffect(() => {
@@ -274,7 +290,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               : 'text-orange-800 dark:text-orange-200'
           }`}>
             {hasOnlyOtherMetadata 
-              ? 'Location Safe, Minor Data Found'
+              ? t('preview.minor.title')
               : t('preview.title')
             }
           </h2>
@@ -283,7 +299,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               : 'text-orange-700 dark:text-orange-300'
           }>
             {hasOnlyOtherMetadata
-              ? `No GPS or camera info, but found ${otherMetadata} other metadata items (XMP, IPTC, etc.)`
+              ? t('preview.minor.subtitle', { count: otherMetadata })
               : t('preview.subtitle', { count: totalMetadataItems, fileCount: files.length })
             }
           </p>
@@ -303,11 +319,11 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                 {hasGpsLocation && gpsMetadata?.location ? (
                   <div className="space-y-2">
                     <div className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded font-bold animate-pulse">
-                      ⚠️ EXPOSED
+                      {t('preview.gpsExposedBadge')}
                     </div>
                     <div className="text-xs text-red-800 dark:text-red-200 font-mono">
-                      Lat: {gpsMetadata.location.latitude.toFixed(4)}<br/>
-                      Lon: {gpsMetadata.location.longitude.toFixed(4)}
+                      {t('dangerMap.latShort')}: {gpsMetadata.location.latitude.toFixed(4)}<br/>
+                      {t('dangerMap.lngShort')}: {gpsMetadata.location.longitude.toFixed(4)}
                     </div>
                   </div>
                 ) : hasGps ? (
@@ -412,7 +428,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                               className="text-xs"
                             >
                               <Trash2 className="w-3 h-3 mr-1" />
-                              {metaType}
+                              {translateMetadataType(metaType)}
                             </Badge>
                           ))}
                         </div>

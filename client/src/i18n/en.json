@@ -3,6 +3,10 @@
     "title": "SecureGPS",
     "tagline": "Privacy-first image metadata removal"
   },
+  "meta": {
+    "title": "SecureGPS — Remove GPS & Metadata (100% Offline)",
+    "description": "Remove GPS, EXIF, and tracking metadata from photos in your browser. 100% offline processing. Zero uploads."
+  },
   "hero": {
     "title": "Eliminate Digital Traces from Photos",
     "subtitle": "100% Offline Processing - Zero Server Upload",

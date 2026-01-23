@@ -1,0 +1,28 @@
+{
+  "app": {
+    "title": "SecureGPS",
+    "tagline": "Privacy-first image metadata removal"
+  },
+  "meta": {
+    "title": "SecureGPS — GPS & Metadaten entfernen (100% offline)",
+    "description": "Entfernen Sie GPS, EXIF und Tracking-Metadaten aus Fotos direkt im Browser. 100% offline. Kein Upload."
+  },
+  "hero": {
+    "title": "Eliminate Digital Traces from Photos",
+    "subtitle": "100% Offline Processing - Zero Server Upload",
+    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
+    "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
+    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
+    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
+  },
+  "dropzone": {
+    "title": "Eliminate Tracking Risks from Photos",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
+    "chooseFiles": "Select Photos",
+    "features": {
+      "noUpload": "Zero Upload",
+      "private": "100% Offline",
+      "instant": "Instant Processing"
+    }
+  }
+}

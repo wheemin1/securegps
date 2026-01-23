@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build:client",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build:client"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "git:commit-push",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"git add -A && git commit -m \"feat(i18n-seo): lang-prefixed routes + hreflang sitemap\" && git push"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git:add-all",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"add",
+				"-A"
+			],
+			"isBackground": false
+		}
+	]
+}

@@ -3,6 +3,10 @@
     "title": "SecureGPS",
     "tagline": "개인정보 보호 우선 이미지 메타데이터 제거"
   },
+  "meta": {
+    "title": "SecureGPS — 사진 GPS/메타데이터 제거 (100% 오프라인)",
+    "description": "브라우저에서 사진의 GPS, EXIF, 추적 메타데이터를 제거하세요. 100% 기기 내 처리, 업로드 없음."
+  },
   "hero": {
     "title": "이미지를 드롭하여 정리",
     "subtitle": "(업로드 없음)",

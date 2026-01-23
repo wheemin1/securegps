@@ -3,6 +3,10 @@
     "title": "SecureGPS",
     "tagline": "プライバシー重視の画像メタデータ削除"
   },
+  "meta": {
+    "title": "SecureGPS — GPS/メタデータ削除（100%オフライン）",
+    "description": "ブラウザ内で写真のGPS、EXIF、追跡メタデータを削除します。100%オフライン処理。アップロードなし。"
+  },
   "hero": {
     "title": "画像をドロップして清浄化",
     "subtitle": "（アップロードなし）",

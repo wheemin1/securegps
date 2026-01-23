@@ -43,13 +43,15 @@ export function Dropzone() {
       const isZip = downloadKind === 'zip';
 
       toast({
-        title: 'Done',
+        title: t('toast.processingComplete.title'),
         description: isZip
-          ? `Your ZIP is ready${typeof count === 'number' ? ` (${count} photos)` : ''}. Tap Download when ready.`
-          : 'Your cleaned photo is ready. Tap Download when ready.',
+          ? (typeof count === 'number'
+            ? t('toast.processingComplete.zipReadyWithCount', { count })
+            : t('toast.processingComplete.zipReady'))
+          : t('toast.processingComplete.singleReady'),
       });
     }
-  }, [state.status, state.download, toast]);
+  }, [state.status, state.download, toast, t]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -60,17 +62,10 @@ export function Dropzone() {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
-  const terminalSteps = useMemo(
-    () => [
-      'Searching for GPS coordinates...',
-      'Removing Exif.Image.Make...',
-      'Scrubbing XMP tags...',
-      'Zero-filling sensitive bytes...',
-      'Securing export...',
-      'Done.'
-    ],
-    []
-  );
+  const terminalSteps = useMemo(() => {
+    const value = t('dropzone.processing.terminalSteps');
+    return Array.isArray(value) ? value : [String(value)];
+  }, [t]);
 
   const [terminalIndex, setTerminalIndex] = useState(0);
 
@@ -84,20 +79,20 @@ export function Dropzone() {
       );
 
       const lastLine = hasGpsCoords
-        ? 'Found Lat/Lon data!'
+        ? t('dropzone.scan.foundCoords')
         : hasGpsTagsOnly
-          ? 'Found GPS tags (no coordinates).'
-          : 'No GPS found. Checking other metadata…';
+          ? t('dropzone.scan.foundTagsOnly')
+          : t('dropzone.scan.noGps');
 
       return [
-        'Reading Exif tags…',
-        'Detecting GPS coordinates…',
-        'Checking camera/device info…',
-        'Building risk report…',
+        t('dropzone.scan.readingExif'),
+        t('dropzone.scan.detectingGps'),
+        t('dropzone.scan.checkingDevice'),
+        t('dropzone.scan.buildingReport'),
         lastLine
       ];
     },
-    [state.queuedMetadata]
+    [state.queuedMetadata, t]
   );
   const [scanIndex, setScanIndex] = useState(0);
 
@@ -195,10 +190,12 @@ export function Dropzone() {
         <div className="toss-card p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'} Ready
+              {state.queuedFiles.length === 1
+                ? t('dropzone.queue.readyTitleSingle', { count: state.queuedFiles.length })
+                : t('dropzone.queue.readyTitleMultiple', { count: state.queuedFiles.length })}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Add more or start processing
+              {t('dropzone.queue.readySubtitle')}
             </p>
           </div>
 
@@ -235,7 +232,7 @@ export function Dropzone() {
                           <>
                             <span>•</span>
                             <span className="text-orange-600 dark:text-orange-400 font-medium">
-                              {meta.metadataFound.length} metadata
+                              {t('dropzone.queue.metadataCount', { count: meta.metadataFound.length })}
                             </span>
                           </>
                         )}
@@ -246,7 +243,7 @@ export function Dropzone() {
                   <button
                     onClick={() => removeFileFromQueue(index)}
                     className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
-                    aria-label="Remove file"
+                    aria-label={t('dropzone.queue.removeFileAria')}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -271,10 +268,14 @@ export function Dropzone() {
               {showScanOverlay ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Scanning…
+                  {t('dropzone.queue.scanning')}
                 </>
               ) : (
-                <>Clean {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'}</>
+                <>
+                  {state.queuedFiles.length === 1
+                    ? t('dropzone.queue.cleanButtonSingle', { count: state.queuedFiles.length })
+                    : t('dropzone.queue.cleanButtonMultiple', { count: state.queuedFiles.length })}
+                </>
               )}
             </Button>
             
@@ -284,7 +285,7 @@ export function Dropzone() {
               disabled={showScanOverlay}
               className="w-full h-14 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-base font-medium rounded-xl transition-colors"
             >
-              + Add More Photos
+              {t('dropzone.queue.addMore')}
             </button>
           </div>
         </div>
@@ -298,8 +299,8 @@ export function Dropzone() {
                 </div>
               </div>
               <div className="text-center mb-3">
-                <h2 className="text-xl font-semibold text-foreground">Scanning metadata…</h2>
-                <p className="text-sm text-muted-foreground">Preparing your risk report</p>
+                <h2 className="text-xl font-semibold text-foreground">{t('dropzone.queue.scanningMetadataTitle')}</h2>
+                <p className="text-sm text-muted-foreground">{t('dropzone.queue.scanningMetadataSubtitle')}</p>
               </div>
               <div className="rounded-xl border border-border bg-muted/30 p-3">
                 <div className="font-mono text-xs text-foreground/90 truncate">
@@ -357,17 +358,17 @@ export function Dropzone() {
 
           <div className="text-center mb-5">
             <h2 className="text-xl font-semibold text-foreground mb-1">
-              Analyzing & Securing…
+              {t('dropzone.processing.title')}
             </h2>
             <p className="text-sm text-muted-foreground">
-              Runs on your device. No upload.
+              {t('dropzone.processing.subtitle')}
             </p>
           </div>
 
           <div className="max-w-md mx-auto">
             <Progress value={state.progress} className="h-4 mb-3" />
             <div className="flex justify-between items-center text-xs text-muted-foreground mb-3">
-              <span>{state.processed} / {state.total} {t('processing.filesCompleted') || 'files completed'}</span>
+              <span>{state.processed} / {state.total} {t('processing.filesCompleted')}</span>
               <span className="font-semibold text-primary">{Math.round(state.progress)}%</span>
             </div>
           </div>
@@ -394,7 +395,7 @@ export function Dropzone() {
           <div className="flex items-center justify-center">
             <div className="w-full max-w-[300px]">
               <div className="w-full h-[250px] rounded-xl border border-dashed border-border bg-muted/40 flex items-center justify-center text-xs text-muted-foreground">
-                Advertisement (300×250)
+                {t('ads.placeholder')}
               </div>
             </div>
           </div>
@@ -416,7 +417,14 @@ export function Dropzone() {
               {t('success.title') || 'All clean. Safe to share.'}
             </h2>
             <p className="text-green-700 dark:text-green-300 mb-6">
-              {state.message}
+              {state.download?.kind === 'zip'
+                ? t('success.multipleFiles', {
+                  count: state.download.count,
+                  filename: state.download.filename
+                })
+                : t('success.singleFile', {
+                  filename: state.download?.filename || ''
+                })}
             </p>
 
             <Button
@@ -432,7 +440,7 @@ export function Dropzone() {
               className="w-full md:w-auto h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 text-base font-semibold rounded-xl shadow-sm transition-colors"
             >
               <Download className="w-5 h-5 mr-2" />
-              {state.download?.kind === 'zip' ? 'Download Cleaned ZIP' : '⬇ Save Cleaned Photo'}
+              {state.download?.kind === 'zip' ? t('success.downloadZip') : t('success.downloadSingle')}
             </Button>
             
             {/* Enhanced Result feedback card */}
@@ -480,11 +488,11 @@ export function Dropzone() {
             {state.deletionLog && state.deletionLog.some(section => section.entries.length > 0) && (
               <div className="mt-6 mx-auto max-w-md text-left">
                 <div className="rounded-xl bg-white/70 dark:bg-gray-900/40 border border-border p-4">
-                  <div className="text-sm font-semibold text-foreground mb-2">Deletion Log</div>
+                  <div className="text-sm font-semibold text-foreground mb-2">{t('deletionLog.title')}</div>
                   <Accordion type="single" collapsible>
                     <AccordionItem value="log">
                       <AccordionTrigger className="py-2 text-sm">
-                        View what was removed
+                        {t('deletionLog.trigger')}
                       </AccordionTrigger>
                       <AccordionContent className="pt-2">
                         <div className="space-y-4">
@@ -495,7 +503,7 @@ export function Dropzone() {
                               </div>
                               <div className="space-y-2">
                                 {section.entries.length === 0 ? (
-                                  <div className="text-xs text-muted-foreground">No sensitive metadata detected.</div>
+                                  <div className="text-xs text-muted-foreground">{t('deletionLog.none')}</div>
                                 ) : (
                                   section.entries.map((entry) => (
                                     <div key={`${entry.label}-${entry.before}`} className="text-xs flex items-center justify-between gap-3">
@@ -503,7 +511,7 @@ export function Dropzone() {
                                       <div className="font-mono text-right">
                                         <span className="text-foreground/80">{entry.before}</span>
                                         <span className="text-muted-foreground"> → </span>
-                                        <span className="text-red-600 font-semibold">REMOVED</span>
+                                        <span className="text-red-600 font-semibold">{t('deletionLog.removed')}</span>
                                       </div>
                                     </div>
                                   ))
@@ -531,16 +539,16 @@ export function Dropzone() {
                 </div>
                 <div className="flex-1">
                   <div className="text-sm font-semibold text-foreground mb-1">
-                    Use SecureGPS offline next time?
+                    {t('pwa.nudge.title')}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Install the app for faster access and offline mode.
+                    {t('pwa.nudge.description')}
                   </div>
                 </div>
                 <button
                   onClick={() => setShowInstallSheet(false)}
                   className="text-muted-foreground hover:text-foreground text-sm"
-                  aria-label="Dismiss"
+                  aria-label={t('ui.dismiss')}
                 >
                   ✕
                 </button>
@@ -560,14 +568,14 @@ export function Dropzone() {
                     }
                   }}
                 >
-                  Install App
+                  {t('pwa.nudge.installButton')}
                 </Button>
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setShowInstallSheet(false)}
                 >
-                  Not now
+                  {t('pwa.nudge.notNow')}
                 </Button>
               </div>
             </div>
@@ -594,7 +602,7 @@ export function Dropzone() {
         onPaste={handlePaste}
         tabIndex={0}
         role="button"
-        aria-label="Tap to select photos"
+        aria-label={t('dropzone.idle.ariaTapToSelect')}
         data-testid="dropzone-area"
       >
         <div className="text-center space-y-4 py-8">
@@ -606,10 +614,10 @@ export function Dropzone() {
           {/* Text */}
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1" data-testid="text-dropzone-title">
-              Tap to select photos
+              {t('dropzone.idle.title')}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              JPG, PNG, WebP supported
+              {t('dropzone.idle.subtitle')}
             </p>
           </div>
           
@@ -620,7 +628,7 @@ export function Dropzone() {
             className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-xl transition-colors shadow-sm"
             data-testid="button-choose-files"
           >
-            Select Photos
+            {t('dropzone.chooseFiles')}
           </button>
         </div>
       </div>

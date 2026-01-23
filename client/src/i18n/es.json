@@ -3,6 +3,10 @@
     "title": "SecureGPS",
     "tagline": "Eliminación de metadatos de imagen con privacidad primero"
   },
+  "meta": {
+    "title": "SecureGPS — Eliminar GPS y metadatos (100% offline)",
+    "description": "Elimina GPS, EXIF y metadatos de seguimiento de tus fotos en el navegador. Procesamiento 100% offline. Cero subidas."
+  },
   "hero": {
     "title": "Arrastra imágenes para limpiar",
     "subtitle": "(Sin subida)",

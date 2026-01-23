@@ -4,6 +4,7 @@ import { isFormatSupported, generateZipFilename, downloadFile } from '@/utils/im
 import { createZipFile } from '@/utils/zip-handler';
 import { extractMetadata } from '@/utils/metadata-extractor';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/use-language';
 
 export function useImageProcessor() {
   const [state, setState] = useState<ProcessingState>({
@@ -26,6 +27,7 @@ export function useImageProcessor() {
   });
   
   const { toast } = useToast();
+  const { t } = useLanguage();
   const workerRef = useRef<Worker | null>(null);
   const processingResults = useRef<FileProcessingResult[]>([]);
   const downloadableRef = useRef<{ blob: Blob; filename: string; kind: 'single' | 'zip'; count: number } | null>(null);
@@ -159,8 +161,8 @@ export function useImageProcessor() {
     const supportedFiles = files.filter(file => {
       if (!isFormatSupported(file)) {
         toast({
-          title: "Unsupported Format",
-          description: `${file.name} is not a supported format.`,
+          title: t('toast.errors.unsupportedTitle'),
+          description: t('errors.unsupported', { filename: file.name }),
           variant: "destructive",
         });
         return false;
@@ -192,21 +194,21 @@ export function useImageProcessor() {
       processed: 0,
       total: supportedFiles.length,
       progress: 0,
-      message: `Ready to clean ${supportedFiles.length} ${supportedFiles.length === 1 ? 'file' : 'files'}`,
+      message: t('dropzone.preview.readyMessage', { count: supportedFiles.length }),
       selectedFiles: supportedFiles,
       previewData
     });
     
     console.log('setState called with selectedFiles:', supportedFiles);
-  }, [toast]);
+  }, [toast, t]);
 
   const addFilesToQueue = useCallback(async (files: File[]) => {
     const supportedFiles = files.filter(isFormatSupported);
     
     if (supportedFiles.length === 0) {
       toast({
-        title: 'No supported files',
-        description: 'Please select valid image files (JPG, PNG, or WebP)',
+        title: t('toast.errors.noSupportedTitle'),
+        description: t('toast.errors.noSupportedDescription'),
         variant: 'destructive'
       });
       return;
@@ -221,9 +223,9 @@ export function useImageProcessor() {
       status: 'queued',
       queuedFiles: [...(prev.queuedFiles || []), ...supportedFiles],
       queuedMetadata: [...(prev.queuedMetadata || []), ...newMetadata],
-      message: `${(prev.queuedFiles?.length || 0) + supportedFiles.length} photos ready to clean`
+      message: t('dropzone.queue.readyMessage', { count: (prev.queuedFiles?.length || 0) + supportedFiles.length })
     }));
-  }, [toast]);
+  }, [toast, t]);
 
   const removeFileFromQueue = useCallback((index: number) => {
     setState(prev => {
@@ -237,10 +239,10 @@ export function useImageProcessor() {
         status: newQueuedFiles.length === 0 ? 'idle' : 'queued',
         queuedFiles: newQueuedFiles,
         queuedMetadata: newQueuedMetadata,
-        message: newQueuedFiles.length === 0 ? '' : `${newQueuedFiles.length} photos ready to clean`
+        message: newQueuedFiles.length === 0 ? '' : t('dropzone.queue.readyMessage', { count: newQueuedFiles.length })
       };
     });
-  }, []);
+  }, [t]);
 
   const startBatchProcessing = useCallback(() => {
     if (!state.queuedFiles || state.queuedFiles.length === 0) return;
@@ -343,8 +345,11 @@ export function useImageProcessor() {
       console.log('❌ Failed results:', failedResults);
       failedResults.forEach(result => {
         toast({
-          title: "Processing Error",
-          description: `Failed to process ${result.originalFile.name}: ${result.error}`,
+          title: t('toast.errors.processingErrorTitle'),
+          description: t('toast.errors.processingErrorDescription', {
+            filename: result.originalFile.name,
+            error: result.error || ''
+          }),
           variant: "destructive",
         });
       });
@@ -370,7 +375,7 @@ export function useImageProcessor() {
             processed: 1,
             total: selectedFiles.length,
             progress: 100,
-            message: 'Ready. Review the result and download when you are ready.',
+            message: '',
             selectedFiles,
             previewData: state.previewData,
             deletionLog,
@@ -400,7 +405,7 @@ export function useImageProcessor() {
             processed: successfulResults.length,
             total: selectedFiles.length,
             progress: 100,
-            message: 'Ready. Review the result and download when you are ready.',
+            message: '',
             selectedFiles,
             previewData: state.previewData,
             deletionLog,
@@ -413,23 +418,23 @@ export function useImageProcessor() {
         }
       } catch (error) {
         toast({
-          title: 'Error',
-          description: 'Failed to prepare the processed files for download.',
+          title: t('toast.errors.genericTitle'),
+          description: t('toast.errors.prepareDownloadFailed'),
           variant: 'destructive'
         });
         setState(prev => ({ ...prev, status: 'error' }));
       }
     } else {
-      setState(prev => ({ ...prev, status: 'error', message: 'No files were successfully processed.' }));
+      setState(prev => ({ ...prev, status: 'error', message: t('toast.errors.noSuccessfulFiles') }));
     }
-  }, [buildDeletionLog, options, state.previewData, toast, initWorker]);
+  }, [buildDeletionLog, options, state.previewData, toast, initWorker, t]);
 
   const downloadResults = useCallback(async () => {
     const downloadable = downloadableRef.current;
     if (!downloadable) {
       toast({
-        title: 'Nothing to download',
-        description: 'Please process a photo first.',
+        title: t('toast.download.nothingTitle'),
+        description: t('toast.download.nothingDescription'),
         variant: 'destructive'
       });
       return;
@@ -438,23 +443,23 @@ export function useImageProcessor() {
     try {
       await downloadFile(downloadable.blob, downloadable.filename);
       toast({
-        title: 'Download started',
+        title: t('toast.download.startedTitle'),
         description: downloadable.kind === 'zip'
-          ? `Downloading ${downloadable.count} cleaned photos as ZIP.`
-          : 'Downloading your cleaned photo.'
+          ? t('toast.download.startedZip', { count: downloadable.count })
+          : t('toast.download.startedSingle')
       });
       setState(prev => ({
         ...prev,
-        message: 'Download started. You can process more photos anytime.'
+        message: ''
       }));
     } catch {
       toast({
-        title: 'Download failed',
-        description: 'Your browser blocked the download. Try again by tapping the button once.',
+        title: t('toast.download.failedTitle'),
+        description: t('toast.download.failedDescription'),
         variant: 'destructive'
       });
     }
-  }, [toast]);
+  }, [toast, t]);
 
   const reset = useCallback(() => {
     setState({

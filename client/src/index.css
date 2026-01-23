@@ -214,6 +214,50 @@
   background: #BC002D;
 }
 
+/* 브라질 국기 (간단한 버전) */
+.flag-pt-br {
+  background: #009C3B;
+  position: relative;
+}
+
+.flag-pt-br::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: #FFDF00;
+}
+
+.flag-pt-br::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #002776;
+}
+
+/* 독일 국기 */
+.flag-de {
+  background: linear-gradient(to bottom, #000000 0%, #000000 33%, #DD0000 33%, #DD0000 66%, #FFCE00 66%, #FFCE00 100%);
+}
+
+/* 인도네시아 국기 */
+.flag-id {
+  background: linear-gradient(to bottom, #CE1126 0%, #CE1126 50%, #FFFFFF 50%, #FFFFFF 100%);
+}
+
+/* 프랑스 국기 */
+.flag-fr {
+  background: linear-gradient(to right, #0055A4 0%, #0055A4 33%, #FFFFFF 33%, #FFFFFF 66%, #EF4135 66%, #EF4135 100%);
+}
+
 .scale-102 {
   transform: scale(1.02);
 }

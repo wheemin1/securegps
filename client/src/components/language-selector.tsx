@@ -1,14 +1,31 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/use-language';
+import { isSupportedLangUrl } from '@/lib/constants';
 
 export function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
-  const { currentLanguage, changeLanguage, languages } = useLanguage();
+  const { currentLanguage, languages } = useLanguage();
 
   const handleLanguageClick = (languageCode: string) => {
     console.log('🎯 Language button clicked:', languageCode);
-    changeLanguage(languageCode);
+
+    const pathname = window.location.pathname;
+    const search = window.location.search;
+    const hash = window.location.hash;
+
+    const segments = pathname.split('/').filter(Boolean);
+    const first = segments[0];
+
+    const hasLangPrefix = isSupportedLangUrl(first);
+    const suffix = hasLangPrefix
+      ? (segments.length > 1 ? `/${segments.slice(1).join('/')}` : '')
+      : pathname;
+
+    const target = `/${languageCode}${suffix}${search}${hash}`;
+    window.history.pushState(null, '', target);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+
     setIsOpen(false);
   };
 
