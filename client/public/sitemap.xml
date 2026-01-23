@@ -1,70 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-    <!-- Home -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
     <url>
         <loc>https://securegps.netlify.app/en</loc>
-        <xhtml:link rel="alternate" hreflang="en" href="https://securegps.netlify.app/en"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://securegps.netlify.app/es"/>
-        <xhtml:link rel="alternate" hreflang="pt-BR" href="https://securegps.netlify.app/pt-br"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://securegps.netlify.app/de"/>
-        <xhtml:link rel="alternate" hreflang="id" href="https://securegps.netlify.app/id"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://securegps.netlify.app/fr"/>
-        <xhtml:link rel="alternate" hreflang="ja" href="https://securegps.netlify.app/ja"/>
-        <xhtml:link rel="alternate" hreflang="ko" href="https://securegps.netlify.app/ko"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://securegps.netlify.app/en"/>
         <lastmod>2026-01-23</lastmod>
-        <changefreq>weekly</changefreq>
+        <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
-    <!-- Privacy -->
+    <url>
+        <loc>https://securegps.netlify.app/de</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/pt-br</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/id</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/fr</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/ko</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/es</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/ja</loc>
+        <lastmod>2026-01-23</lastmod>
+        <priority>0.8</priority>
+    </url>
+
     <url>
         <loc>https://securegps.netlify.app/en/privacy</loc>
-        <xhtml:link rel="alternate" hreflang="en" href="https://securegps.netlify.app/en/privacy"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://securegps.netlify.app/es/privacy"/>
-        <xhtml:link rel="alternate" hreflang="pt-BR" href="https://securegps.netlify.app/pt-br/privacy"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://securegps.netlify.app/de/privacy"/>
-        <xhtml:link rel="alternate" hreflang="id" href="https://securegps.netlify.app/id/privacy"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://securegps.netlify.app/fr/privacy"/>
-        <xhtml:link rel="alternate" hreflang="ja" href="https://securegps.netlify.app/ja/privacy"/>
-        <xhtml:link rel="alternate" hreflang="ko" href="https://securegps.netlify.app/ko/privacy"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://securegps.netlify.app/en/privacy"/>
         <lastmod>2026-01-23</lastmod>
-        <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
-
-    <!-- Terms -->
     <url>
         <loc>https://securegps.netlify.app/en/terms</loc>
-        <xhtml:link rel="alternate" hreflang="en" href="https://securegps.netlify.app/en/terms"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://securegps.netlify.app/es/terms"/>
-        <xhtml:link rel="alternate" hreflang="pt-BR" href="https://securegps.netlify.app/pt-br/terms"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://securegps.netlify.app/de/terms"/>
-        <xhtml:link rel="alternate" hreflang="id" href="https://securegps.netlify.app/id/terms"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://securegps.netlify.app/fr/terms"/>
-        <xhtml:link rel="alternate" hreflang="ja" href="https://securegps.netlify.app/ja/terms"/>
-        <xhtml:link rel="alternate" hreflang="ko" href="https://securegps.netlify.app/ko/terms"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://securegps.netlify.app/en/terms"/>
         <lastmod>2026-01-23</lastmod>
-        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://securegps.netlify.app/en/contact</loc>
+        <lastmod>2026-01-23</lastmod>
         <priority>0.3</priority>
     </url>
 
-    <!-- Contact -->
-    <url>
-        <loc>https://securegps.netlify.app/en/contact</loc>
-        <xhtml:link rel="alternate" hreflang="en" href="https://securegps.netlify.app/en/contact"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://securegps.netlify.app/es/contact"/>
-        <xhtml:link rel="alternate" hreflang="pt-BR" href="https://securegps.netlify.app/pt-br/contact"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://securegps.netlify.app/de/contact"/>
-        <xhtml:link rel="alternate" hreflang="id" href="https://securegps.netlify.app/id/contact"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://securegps.netlify.app/fr/contact"/>
-        <xhtml:link rel="alternate" hreflang="ja" href="https://securegps.netlify.app/ja/contact"/>
-        <xhtml:link rel="alternate" hreflang="ko" href="https://securegps.netlify.app/ko/contact"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://securegps.netlify.app/en/contact"/>
-        <lastmod>2026-01-23</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.3</priority>
-    </url>
 </urlset>

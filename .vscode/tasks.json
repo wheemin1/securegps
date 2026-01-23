@@ -10,16 +10,6 @@
 				"build:client"
 			],
 			"isBackground": false
-		},
-		{
-			"label": "git:add-all",
-			"type": "shell",
-			"command": "git",
-			"args": [
-				"add",
-				"-A"
-			],
-			"isBackground": false
 		}
 	]
 }
