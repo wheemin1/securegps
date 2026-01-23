@@ -14,7 +14,7 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
         <div
           className="w-full h-full scale-110"
           style={{
-            filter: 'blur(3px)',
+            filter: 'blur(0.6px) grayscale(1) contrast(1.25) brightness(0.75)',
             backgroundImage:
               'radial-gradient(circle at 20% 30%, rgba(239,68,68,0.25), transparent 45%), radial-gradient(circle at 75% 60%, rgba(59,130,246,0.22), transparent 50%), linear-gradient(135deg, rgba(148,163,184,0.25), rgba(226,232,240,0.10))'
           }}
@@ -24,14 +24,13 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
           style={{
             backgroundImage:
               'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)',
-            backgroundSize: '18px 18px',
-            filter: 'blur(1px)'
+            backgroundSize: '14px 14px'
           }}
         />
       </div>
 
       {/* Warning overlay */}
-      <div className="absolute inset-0 bg-red-900/40 z-10 flex flex-col items-center justify-center">
+      <div className="absolute inset-0 bg-red-900/20 z-10 flex flex-col items-center justify-center">
         <MapPin className="w-16 h-16 text-red-600 fill-red-600 animate-bounce drop-shadow-lg z-20" />
         <div className="mt-2 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-xl shadow-[0_0_15px_rgba(220,38,38,0.7)] border-2 border-white z-20 animate-pulse tracking-widest uppercase">
           Your Location Exposed
@@ -39,6 +38,15 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
         <div className="mt-3 bg-black/80 text-red-400 font-mono text-sm px-3 py-1 rounded backdrop-blur-sm border border-red-900/50">
           LAT: {lat.toFixed(5)} | LON: {lng.toFixed(5)}
         </div>
+
+        <a
+          href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 text-xs text-white/90 underline underline-offset-4 hover:text-white"
+        >
+          View on map
+        </a>
       </div>
     </div>
   );
@@ -286,13 +294,13 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             <CardContent>
               <div className="text-lg font-semibold">
                 {hasGpsLocation && gpsMetadata?.location ? (
-                  <div>
-                    <Badge variant="destructive" className="text-xs">
-                      {t('preview.gpsFound')} - {t('preview.gpsLocationData')}
-                    </Badge>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      Lat: {gpsMetadata.location.latitude.toFixed(6)}<br/>
-                      Lon: {gpsMetadata.location.longitude.toFixed(6)}
+                  <div className="space-y-2">
+                    <div className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded font-bold animate-pulse">
+                      ⚠️ EXPOSED
+                    </div>
+                    <div className="text-xs text-red-800 dark:text-red-200 font-mono">
+                      Lat: {gpsMetadata.location.latitude.toFixed(4)}<br/>
+                      Lon: {gpsMetadata.location.longitude.toFixed(4)}
                     </div>
                   </div>
                 ) : hasGps ? (
