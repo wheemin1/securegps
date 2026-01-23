@@ -5,7 +5,7 @@ export interface ProcessingOptions {
 }
 
 export interface ProcessingState {
-  status: 'idle' | 'queued' | 'preview' | 'processing' | 'success' | 'error';
+  status: 'idle' | 'queued' | 'preview' | 'processing' | 'result' | 'error';
   currentFile: string | null;
   processed: number;
   total: number;
@@ -15,6 +15,11 @@ export interface ProcessingState {
   previewData?: FileMetadata[];
   queuedFiles?: File[];
   queuedMetadata?: FileMetadata[];
+  download?: {
+    kind: 'single' | 'zip';
+    filename: string;
+    count: number;
+  };
 }
 
 export interface Language {

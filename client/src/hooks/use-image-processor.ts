@@ -28,6 +28,7 @@ export function useImageProcessor() {
   const { toast } = useToast();
   const workerRef = useRef<Worker | null>(null);
   const processingResults = useRef<FileProcessingResult[]>([]);
+  const downloadableRef = useRef<{ blob: Blob; filename: string; kind: 'single' | 'zip'; count: number } | null>(null);
 
   const initWorker = useCallback(() => {
     if (!workerRef.current) {
@@ -228,6 +229,9 @@ export function useImageProcessor() {
 
     console.log('Processing files:', selectedFiles);
 
+    const minDelayMs = 1500 + Math.floor(Math.random() * 1000);
+    const processingStartedAt = Date.now();
+
     // Initialize processing state
     setState(prev => ({
       ...prev,
@@ -308,45 +312,64 @@ export function useImageProcessor() {
 
     if (successfulResults.length > 0) {
       try {
-        console.log('🚀 Initiating download for successful results...');
+        const elapsed = Date.now() - processingStartedAt;
+        if (elapsed < minDelayMs) {
+          await new Promise<void>((resolve) => setTimeout(resolve, minDelayMs - elapsed));
+        }
+
         if (successfulResults.length === 1) {
-          // Single file - direct download
-          console.log('📁 Single file download mode');
-          await downloadFile(successfulResults[0].cleanedBlob, successfulResults[0].filename);
+          downloadableRef.current = {
+            blob: successfulResults[0].cleanedBlob,
+            filename: successfulResults[0].filename,
+            kind: 'single',
+            count: 1
+          };
           setState({
-            status: 'success',
+            status: 'result',
             currentFile: null,
-            processed: successfulResults.length,
+            processed: 1,
             total: selectedFiles.length,
             progress: 100,
-            message: `Downloaded cleaned image: ${successfulResults[0].filename}`
+            message: 'Ready. Review the result and download when you are ready.',
+            download: {
+              kind: 'single',
+              filename: successfulResults[0].filename,
+              count: 1
+            }
           });
         } else {
-          // Multiple files - create ZIP
           const zipBlob = await createZipFile(
             successfulResults.map(r => ({
               blob: r.cleanedBlob,
               filename: r.filename
             }))
           );
-          
           const zipFilename = generateZipFilename();
-          await downloadFile(zipBlob, zipFilename);
-          
+          downloadableRef.current = {
+            blob: zipBlob,
+            filename: zipFilename,
+            kind: 'zip',
+            count: successfulResults.length
+          };
           setState({
-            status: 'success',
+            status: 'result',
             currentFile: null,
             processed: successfulResults.length,
             total: selectedFiles.length,
             progress: 100,
-            message: `Downloaded ${successfulResults.length} cleaned images in ${zipFilename}`
+            message: 'Ready. Review the result and download when you are ready.',
+            download: {
+              kind: 'zip',
+              filename: zipFilename,
+              count: successfulResults.length
+            }
           });
         }
       } catch (error) {
         toast({
-          title: "Download Error",
-          description: "Failed to download processed files.",
-          variant: "destructive",
+          title: 'Error',
+          description: 'Failed to prepare the processed files for download.',
+          variant: 'destructive'
         });
         setState(prev => ({ ...prev, status: 'error' }));
       }
@@ -354,6 +377,38 @@ export function useImageProcessor() {
       setState(prev => ({ ...prev, status: 'error', message: 'No files were successfully processed.' }));
     }
   }, [options, toast, initWorker]);
+
+  const downloadResults = useCallback(async () => {
+    const downloadable = downloadableRef.current;
+    if (!downloadable) {
+      toast({
+        title: 'Nothing to download',
+        description: 'Please process a photo first.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      await downloadFile(downloadable.blob, downloadable.filename);
+      toast({
+        title: 'Download started',
+        description: downloadable.kind === 'zip'
+          ? `Downloading ${downloadable.count} cleaned photos as ZIP.`
+          : 'Downloading your cleaned photo.'
+      });
+      setState(prev => ({
+        ...prev,
+        message: 'Download started. You can process more photos anytime.'
+      }));
+    } catch {
+      toast({
+        title: 'Download failed',
+        description: 'Your browser blocked the download. Try again by tapping the button once.',
+        variant: 'destructive'
+      });
+    }
+  }, [toast]);
 
   const reset = useCallback(() => {
     setState({
@@ -367,6 +422,7 @@ export function useImageProcessor() {
       previewData: []
     });
     processingResults.current = [];
+    downloadableRef.current = null;
   }, []);
 
   const updateOptions = useCallback((newOptions: Partial<ProcessingOptions>) => {
@@ -381,6 +437,7 @@ export function useImageProcessor() {
     removeFileFromQueue,
     startBatchProcessing,
     confirmProcessing,
+    downloadResults,
     reset,
     updateOptions
   };

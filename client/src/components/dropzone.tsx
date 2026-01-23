@@ -1,16 +1,46 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useImageProcessor } from '@/hooks/use-image-processor';
 import { useLanguage } from '@/hooks/use-language';
 import { MetadataPreview } from '@/components/metadata-preview';
-import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle } from 'lucide-react';
+import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download } from 'lucide-react';
 
 export function Dropzone() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { state, previewFiles, addFilesToQueue, removeFileFromQueue, startBatchProcessing, confirmProcessing, reset } = useImageProcessor();
+  const { state, previewFiles, addFilesToQueue, removeFileFromQueue, startBatchProcessing, confirmProcessing, downloadResults, reset } = useImageProcessor();
   const { t } = useLanguage();
   const [isDragOver, setIsDragOver] = useState(false);
+
+  const terminalSteps = useMemo(
+    () => [
+      'Searching for GPS coordinates...',
+      'Removing Exif.Image.Make...',
+      'Scrubbing XMP tags...',
+      'Zero-filling sensitive bytes...',
+      'Securing export...',
+      'Done.'
+    ],
+    []
+  );
+
+  const [terminalIndex, setTerminalIndex] = useState(0);
+
+  useEffect(() => {
+    if (state.status !== 'processing') {
+      setTerminalIndex(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTerminalIndex((prev) => {
+        const next = prev + 1;
+        return next >= terminalSteps.length ? terminalSteps.length - 1 : next;
+      });
+    }, 450);
+
+    return () => clearInterval(interval);
+  }, [state.status, terminalSteps.length]);
 
   const handleFileSelect = (files: File[]) => {
     if (files.length > 0) {
@@ -184,55 +214,62 @@ export function Dropzone() {
   }
 
   if (state.status === 'processing') {
+    const activeIndexByProgress = Math.min(
+      terminalSteps.length - 1,
+      Math.floor((Math.min(state.progress, 99) / 100) * (terminalSteps.length - 1))
+    );
+    const activeIndex = Math.max(terminalIndex, activeIndexByProgress);
+    const visibleLines = terminalSteps.slice(Math.max(0, activeIndex - 3), activeIndex + 1);
+
     return (
-      <div className="rounded-2xl p-8 md:p-12 text-center bg-blue-50/50 dark:bg-blue-950/30 toss-card fade-in-up">
-        <div className="space-y-6">
-          <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center">
-            <Trash2 className="w-8 h-8 text-blue-600 dark:text-blue-400 progress-pulse" />
+      <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-xl p-6">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+              <Loader2 className="w-7 h-7 text-blue-600 dark:text-blue-400 animate-spin" />
+            </div>
           </div>
-          
-          <div>
-            <h2 className="text-2xl font-semibold text-foreground mb-2">
-              {t('processing.cleaning', { current: state.processed, total: state.total })}
+
+          <div className="text-center mb-5">
+            <h2 className="text-xl font-semibold text-foreground mb-1">
+              Analyzing & Securing…
             </h2>
-            <p className="text-muted-foreground mb-6">{t('processing.removing')}</p>
-            
-            {/* Enhanced Progress Bar */}
-            <div className="max-w-md mx-auto">
-              <Progress value={state.progress} className="h-4 mb-4 slide-in" />
-              <div className="flex justify-between items-center text-xs text-muted-foreground mb-2">
-                <span>{state.processed} / {state.total} {t('processing.filesCompleted') || 'files completed'}</span>
-                <span className="font-semibold text-primary">{Math.round(state.progress)}%</span>
-              </div>
+            <p className="text-sm text-muted-foreground">
+              Runs on your device. No upload.
+            </p>
+          </div>
+
+          <div className="max-w-md mx-auto">
+            <Progress value={state.progress} className="h-4 mb-3" />
+            <div className="flex justify-between items-center text-xs text-muted-foreground mb-3">
+              <span>{state.processed} / {state.total} {t('processing.filesCompleted') || 'files completed'}</span>
+              <span className="font-semibold text-primary">{Math.round(state.progress)}%</span>
             </div>
-            
-            {/* Current File Info */}
-            <div className="text-sm text-muted-foreground mb-4" aria-live="polite">
-              {state.currentFile && (
-                <div className="flex items-center justify-center space-x-2 fade-in-up">
-                  <FileCheck className="w-4 h-4 progress-pulse" />
-                  <span data-testid="text-current-file" className="font-medium">
-                    {t('processing.currentFile', { filename: state.currentFile })}
-                  </span>
-                </div>
-              )}
+          </div>
+
+          <div className="text-xs text-muted-foreground mb-3" aria-live="polite">
+            {state.currentFile && (
+              <div className="flex items-center justify-center space-x-2">
+                <FileCheck className="w-4 h-4" />
+                <span data-testid="text-current-file" className="font-medium">
+                  {t('processing.currentFile', { filename: state.currentFile })}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-border bg-muted/30 p-3 mb-4">
+            <div className="font-mono text-xs text-foreground/90 space-y-1">
+              {visibleLines.map((line) => (
+                <div key={line} className="truncate">{line}</div>
+              ))}
             </div>
-            
-            {/* Processing Steps Indicator */}
-            <div className="mt-6 flex items-center justify-center space-x-4 text-xs text-muted-foreground">
-              <div className="flex items-center space-x-2 step-indicator">
-                <div className="w-2 h-2 bg-primary rounded-full progress-pulse"></div>
-                <span>{t('processing.step.reading') || 'Reading metadata'}</span>
-              </div>
-              <div className="w-px h-4 bg-border"></div>
-              <div className="flex items-center space-x-2 step-indicator">
-                <div className="w-2 h-2 bg-primary rounded-full progress-pulse" style={{animationDelay: '0.5s'}}></div>
-                <span>{t('processing.step.cleaning') || 'Cleaning image'}</span>
-              </div>
-              <div className="w-px h-4 bg-border"></div>
-              <div className="flex items-center space-x-2 step-indicator">
-                <div className="w-2 h-2 bg-primary rounded-full progress-pulse" style={{animationDelay: '1s'}}></div>
-                <span>{t('processing.step.finalizing') || 'Finalizing'}</span>
+          </div>
+
+          <div className="flex items-center justify-center">
+            <div className="w-full max-w-[300px]">
+              <div className="w-full h-[250px] rounded-xl border border-dashed border-border bg-muted/40 flex items-center justify-center text-xs text-muted-foreground">
+                Advertisement (300×250)
               </div>
             </div>
           </div>
@@ -241,7 +278,7 @@ export function Dropzone() {
     );
   }
 
-  if (state.status === 'success') {
+  if (state.status === 'result') {
     return (
       <div className="rounded-2xl p-8 text-center bg-green-50/50 dark:bg-green-950/30 success-card">
         <div className="space-y-6">
@@ -256,6 +293,14 @@ export function Dropzone() {
             <p className="text-green-700 dark:text-green-300 mb-6">
               {state.message}
             </p>
+
+            <Button
+              onClick={downloadResults}
+              className="w-full md:w-auto h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 text-base font-semibold rounded-xl shadow-sm transition-colors"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              {state.download?.kind === 'zip' ? 'Download Cleaned ZIP' : '⬇ Save Cleaned Photo'}
+            </Button>
             
             {/* Enhanced Result feedback card */}
             <div className="bg-white dark:bg-gray-800 border-none rounded-xl p-6 mb-6 mx-auto max-w-md shadow-sm success-stats">
@@ -287,13 +332,16 @@ export function Dropzone() {
               </div>
             </div>
             
-            <Button 
-              onClick={reset} 
-              className="w-full md:w-auto h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-8 text-base font-semibold rounded-xl shadow-sm transition-colors"
-            >
-              <Upload className="w-5 h-5 mr-2" />
-              {t('success.processMore') || 'Process more images'}
-            </Button>
+            <div className="pt-2">
+              <Button 
+                onClick={reset} 
+                variant="ghost"
+                className="w-full md:w-auto h-12 text-foreground px-8 text-sm font-semibold rounded-xl transition-colors"
+              >
+                <Upload className="w-5 h-5 mr-2" />
+                {t('success.processMore') || 'Process more images'}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
