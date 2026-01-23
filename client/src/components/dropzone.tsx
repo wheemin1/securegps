@@ -51,14 +51,29 @@ export function Dropzone() {
   const [terminalIndex, setTerminalIndex] = useState(0);
 
   const scanSteps = useMemo(
-    () => [
-      'Reading Exif tags…',
-      'Detecting GPS coordinates…',
-      'Checking camera/device info…',
-      'Building risk report…',
-      'Found sensitive data!'
-    ],
-    []
+    () => {
+      const hasGpsCoords = (state.queuedMetadata || []).some(
+        (m) => Boolean(m.hasGps && m.location)
+      );
+      const hasGpsTagsOnly = !hasGpsCoords && (state.queuedMetadata || []).some(
+        (m) => Boolean(m.hasGps)
+      );
+
+      const lastLine = hasGpsCoords
+        ? 'Found Lat/Lon data!'
+        : hasGpsTagsOnly
+          ? 'Found GPS tags (no coordinates).'
+          : 'No GPS found. Checking other metadata…';
+
+      return [
+        'Reading Exif tags…',
+        'Detecting GPS coordinates…',
+        'Checking camera/device info…',
+        'Building risk report…',
+        lastLine
+      ];
+    },
+    [state.queuedMetadata]
   );
   const [scanIndex, setScanIndex] = useState(0);
 
