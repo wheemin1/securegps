@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useImageProcessor } from '@/hooks/use-image-processor';
 import { useLanguage } from '@/hooks/use-language';
+import { useToast } from '@/hooks/use-toast';
 import { MetadataPreview } from '@/components/metadata-preview';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download, Smartphone } from 'lucide-react';
@@ -16,8 +17,10 @@ export function Dropzone() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { state, previewFiles, addFilesToQueue, removeFileFromQueue, startBatchProcessing, confirmProcessing, downloadResults, reset } = useImageProcessor();
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [isDragOver, setIsDragOver] = useState(false);
   const [showScanOverlay, setShowScanOverlay] = useState(false);
+  const previousStatusRef = useRef<string>('');
 
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallSheet, setShowInstallSheet] = useState(false);
@@ -26,6 +29,27 @@ export function Dropzone() {
   useEffect(() => {
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
   }, []);
+
+  useEffect(() => {
+    const prev = previousStatusRef.current;
+    previousStatusRef.current = state.status;
+
+    if (prev === 'processing' && state.status === 'result') {
+      const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+
+      const downloadKind = state.download?.kind;
+      const count = state.download?.count;
+      const isZip = downloadKind === 'zip';
+
+      toast({
+        title: 'Done',
+        description: isZip
+          ? `Your ZIP is ready${typeof count === 'number' ? ` (${count} photos)` : ''}. Tap Download when ready.`
+          : 'Your cleaned photo is ready. Tap Download when ready.',
+      });
+    }
+  }, [state.status, state.download, toast]);
 
   useEffect(() => {
     const handler = (e: Event) => {
