@@ -5,40 +5,44 @@ import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, MapPin, Camera, FileImage, HardDrive, Calendar, Shield, Trash2 } from 'lucide-react';
 import { useLanguage } from '@/hooks/use-language';
 import { useEffect } from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 function DangerMap({ lat, lng }: { lat: number; lng: number }) {
   return (
-    <div className="relative w-full h-64 rounded-xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950">
-      {/* Blurred pseudo-map background (offline-safe) */}
-      <div className="absolute inset-0">
-        <div
-          className="w-full h-full scale-110"
-          style={{
-            filter: 'blur(0.6px) grayscale(1) contrast(1.25) brightness(0.75)',
-            backgroundImage:
-              'radial-gradient(circle at 20% 30%, rgba(239,68,68,0.25), transparent 45%), radial-gradient(circle at 75% 60%, rgba(59,130,246,0.22), transparent 50%), linear-gradient(135deg, rgba(148,163,184,0.25), rgba(226,232,240,0.10))'
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)',
-            backgroundSize: '14px 14px'
-          }}
-        />
+    <div className="relative w-full h-64 rounded-xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950 group">
+      {/* Background live map (non-interactive) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 filter contrast-125 saturate-150 transition-transform duration-700 group-hover:scale-110">
+          <MapContainer
+            center={[lat, lng]}
+            zoom={16}
+            zoomControl={false}
+            scrollWheelZoom={false}
+            dragging={false}
+            doubleClickZoom={false}
+            touchZoom={false}
+            keyboard={false}
+            attributionControl={false}
+            className="w-full h-full"
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          </MapContainer>
+        </div>
+        <div className="absolute inset-0 bg-black/10" />
       </div>
 
-      {/* Warning overlay */}
-      <div className="absolute inset-0 bg-red-900/20 z-10 flex flex-col items-center justify-center">
-        <MapPin className="w-16 h-16 text-red-600 fill-red-600 animate-bounce drop-shadow-lg z-20" />
-        <div className="mt-2 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-xl shadow-[0_0_15px_rgba(220,38,38,0.7)] border-2 border-white z-20 animate-pulse tracking-widest uppercase">
+      {/* Warning overlay (translucent so the map shows through) */}
+      <div className="absolute inset-0 z-10 bg-red-900/35 flex flex-col items-center justify-center">
+        <div className="relative">
+          <MapPin className="w-16 h-16 text-red-500 fill-red-500 animate-bounce drop-shadow-[0_2px_10px_rgba(255,0,0,0.65)]" />
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 bg-red-600 rounded-full animate-ping opacity-50" />
+        </div>
+        <div className="mt-3 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-xl shadow-[0_0_20px_rgba(220,38,38,0.8)] border-2 border-white tracking-widest uppercase">
           Your Location Exposed
         </div>
-        <div className="mt-3 bg-black/80 text-red-400 font-mono text-sm px-3 py-1 rounded backdrop-blur-sm border border-red-900/50">
+        <div className="mt-3 bg-black/80 text-red-200 font-mono text-xs px-3 py-1 rounded border border-red-500/40 font-bold">
           LAT: {lat.toFixed(5)} | LON: {lng.toFixed(5)}
         </div>
-
         <a
           href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`}
           target="_blank"
@@ -48,6 +52,9 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
           View on map
         </a>
       </div>
+
+      {/* Subtle scanline overlay */}
+      <div className="absolute inset-0 z-20 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.12)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_3px,4px_100%] opacity-50" />
     </div>
   );
 }
