@@ -6,6 +6,44 @@ import { AlertTriangle, MapPin, Camera, FileImage, HardDrive, Calendar, Shield, 
 import { useLanguage } from '@/hooks/use-language';
 import { useEffect } from 'react';
 
+function DangerMap({ lat, lng }: { lat: number; lng: number }) {
+  return (
+    <div className="relative w-full h-64 rounded-xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950">
+      {/* Blurred pseudo-map background (offline-safe) */}
+      <div className="absolute inset-0">
+        <div
+          className="w-full h-full scale-110"
+          style={{
+            filter: 'blur(3px)',
+            backgroundImage:
+              'radial-gradient(circle at 20% 30%, rgba(239,68,68,0.25), transparent 45%), radial-gradient(circle at 75% 60%, rgba(59,130,246,0.22), transparent 50%), linear-gradient(135deg, rgba(148,163,184,0.25), rgba(226,232,240,0.10))'
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)',
+            backgroundSize: '18px 18px',
+            filter: 'blur(1px)'
+          }}
+        />
+      </div>
+
+      {/* Warning overlay */}
+      <div className="absolute inset-0 bg-red-900/40 z-10 flex flex-col items-center justify-center">
+        <MapPin className="w-16 h-16 text-red-600 fill-red-600 animate-bounce drop-shadow-lg z-20" />
+        <div className="mt-2 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-xl shadow-[0_0_15px_rgba(220,38,38,0.7)] border-2 border-white z-20 animate-pulse tracking-widest uppercase">
+          Your Location Exposed
+        </div>
+        <div className="mt-3 bg-black/80 text-red-400 font-mono text-sm px-3 py-1 rounded backdrop-blur-sm border border-red-900/50">
+          LAT: {lat.toFixed(5)} | LON: {lng.toFixed(5)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface MetadataPreviewProps {
   files: File[];
   metadata: FileMetadata[];
@@ -237,7 +275,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card className={hasGps ? "border-none bg-red-50/80 dark:bg-red-950/30 shadow-sm" : "border-none bg-white dark:bg-gray-800 shadow-sm"}>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2 text-sm">
@@ -255,32 +293,6 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                     <div className="text-xs text-muted-foreground mt-1">
                       Lat: {gpsMetadata.location.latitude.toFixed(6)}<br/>
                       Lon: {gpsMetadata.location.longitude.toFixed(6)}
-                    </div>
-
-                    {/* Fear visualization (offline-safe) */}
-                    <div className="mt-3">
-                      <div className="relative overflow-hidden rounded-lg border border-red-200 dark:border-red-900 bg-red-50/40 dark:bg-red-950/20">
-                        <div className="absolute inset-0">
-                          <div className="w-full h-full bg-[radial-gradient(circle_at_20%_30%,rgba(239,68,68,0.25),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(59,130,246,0.22),transparent_50%),linear-gradient(135deg,rgba(148,163,184,0.25),rgba(226,232,240,0.10))]" style={{ filter: 'blur(1.5px)' }} />
-                          <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'linear-gradient(rgba(15,23,42,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.12) 1px, transparent 1px)', backgroundSize: '18px 18px', filter: 'blur(0.8px)' }} />
-                        </div>
-                        <div className="relative aspect-[16/9] flex items-center justify-center">
-                          <div className="absolute top-2 left-2 px-2 py-1 rounded bg-red-600 text-white text-[10px] font-semibold tracking-wide">
-                            YOUR LOCATION EXPOSED
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-9 h-9 rounded-full bg-red-600/15 border border-red-500/30 flex items-center justify-center">
-                              <MapPin className="w-5 h-5 text-red-600" />
-                            </div>
-                            <div className="mt-1 text-[10px] text-red-700 dark:text-red-300 font-medium">
-                              Precise GPS embedded
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-1 text-[10px] text-muted-foreground">
-                        Map preview is blurred for safety.
-                      </div>
                     </div>
                   </div>
                 ) : hasGps ? (
@@ -341,6 +353,11 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
             </CardContent>
           </Card>
         </div>
+
+        {/* Full-width danger map (place OUTSIDE the 3-card grid) */}
+        {hasGpsLocation && gpsMetadata?.location && (
+          <DangerMap lat={gpsMetadata.location.latitude} lng={gpsMetadata.location.longitude} />
+        )}
 
         {/* Detailed File List */}
         <div className="max-h-64 overflow-y-auto space-y-4">

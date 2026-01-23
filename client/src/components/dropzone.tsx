@@ -17,6 +17,7 @@ export function Dropzone() {
   const { state, previewFiles, addFilesToQueue, removeFileFromQueue, startBatchProcessing, confirmProcessing, downloadResults, reset } = useImageProcessor();
   const { t } = useLanguage();
   const [isDragOver, setIsDragOver] = useState(false);
+  const [showScanOverlay, setShowScanOverlay] = useState(false);
 
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallSheet, setShowInstallSheet] = useState(false);
@@ -48,6 +49,31 @@ export function Dropzone() {
   );
 
   const [terminalIndex, setTerminalIndex] = useState(0);
+
+  const scanSteps = useMemo(
+    () => [
+      'Reading Exif tags…',
+      'Detecting GPS coordinates…',
+      'Checking camera/device info…',
+      'Building risk report…',
+      'Found sensitive data!'
+    ],
+    []
+  );
+  const [scanIndex, setScanIndex] = useState(0);
+
+  useEffect(() => {
+    if (!showScanOverlay) {
+      setScanIndex(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setScanIndex((prev) => Math.min(prev + 1, scanSteps.length - 1));
+    }, 350);
+
+    return () => clearInterval(interval);
+  }, [showScanOverlay, scanSteps.length]);
 
   useEffect(() => {
     if (state.status !== 'processing') {
@@ -127,7 +153,7 @@ export function Dropzone() {
   if (state.status === 'queued' && state.queuedFiles && state.queuedMetadata) {
     return (
       <>
-        <div className="toss-card p-6 space-y-6">
+        <div className="toss-card p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'} Ready
@@ -192,21 +218,58 @@ export function Dropzone() {
 
           <div className="space-y-3">
             <Button
-              onClick={startBatchProcessing}
+              onClick={() => {
+                if (showScanOverlay) return;
+                setShowScanOverlay(true);
+                setTimeout(() => {
+                  startBatchProcessing();
+                  setShowScanOverlay(false);
+                }, 1500);
+              }}
+              disabled={showScanOverlay}
               className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-base font-semibold rounded-xl shadow-sm transition-colors"
             >
-              Clean {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'}
+              {showScanOverlay ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Scanning…
+                </>
+              ) : (
+                <>Clean {state.queuedFiles.length} {state.queuedFiles.length === 1 ? 'Photo' : 'Photos'}</>
+              )}
             </Button>
             
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
+              disabled={showScanOverlay}
               className="w-full h-14 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-base font-medium rounded-xl transition-colors"
             >
               + Add More Photos
             </button>
           </div>
         </div>
+
+        {showScanOverlay && (
+          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-xl p-6">
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                  <Loader2 className="w-7 h-7 text-blue-600 dark:text-blue-400 animate-spin" />
+                </div>
+              </div>
+              <div className="text-center mb-3">
+                <h2 className="text-xl font-semibold text-foreground">Scanning metadata…</h2>
+                <p className="text-sm text-muted-foreground">Preparing your risk report</p>
+              </div>
+              <div className="rounded-xl border border-border bg-muted/30 p-3">
+                <div className="font-mono text-xs text-foreground/90 truncate">
+                  {scanSteps[scanIndex]}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         
         <input
           ref={fileInputRef}
@@ -480,7 +543,7 @@ export function Dropzone() {
       <div 
         className={`toss-card cursor-pointer transition-all ${
           isDragOver 
-            ? 'shadow-lg border-blue-500 bg-blue-50 dark:bg-blue-950/30 scale-[0.99]' 
+            ? 'shadow-lg border-2 border-dashed border-blue-500 bg-blue-50 dark:bg-blue-950/30 scale-[0.99] animate-pulse' 
             : 'hover:shadow-md active:scale-[0.99]'
         }`}
         onDrop={handleDrop}
