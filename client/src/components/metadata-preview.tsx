@@ -8,7 +8,11 @@ import { useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 
 function DangerMap({ lat, lng }: { lat: number; lng: number }) {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
+  
+  // Google Maps language code (convert pt-br to pt)
+  const googleMapsLang = currentLanguage.code === 'pt-br' ? 'pt' : currentLanguage.code;
+  
   return (
     <div className="relative w-full h-48 sm:h-56 md:h-64 rounded-2xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950 group">
       {/* Background live map (non-interactive) */}
@@ -45,7 +49,7 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
           {t('dangerMap.coords', { lat: lat.toFixed(5), lng: lng.toFixed(5) })}
         </div>
         <a
-          href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`}
+          href={`https://www.google.com/maps?q=${lat},${lng}&hl=${googleMapsLang}`}
           target="_blank"
           rel="noreferrer"
           className="mt-4 bg-white text-red-600 font-bold text-sm md:text-base px-6 py-2.5 rounded-lg shadow-lg hover:bg-red-50 hover:shadow-xl transition-all duration-200 border-2 border-red-200"
