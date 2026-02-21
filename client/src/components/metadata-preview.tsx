@@ -33,7 +33,7 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
       </div>
 
       {/* Warning overlay (translucent so the map shows through) */}
-      <div className="absolute inset-0 z-10 bg-red-900/25 backdrop-blur-md flex flex-col items-center justify-center">
+      <div className="absolute inset-0 z-10 bg-red-900/15 backdrop-blur-sm flex flex-col items-center justify-center">
         <div className="relative">
           <MapPin className="w-16 h-16 text-red-500 fill-red-500 animate-bounce drop-shadow-[0_2px_10px_rgba(255,0,0,0.65)]" />
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 bg-red-600 rounded-full animate-ping opacity-50" />
@@ -48,9 +48,9 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
           href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`}
           target="_blank"
           rel="noreferrer"
-          className="mt-3 text-xs text-white/90 underline underline-offset-4 hover:text-white"
+          className="mt-4 bg-white text-red-600 font-bold text-sm md:text-base px-6 py-2.5 rounded-lg shadow-lg hover:bg-red-50 hover:shadow-xl transition-all duration-200 border-2 border-red-200"
         >
-          {t('dangerMap.viewOnMap')}
+          🗺️ {t('dangerMap.viewOnMap')}
         </a>
       </div>
 
