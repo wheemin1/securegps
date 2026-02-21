@@ -4,20 +4,20 @@
     "tagline": "Privacy-first image metadata removal"
   },
   "meta": {
-    "title": "SecureGPS — Hapus GPS & metadata (100% offline)",
-    "description": "Hapus GPS, EXIF, dan metadata pelacakan dari foto langsung di browser. 100% offline. Tanpa upload."
+    "title": "Hapus GPS dan Geotag Gratis - 100% Offline, Tanpa Upload",
+    "description": "Hapus lokasi GPS, geotag, dan metadata EXIF dari foto secara instan. Alat online gratis. Bekerja 100% offline di browser Anda. Tanpa upload, tanpa pelacakan."
   },
   "hero": {
-    "title": "Eliminate Digital Traces from Photos",
-    "subtitle": "100% Offline Processing - Zero Server Upload",
-    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
-    "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
-    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
-    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
+    "title": "Hapus GPS & Geotag dari Foto",
+    "subtitle": "Pemrosesan 100% Offline - Tanpa Upload ke Server",
+    "description": "Hapus lokasi GPS, geotag, dan metadata EXIF dari gambar secara instan. Alat online gratis. Bekerja offline di browser Anda. Dibuat oleh ahli keamanan.",
+    "privacy": "🔒 100% Offline: Foto tidak pernah meninggalkan perangkat Anda. Tanpa pelacakan, tanpa upload.",
+    "mainTitle": "Hapus GPS & Geotag Gratis — Aman & Offline",
+    "mainDescription": "Hapus lokasi GPS dan data geotag secara instan. Alat gratis. Bekerja di ponsel & desktop. Tanpa upload."
   },
   "dropzone": {
-    "title": "Eliminate Tracking Risks from Photos",
-    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
+    "title": "Hapus GPS & Geotag dari Foto",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Tanpa Upload",
     "chooseFiles": "Select Photos",
     "features": {
       "noUpload": "Zero Upload",

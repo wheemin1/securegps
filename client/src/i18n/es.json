@@ -4,20 +4,20 @@
     "tagline": "Eliminación de metadatos de imagen con privacidad primero"
   },
   "meta": {
-    "title": "SecureGPS — Eliminar GPS y metadatos (100% offline)",
-    "description": "Elimina GPS, EXIF y metadatos de seguimiento de tus fotos en el navegador. Procesamiento 100% offline. Cero subidas."
+    "title": "Eliminar GPS y Geoetiquetas Gratis - 100% Offline, Sin Subida",
+    "description": "Elimina ubicación GPS, geoetiquetas y metadatos EXIF de fotos al instante. Herramienta online gratis. Funciona 100% offline en tu navegador. Cero subidas, cero rastreo."
   },
   "hero": {
-    "title": "Arrastra imágenes para limpiar",
-    "subtitle": "(Sin subida)",
-    "description": "Eliminamos GPS y metadatos al instante — todo en tu navegador.",
-    "privacy": "Todo el procesamiento ocurre en tu navegador. Nunca subimos tus archivos.",
-    "mainTitle": "Eliminar GPS y metadatos de fotos",
-    "mainDescription": "Arrastra imágenes o haz clic para elegir. Sin subida — se ejecuta en tu navegador."
+    "title": "Eliminar GPS y Geoetiquetas de Fotos",
+    "subtitle": "Procesamiento 100% Offline - Sin Subida al Servidor",
+    "description": "Elimina ubicación GPS, geoetiquetas y metadatos EXIF de imágenes al instante. Herramienta online gratis. Funciona offline en tu navegador. Creado por expertos en seguridad.",
+    "privacy": "🔒 100% Offline: Las fotos nunca salen de tu dispositivo. Sin rastreo, sin subida.",
+    "mainTitle": "Eliminar GPS y Geoetiquetas Gratis — Seguro y Offline",
+    "mainDescription": "Elimina ubicación GPS y geoetiquetas al instante. Herramienta gratis. Funciona en móvil y escritorio. Cero subida."
   },
   "dropzone": {
-    "title": "Arrastra imágenes aquí o elige archivos",
-    "supportedFormats": "JPEG, PNG, WebP compatibles • Múltiples archivos OK",
+    "title": "Eliminar GPS y Geoetiquetas de Fotos",
+    "supportedFormats": "JPEG, PNG, WebP compatibles • 100% Offline • Sin Subida",
     "chooseFiles": "Elegir Archivos",
     "features": {
       "noUpload": "Sin subida",

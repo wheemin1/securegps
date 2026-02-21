@@ -4,19 +4,19 @@
     "tagline": "Privacy-first image metadata removal"
   },
   "meta": {
-    "title": "SecureGPS — Remove GPS & Metadata (100% Offline)",
-    "description": "Remove GPS, EXIF, and tracking metadata from photos in your browser. 100% offline processing. Zero uploads."
+    "title": "Free GPS & Geotag Remover - 100% Offline, No Upload",
+    "description": "Remove GPS location, geotags, and EXIF metadata from photos instantly. Free online tool. Works 100% offline in your browser. Zero uploads, zero tracking."
   },
   "hero": {
-    "title": "Eliminate Digital Traces from Photos",
+    "title": "Remove GPS & Geotags from Photos",
     "subtitle": "100% Offline Processing - Zero Server Upload",
-    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
+    "description": "Remove GPS location, geotags, and EXIF metadata from images instantly. Free online tool. Works offline in your browser. Built by security experts.",
     "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
-    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
-    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
+    "mainTitle": "Free GPS & Geotag Remover — Safe & Offline",
+    "mainDescription": "Delete GPS location and geotag data instantly. Free tool. Works on phone & desktop. Zero upload."
   },
   "dropzone": {
-    "title": "Eliminate Tracking Risks from Photos",
+    "title": "Remove GPS Location & Geotags from Photos",
     "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
     "chooseFiles": "Select Photos",
     "features": {

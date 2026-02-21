@@ -4,20 +4,20 @@
     "tagline": "개인정보 보호 우선 이미지 메타데이터 제거"
   },
   "meta": {
-    "title": "SecureGPS — 사진 GPS/메타데이터 제거 (100% 오프라인)",
-    "description": "브라우저에서 사진의 GPS, EXIF, 추적 메타데이터를 제거하세요. 100% 기기 내 처리, 업로드 없음."
+    "title": "무료 GPS 위치태그 제거 도구 - 100% 오프라인, 업로드 없음",
+    "description": "사진에서 GPS 위치, 지오태그, EXIF 메타데이터를 즉시 제거하세요. 무료 온라인 도구. 100% 오프라인 처리. 업로드 없음, 추적 없음."
   },
   "hero": {
-    "title": "이미지를 드롭하여 정리",
-    "subtitle": "(업로드 없음)",
-    "description": "브라우저에서 GPS 및 메타데이터를 즉시 제거합니다.",
-    "privacy": "모든 처리는 브라우저에서 이루어집니다. 파일을 업로드하지 않습니다.",
-    "mainTitle": "사진에서 GPS 및 메타데이터 제거",
-    "mainDescription": "이미지를 드롭하거나 클릭하여 선택하세요. 업로드 없음 — 브라우저에서 실행됩니다."
+    "title": "사진에서 GPS 위치태그 제거",
+    "subtitle": "100% 오프라인 처리 - 서버 업로드 없음",
+    "description": "사진에서 GPS 위치, 지오태그, EXIF 메타데이터를 즉시 제거합니다. 무료 온라인 도구. 브라우저에서 오프라인 작동. 보안 전문가가 제작.",
+    "privacy": "🔒 100% 오프라인: 사진이 기기를 떠나지 않습니다. 추적 없음, 업로드 없음.",
+    "mainTitle": "무료 GPS 위치태그 제거 도구 — 안전한 오프라인",
+    "mainDescription": "GPS 위치 및 지오태그 데이터를 즉시 삭제. 무료 도구. 휴대폰 & 데스크톱 지원. 업로드 없음."
   },
   "dropzone": {
-    "title": "이미지를 여기에 드롭하거나 파일 선택",
-    "supportedFormats": "JPEG, PNG, WebP 지원 • 여러 파일 가능",
+    "title": "사진에서 GPS 위치 & 지오태그 제거",
+    "supportedFormats": "JPEG, PNG, WebP 지원 • 100% 오프라인 • 업로드 없음",
     "chooseFiles": "파일 선택",
     "features": {
       "noUpload": "업로드 없음",

@@ -4,20 +4,20 @@
     "tagline": "Privacy-first image metadata removal"
   },
   "meta": {
-    "title": "SecureGPS — Remover GPS e metadados (100% offline)",
-    "description": "Remova GPS, EXIF e metadados de rastreamento das fotos no navegador. Processamento 100% offline. Zero upload."
+    "title": "Remover GPS e Geotag Grátis - 100% Offline, Sem Upload",
+    "description": "Remover localização GPS, geotags e metadados EXIF de fotos instantaneamente. Ferramenta online grátis. Funciona 100% offline no seu navegador. Zero uploads, zero rastreamento."
   },
   "hero": {
-    "title": "Eliminate Digital Traces from Photos",
-    "subtitle": "100% Offline Processing - Zero Server Upload",
-    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
-    "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
-    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
-    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
+    "title": "Remover GPS e Geotags de Fotos",
+    "subtitle": "Processamento 100% Offline - Sem Upload para Servidor",
+    "description": "Remover localização GPS, geotags e metadados EXIF de imagens instantaneamente. Ferramenta online grátis. Funciona offline no seu navegador. Criado por especialistas em segurança.",
+    "privacy": "🔒 100% Offline: As fotos nunca saem do seu dispositivo. Sem rastreamento, sem upload.",
+    "mainTitle": "Remover GPS e Geotag Grátis — Seguro e Offline",
+    "mainDescription": "Excluir localização GPS e dados de geotag instantaneamente. Ferramenta grátis. Funciona em celular e desktop. Sem upload."
   },
   "dropzone": {
-    "title": "Eliminate Tracking Risks from Photos",
-    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
+    "title": "Remover GPS e Geotags de Fotos",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Sem Upload",
     "chooseFiles": "Select Photos",
     "features": {
       "noUpload": "Zero Upload",

@@ -4,20 +4,20 @@
     "tagline": "Privacy-first image metadata removal"
   },
   "meta": {
-    "title": "SecureGPS — Supprimer GPS et métadonnées (100% hors ligne)",
-    "description": "Supprimez GPS, EXIF et métadonnées de suivi de vos photos dans le navigateur. 100% hors ligne. Zéro envoi."
+    "title": "Supprimer GPS et Géotags Gratuit - 100% Hors Ligne, Aucun Upload",
+    "description": "Supprimer localisation GPS, géotags et métadonnées EXIF des photos instantanément. Outil en ligne gratuit. Fonctionne 100% hors ligne dans votre navigateur. Zéro upload, zéro pistage."
   },
   "hero": {
-    "title": "Eliminate Digital Traces from Photos",
-    "subtitle": "100% Offline Processing - Zero Server Upload",
-    "description": "Remove GPS tracking data and metadata from images instantly. Built by security experts. Works offline in your browser.",
-    "privacy": "🔒 100% Offline: Photos never leave your device. No tracking, no upload.",
-    "mainTitle": "Eliminate Photo Tracking Risks — Free & Secure",
-    "mainDescription": "Delete GPS data instantly. Offline processing. Works on phone & desktop. Zero upload."
+    "title": "Supprimer GPS et Géotags des Photos",
+    "subtitle": "Traitement 100% Hors Ligne - Aucun Upload Serveur",
+    "description": "Supprimer localisation GPS, géotags et métadonnées EXIF des images instantanément. Outil en ligne gratuit. Fonctionne hors ligne dans votre navigateur. Conçu par des experts en sécurité.",
+    "privacy": "🔒 100% Hors Ligne : Les photos ne quittent jamais votre appareil. Aucun pistage, aucun upload.",
+    "mainTitle": "Supprimer GPS et Géotags Gratuit — Sûr et Hors Ligne",
+    "mainDescription": "Supprimer localisation GPS et données de géotag instantanément. Outil gratuit. Fonctionne sur téléphone et ordinateur. Aucun upload."
   },
   "dropzone": {
-    "title": "Eliminate Tracking Risks from Photos",
-    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
+    "title": "Supprimer GPS et Géotags des Photos",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Hors Ligne • Aucun Upload",
     "chooseFiles": "Select Photos",
     "features": {
       "noUpload": "Zero Upload",
