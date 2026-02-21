@@ -11,10 +11,10 @@ export function PWAUpdatePrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
-      console.log('SW Registered:', r);
+      // SW Registered
     },
     onRegisterError(error) {
-      console.log('SW registration error', error);
+      // SW registration error
     },
   });
 

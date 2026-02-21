@@ -1,8 +1,6 @@
 import { FileMetadata } from '@/types';
 
 export async function extractMetadata(file: File): Promise<FileMetadata> {
-  console.log('🔍 Raw scan started on original file:', { name: file.name, size: file.size, type: file.type });
-  
   const metadata: FileMetadata = {
     fileName: file.name,
     fileSize: file.size,
@@ -23,17 +21,9 @@ export async function extractMetadata(file: File): Promise<FileMetadata> {
     const arrayBuffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(arrayBuffer);
     
-    console.log('📄 File buffer loaded, scanning for metadata blocks...');
-    
     // Check if JPEG file has EXIF data
     if (file.type === 'image/jpeg') {
       const exifResult = parseJpegExif(uint8Array);
-      console.log('🏷️ EXIF scan result:', {
-        hasExif: exifResult.hasExif,
-        hasGps: exifResult.hasGps,
-        cameraInfo: exifResult.cameraInfo,
-        location: exifResult.location
-      });
       
       if (exifResult.hasExif) {
         metadata.hasExif = true;
@@ -52,45 +42,48 @@ export async function extractMetadata(file: File): Promise<FileMetadata> {
         metadata.metadataFound.push('GPS (found in EXIF)');
         if (exifResult.location) {
           metadata.location = exifResult.location;
-          console.log('🗺️ GPS coordinates found:', metadata.location);
         }
-      } else {
-        console.log('❌ No GPS data found in EXIF');
       }
       
       // Also check for XMP and IPTC
       const xmpResult = parseJpegXmp(uint8Array);
       if (xmpResult.hasXmp) {
         metadata.metadataFound.push('XMP');
-        console.log('📋 XMP metadata found');
         if (xmpResult.hasGps) {
           metadata.hasGps = true;
           metadata.metadataFound.push('GPS (found in XMP)');
-          console.log('🗺️ GPS data also found in XMP');
-        } else {
-          console.log('❌ No GPS data found in XMP');
         }
-      } else {
-        console.log('❌ No XMP metadata found');
       }
       
       const iptcResult = parseJpegIptc(uint8Array);
       if (iptcResult.hasIptc) {
         metadata.metadataFound.push('IPTC');
-        console.log('📋 IPTC metadata found');
-      } else {
-        console.log('❌ No IPTC metadata found');
       }
     } else if (file.type === 'image/png') {
       const pngResult = parsePngMetadata(uint8Array);
       if (pngResult.hasTextChunks) {
         metadata.metadataFound.push('PNG text chunks');
+        metadata.hasExif = true; // PNG text chunks can contain metadata
+      }
+      if (pngResult.hasExif) {
+        metadata.hasExif = true;
+        metadata.metadataFound.push('EXIF (in PNG)');
       }
     } else if (file.type === 'image/webp') {
       const webpResult = parseWebpMetadata(uint8Array);
       if (webpResult.hasExif) {
         metadata.hasExif = true;
-        metadata.metadataFound.push('EXIF');
+        metadata.metadataFound.push('EXIF (in WebP)');
+        
+        // Try to parse EXIF data from WebP
+        const exifResult = parseJpegExif(uint8Array);
+        if (exifResult.hasGps) {
+          metadata.hasGps = true;
+          metadata.metadataFound.push('GPS (found in WebP EXIF)');
+          if (exifResult.location) {
+            metadata.location = exifResult.location;
+          }
+        }
       }
       if (webpResult.hasMetadata) {
         metadata.metadataFound.push('WebP metadata');
@@ -98,17 +91,12 @@ export async function extractMetadata(file: File): Promise<FileMetadata> {
     }
     
   } catch (error) {
-    console.error('🚨 Error during metadata extraction:', error);
+    // Log error for debugging but still return partial metadata
+    metadata.metadataFound.push('Error: Failed to fully analyze file');
+    if (error instanceof Error) {
+      metadata.metadataFound.push(`Error details: ${error.message}`);
+    }
   }
-
-  // Final metadata summary
-  console.log('📊 Final metadata scan result:', {
-    fileName: metadata.fileName,
-    hasExif: metadata.hasExif,
-    hasGps: metadata.hasGps,
-    metadataTypes: metadata.metadataFound,
-    location: metadata.location || 'No GPS coordinates'
-  });
 
   return metadata;
 }
@@ -166,17 +154,11 @@ function parseJpegExif(data: Uint8Array): ExifParseResult {
     
     // Check for GPS IFD
     if (ifd0.gpsIfdOffset) {
-      console.log('🗺️ GPS IFD found, checking for actual GPS data...');
       const gpsIfd = parseGpsIFD(data, tiffStart + ifd0.gpsIfdOffset, tiffStart, byteOrder);
       if (gpsIfd.hasGps && gpsIfd.location) {
         result.hasGps = true;
         result.location = gpsIfd.location;
-        console.log('✅ Valid GPS data confirmed:', gpsIfd.location);
-      } else {
-        console.log('❌ GPS IFD exists but no valid GPS coordinates found');
       }
-    } else {
-      console.log('❌ No GPS IFD found in EXIF');
     }
 
     // Check ExifSubIFD for more data
@@ -188,7 +170,7 @@ function parseJpegExif(data: Uint8Array): ExifParseResult {
     }
     
   } catch (error) {
-    console.error('Error parsing EXIF:', error);
+    // Error parsing EXIF
   }
 
   return result;
@@ -276,19 +258,7 @@ function parseGpsIFD(data: Uint8Array, gpsStart: number, tiffStart: number, byte
         latitude: latRef === 'S' ? -latitude : latitude,
         longitude: lonRef === 'W' ? -longitude : longitude
       };
-      
-      console.log('✅ Valid GPS coordinates found:', {
-        latRef, lonRef,
-        latDegrees, lonDegrees,
-        finalCoords: gps.location
-      });
-    } else {
-      console.log('⚠️ GPS data present but coordinates are zero/invalid:', {
-        latitude, longitude, latRef, lonRef
-      });
     }
-  } else {
-    console.log('❌ No valid GPS coordinate data found (missing lat/lon or refs)');
   }
   
   return gps;
@@ -380,9 +350,6 @@ function parseJpegXmp(data: Uint8Array): { hasXmp: boolean; hasGps: boolean } {
         
         if (foundValidGps) {
           result.hasGps = true;
-          console.log('✅ Valid GPS data found in XMP');
-        } else {
-          console.log('❌ No valid GPS coordinates found in XMP');
         }
         break;
       }
@@ -411,8 +378,8 @@ function parseJpegIptc(data: Uint8Array): { hasIptc: boolean } {
   return result;
 }
 
-function parsePngMetadata(data: Uint8Array): { hasTextChunks: boolean } {
-  const result = { hasTextChunks: false };
+function parsePngMetadata(data: Uint8Array): { hasTextChunks: boolean; hasExif: boolean } {
+  const result = { hasTextChunks: false, hasExif: false };
   
   // PNG signature check
   if (data.length < 8 || data[0] !== 0x89 || data[1] !== 0x50 || data[2] !== 0x4E || data[3] !== 0x47) {
@@ -427,7 +394,11 @@ function parsePngMetadata(data: Uint8Array): { hasTextChunks: boolean } {
     
     if (['tEXt', 'zTXt', 'iTXt'].includes(chunkType)) {
       result.hasTextChunks = true;
-      break;
+    }
+    
+    // PNG can have EXIF chunk
+    if (chunkType === 'eXIf') {
+      result.hasExif = true;
     }
     
     offset += 12 + chunkLength; // 4 (length) + 4 (type) + chunkLength + 4 (CRC)

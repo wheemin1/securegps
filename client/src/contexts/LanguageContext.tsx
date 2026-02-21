@@ -30,14 +30,12 @@ const getInitialLanguage = (): Language => {
     if (saved) {
       const found = languages.find(l => l.code === saved);
       if (found) {
-        console.log('🌐 Found saved language:', found.name);
         return found;
       }
     }
   } catch (error) {
-    console.warn('🌐 Error reading from localStorage:', error);
+    // Error reading from localStorage
   }
-  console.log('🌐 Using default language: English');
   return languages.find((l) => l.code === DEFAULT_LANG_URL) ?? languages[0];
 };
 
@@ -48,22 +46,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   // 번역 파일 로드
   const loadTranslations = useCallback(async (languageCode: string) => {
-    console.log('🌐 Loading translations for:', languageCode);
     setIsLoading(true);
     
     try {
       const response = await import(`@/i18n/${languageCode}.json`);
-      console.log('🌐 Translations loaded successfully:', languageCode);
       setTranslations(response.default);
     } catch (error) {
-      console.error('🌐 Failed to load translations for', languageCode, error);
       // Fallback to English
       try {
         const fallback = await import('@/i18n/en.json');
-        console.log('🌐 Using English fallback translations');
         setTranslations(fallback.default);
       } catch (fallbackError) {
-        console.error('🌐 Failed to load fallback translations:', fallbackError);
         setTranslations({});
       }
     } finally {
@@ -77,15 +70,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [currentLanguage.code, loadTranslations]);
 
   const changeLanguage = useCallback((languageCode: string) => {
-    console.log('🌐 changeLanguage called with:', languageCode);
-    
     const newLanguage = languages.find(l => l.code === languageCode);
     if (!newLanguage) {
-      console.error('🌐 Language not found:', languageCode);
       return;
     }
-
-    console.log('🌐 Found language:', newLanguage);
     
     // React 상태 업데이트 (이것이 모든 컴포넌트에 즉시 반영됨)
     setCurrentLanguage(newLanguage);
@@ -94,10 +82,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem('language', languageCode);
     } catch (error) {
-      console.warn('🌐 Error saving to localStorage:', error);
+      // Error saving to localStorage
     }
-    
-    console.log('🌐 Language change completed');
   }, []);
 
   const t = useCallback((key: string, params?: Record<string, string | number>): any => {

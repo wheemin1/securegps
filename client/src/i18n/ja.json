@@ -66,6 +66,7 @@
     "privacyNotice": "すべての処理はブラウザ内で行われます - ファイルがデバイスから離れることはありません",
     "gpsFound": "発見",
     "gpsNone": "なし",
+    "gpsExposedBadge": "⚠️ 露出",
     "gpsDescription": "位置データが削除されます",
     "gpsNoDescription": "GPSデータは検出されませんでした",
     "exifFound": "発見",
@@ -73,10 +74,20 @@
     "exifDescription": "EXIFデータが削除されます", 
     "exifNoDescription": "カメラデータは検出されませんでした",
     "filesCount": "{count}個のファイルを清浄化予定",
-    "noMetadata": "メタデータは検出されませんでした"
+    "noMetadata": "メタデータは検出されませんでした",
+    "minor": {
+      "title": "軽微なメタデータが検出されました",
+      "subtitle": "{count}個の非重要なメタデータ項目が見つかりました。最大限のプライバシーのため削除を推奨します。"
+    }
   },
   "metadata": {
     "title": "何が削除されますか？",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "PNGテキスト",
+      "webp": "WebPデータ"
+    },
     "gps": {
       "title": "GPS・位置情報",
       "items": [
@@ -163,10 +174,42 @@
   "footer": {
     "description": "すべての処理はブラウザでローカルに行われます。アップロードや追跡はありません。"
   },
+  "dangerMap": {
+    "title": "位置が露出しています",
+    "coords": "座標: {{lat}}, {{lng}}",
+    "viewOnMap": "地図で表示",
+    "latShort": "緯度",
+    "lngShort": "経度"
+  },
   "errors": {
     "unsupported": "サポートされていないファイル形式: {filename}",
     "corrupted": "ファイルが破損している可能性があります: {filename}",
     "processing": "ファイル処理エラー: {filename}",
     "generic": "画像処理中にエラーが発生しました。"
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "サポートされていない形式",
+      "noSupportedTitle": "サポートされているファイルがありません",
+      "noSupportedDescription": "JPEG、PNG、またはWebPファイルを選択してください。",
+      "processingErrorTitle": "処理エラー",
+      "processingErrorDescription": "{filename}の処理に失敗しました: {error}",
+      "genericTitle": "エラー",
+      "prepareDownloadFailed": "ダウンロードの準備に失敗しました。もう一度お試しください。",
+      "noSuccessfulFiles": "正常に処理されたファイルがありません。",
+      "fileTooLargeTitle": "ファイルサイズが大きすぎます",
+      "fileTooLargeDescription": "ファイルは{maxSize}より小さくする必要があります。{filename}は大きすぎます。"    },
+    "warnings": {
+      "metadataRemainingTitle": "メタデータが残る可能性",
+      "metadataRemainingDescription": "{filename}に一部のメタデータが残る可能性があります。特定のファイル形式や複雑なメタデータ構造で発生することがあります。"
+    },
+    "download": {
+      "nothingTitle": "ダウンロードするものがありません",
+      "nothingDescription": "ダウンロードする前に、まず画像を処理してください。",
+      "startedTitle": "ダウンロード開始",
+      "startedSingle": "クリーンな画像をダウンロード中です。",
+      "startedZip": "{count}個のクリーンな画像をZIPファイルとしてダウンロード中です。",
+      "failedTitle": "ダウンロード失敗",
+      "failedDescription": "ファイルのダウンロードに失敗しました。再試行してください。"    }
   }
 }

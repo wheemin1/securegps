@@ -10,7 +10,7 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 function DangerMap({ lat, lng }: { lat: number; lng: number }) {
   const { t } = useLanguage();
   return (
-    <div className="relative w-full h-64 rounded-xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950 group">
+    <div className="relative w-full h-48 sm:h-56 md:h-64 rounded-2xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950 group">
       {/* Background live map (non-interactive) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 filter contrast-125 saturate-150 transition-transform duration-700 group-hover:scale-110">
@@ -33,15 +33,15 @@ function DangerMap({ lat, lng }: { lat: number; lng: number }) {
       </div>
 
       {/* Warning overlay (translucent so the map shows through) */}
-      <div className="absolute inset-0 z-10 bg-red-900/35 flex flex-col items-center justify-center">
+      <div className="absolute inset-0 z-10 bg-red-900/25 backdrop-blur-md flex flex-col items-center justify-center">
         <div className="relative">
           <MapPin className="w-16 h-16 text-red-500 fill-red-500 animate-bounce drop-shadow-[0_2px_10px_rgba(255,0,0,0.65)]" />
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 bg-red-600 rounded-full animate-ping opacity-50" />
         </div>
-        <div className="mt-3 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-xl shadow-[0_0_20px_rgba(220,38,38,0.8)] border-2 border-white tracking-widest uppercase">
+        <div className="mt-3 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-2xl md:text-3xl shadow-[0_0_20px_rgba(220,38,38,0.8)] border-2 border-white tracking-widest uppercase">
           {t('dangerMap.title')}
         </div>
-        <div className="mt-3 bg-black/80 text-red-200 font-mono text-xs px-3 py-1 rounded border border-red-500/40 font-bold">
+        <div className="mt-3 bg-black/80 text-red-200 font-mono text-sm px-3 py-1 rounded border border-red-500/40 font-bold opacity-90">
           {t('dangerMap.coords', { lat: lat.toFixed(5), lng: lng.toFixed(5) })}
         </div>
         <a
@@ -120,7 +120,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   // 메타데이터가 없는 경우의 UI
   if (totalMetadataItems === 0) {
     return (
-      <div className="rounded-2xl p-6 bg-green-50/50 dark:bg-green-950/50">
+      <div className="rounded-2xl p-4 md:p-6 bg-green-50/50 dark:bg-green-950/50">
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center">
@@ -136,10 +136,10 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
           </div>
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center space-x-2 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]">
+              <CardHeader className="p-4 pb-2">
+                <CardTitle className="flex items-center space-x-2 text-base">
                   <MapPin className="w-4 h-4 text-green-600" />
                   <span>{t('preview.gpsTitle')}</span>
                 </CardTitle>
@@ -150,15 +150,15 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                     {t('preview.gpsNone')}
                   </Badge>
                 </div>
-                <CardDescription className="text-xs mt-1">
+                <CardDescription className="text-sm mt-1">
                   {t('preview.gpsNoDescription')}
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center space-x-2 text-sm">
+            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]">
+              <CardHeader className="p-4 pb-2">
+                <CardTitle className="flex items-center space-x-2 text-base">
                   <Camera className="w-4 h-4 text-green-600" />
                   <span>{t('preview.cameraTitle')}</span>
                 </CardTitle>
@@ -169,15 +169,15 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                     {t('preview.cameraNone')}
                   </Badge>
                 </div>
-                <CardDescription className="text-xs mt-1">
+                <CardDescription className="text-sm mt-1">
                   {t('preview.cameraNoDescription')}
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center space-x-2 text-sm">
+            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]">
+              <CardHeader className="p-4 pb-2">
+                <CardTitle className="flex items-center space-x-2 text-base">
                   <FileImage className="w-4 h-4 text-green-600" />
                   <span>{t('preview.filesTitle')}</span>
                 </CardTitle>
@@ -186,7 +186,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                 <div className="text-lg font-semibold">
                   {files.length}
                 </div>
-                <CardDescription className="text-xs mt-1">
+                <CardDescription className="text-sm mt-1">
                   {t('preview.safeFiles')}
                 </CardDescription>
               </CardContent>
@@ -194,7 +194,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
           </div>
 
           {/* Detailed File List */}
-          <div className="max-h-64 overflow-y-auto space-y-2">
+          <div className="max-h-64 overflow-y-auto space-y-3">
             {files.map((file, index) => {
               const meta = metadata[index];
               return (
@@ -210,7 +210,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                           </Badge>
                         </div>
                         
-                        <div className="grid grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
                           <div className="flex items-center space-x-1">
                             <HardDrive className="w-3 h-3" />
                             <span>{(file.size / 1024).toFixed(1)}KB</span>
@@ -265,7 +265,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
   }
 
   return (
-    <div className={`rounded-2xl p-6 ${
+    <div className={`rounded-2xl p-4 md:p-6 ${
       hasOnlyOtherMetadata 
         ? 'bg-blue-50/50 dark:bg-blue-950/30' 
         : 'bg-orange-50/50 dark:bg-orange-950/50'
@@ -306,10 +306,10 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <Card className={hasGps ? "border-none bg-red-50/80 dark:bg-red-950/30 shadow-sm" : "border-none bg-white dark:bg-gray-800 shadow-sm"}>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <Card className={hasGps ? "border-none bg-red-50/80 dark:bg-red-950/30 shadow-sm min-h-[140px]" : "border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]"}>
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center space-x-2 text-base">
                 <MapPin className={`w-4 h-4 ${hasGps ? 'text-red-600' : 'text-gray-400'}`} />
                 <span>{t('preview.gpsTitle') || 'GPS Location'}</span>
               </CardTitle>
@@ -318,10 +318,10 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               <div className="text-lg font-semibold">
                 {hasGpsLocation && gpsMetadata?.location ? (
                   <div className="space-y-2">
-                    <div className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded font-bold animate-pulse">
+                    <div className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded font-bold animate-pulse opacity-90">
                       {t('preview.gpsExposedBadge')}
                     </div>
-                    <div className="text-xs text-red-800 dark:text-red-200 font-mono">
+                    <div className="text-xs text-red-800 dark:text-red-200 font-mono opacity-70">
                       {t('dangerMap.latShort')}: {gpsMetadata.location.latitude.toFixed(4)}<br/>
                       {t('dangerMap.lngShort')}: {gpsMetadata.location.longitude.toFixed(4)}
                     </div>
@@ -336,15 +336,15 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                   </Badge>
                 )}
               </div>
-              <CardDescription className="text-xs mt-1">
+              <CardDescription className="text-sm mt-1">
                 {hasGps ? t('preview.gpsDescription') : t('preview.gpsNoDescription')}
               </CardDescription>
             </CardContent>
           </Card>
 
-          <Card className={hasExif ? "border-none bg-yellow-50/80 dark:bg-yellow-950/30 shadow-sm" : "border-none bg-white dark:bg-gray-800 shadow-sm"}>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2 text-sm">
+          <Card className={hasExif ? "border-none bg-yellow-50/80 dark:bg-yellow-950/30 shadow-sm min-h-[140px]" : "border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]"}>
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center space-x-2 text-base">
                 <Camera className={`w-4 h-4 ${hasExif ? 'text-yellow-600' : 'text-gray-400'}`} />
                 <span>{t('preview.cameraTitle')}</span>
               </CardTitle>
@@ -361,15 +361,15 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                   </Badge>
                 )}
               </div>
-              <CardDescription className="text-xs mt-1">
+              <CardDescription className="text-sm mt-1">
                 {hasExif ? t('preview.cameraDescription') : t('preview.cameraNoDescription')}
               </CardDescription>
             </CardContent>
           </Card>
 
-          <Card className="border-none bg-blue-50/80 dark:bg-blue-950/30 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center space-x-2 text-sm">
+          <Card className="border-none bg-blue-50/80 dark:bg-blue-950/30 shadow-sm min-h-[140px]">
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center space-x-2 text-base">
                 <FileImage className="w-4 h-4 text-blue-600" />
                 <span>{t('preview.filesTitle')}</span>
               </CardTitle>
@@ -378,7 +378,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
               <div className="text-lg font-semibold">
                 {files.length}
               </div>
-              <CardDescription className="text-xs mt-1">
+              <CardDescription className="text-sm mt-1">
                 {t('preview.filesToClean')}
               </CardDescription>
             </CardContent>
@@ -391,14 +391,14 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
         )}
 
         {/* Detailed File List */}
-        <div className="max-h-64 overflow-y-auto space-y-4">
+        <div className="max-h-64 overflow-y-auto space-y-3">
           {files.map((file, index) => {
             const meta = metadata[index];
             return (
               <Card key={file.name} className="border border-gray-200 bg-white dark:bg-gray-800">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-2 mb-2">
                         <FileImage className="w-4 h-4 text-gray-500" />
                         <span className="font-medium text-sm truncate">{file.name}</span>
@@ -407,7 +407,7 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
                         </Badge>
                       </div>
                       
-                      <div className="grid grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
                         <div className="flex items-center space-x-1">
                           <HardDrive className="w-3 h-3" />
                           <span>{(file.size / 1024).toFixed(1)}KB</span>
@@ -452,14 +452,13 @@ export function MetadataPreview({ files, metadata, onConfirm, onCancel }: Metada
         <div className="flex justify-center pt-4">
           <Button
             onClick={() => {
-              console.log('Confirm button clicked!');
               if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
                 // Small haptic to make it feel like an app
                 navigator.vibrate(40);
               }
               onConfirm(files);
             }}
-            className={`w-full md:w-auto h-14 px-8 text-white text-base font-semibold rounded-xl shadow-sm transition-colors ${
+            className={`w-full md:w-auto h-12 md:h-14 px-8 text-white text-base font-semibold rounded-xl shadow-sm transition-colors ${
               hasOnlyOtherMetadata
                 ? 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
                 : (hasCriticalMetadata

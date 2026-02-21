@@ -8,8 +8,6 @@ export function LanguageSelector() {
   const { currentLanguage, languages } = useLanguage();
 
   const handleLanguageClick = (languageCode: string) => {
-    console.log('🎯 Language button clicked:', languageCode);
-
     const pathname = window.location.pathname;
     const search = window.location.search;
     const hash = window.location.hash;

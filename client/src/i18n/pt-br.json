@@ -74,6 +74,7 @@
     "gpsTitle": "GPS Location",
     "gpsFound": "⚠️ Tracking Risk",
     "gpsNone": "Safe",
+    "gpsExposedBadge": "⚠️ EXPOSTO",
     "gpsDescription": "Location data will be eliminated",
     "gpsNoDescription": "No GPS tracking data",
     "gpsTagsOnly": "GPS Tags Only (No Coordinates)",
@@ -81,6 +82,98 @@
     "cameraTitle": "Camera Data",
     "cameraFound": "Found",
     "cameraNone": "None",
-    "cameraDescription": "EXIF data will be removed"
+    "cameraDescription": "EXIF data will be removed",
+    "minor": {
+      "title": "Metadados Menores Detectados",
+      "subtitle": "Encontrados {count} itens de metadados não críticos. Remoção recomendada para máxima privacidade."
+    }
+  },
+  "metadata": {
+    "title": "O que é removido?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "Texto PNG",
+      "webp": "Dados WebP"
+    },
+    "gps": {
+      "title": "Dados de GPS e Localização",
+      "items": [
+        "Coordenadas de latitude e longitude",
+        "Informações de altitude",
+        "Carimbos de data/hora GPS"
+      ]
+    },
+    "device": {
+      "title": "Informações do Dispositivo",
+      "items": [
+        "Marca e modelo da câmera",
+        "Números de série do dispositivo",
+        "Informações da lente",
+        "Versões de software"
+      ]
+    },
+    "timestamps": {
+      "title": "Carimbos de Data/Hora",
+      "items": [
+        "Data/hora em que a foto foi tirada",
+        "Data/hora de criação do arquivo",
+        "Data/hora de modificação do arquivo"
+      ]
+    },
+    "other": {
+      "title": "Outros Metadados",
+      "items": [
+        "Blocos de dados XMP/IPTC",
+        "Imagens de pré-visualização incorporadas",
+        "Imagens em miniatura",
+        "Informações de direitos autorais"
+      ]
+    },
+    "preserved": {
+      "title": "O que é preservado",
+      "description": "O conteúdo real da imagem, dimensões e qualidade permanecem inalterados. Os perfis de cor são removidos por padrão, mas podem ser preservados via opções avançadas."
+    }
+  },
+  "footer": {
+    "description": "Todo o processamento ocorre localmente no seu navegador. Sem uploads, sem rastreamento."
+  },
+  "dangerMap": {
+    "title": "LOCALIZAÇÃO EXPOSTA",
+    "coords": "Coordenadas: {{lat}}, {{lng}}",
+    "viewOnMap": "Ver no Mapa",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
+  "errors": {
+    "unsupported": "Formato de arquivo não suportado: {filename}",
+    "corrupted": "O arquivo parece estar corrompido: {filename}",
+    "processing": "Erro ao processar arquivo: {filename}",
+    "generic": "Ocorreu um erro ao processar suas imagens."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Formato não suportado",
+      "noSupportedTitle": "Nenhum arquivo suportado",
+      "noSupportedDescription": "Selecione arquivos JPEG, PNG ou WebP.",
+      "processingErrorTitle": "Erro de processamento",
+      "processingErrorDescription": "Falha ao processar {filename}: {error}",
+      "genericTitle": "Erro",
+      "prepareDownloadFailed": "Falha ao preparar o download. Por favor, tente novamente.",
+      "noSuccessfulFiles": "Nenhum arquivo foi processado com sucesso.",
+      "fileTooLargeTitle": "Arquivo muito grande",
+      "fileTooLargeDescription": "Os arquivos devem ser menores que {maxSize}. {filename} é muito grande."    },
+    "warnings": {
+      "metadataRemainingTitle": "Metadados Podem Permanecer",
+      "metadataRemainingDescription": "{filename} pode ainda conter alguns metadados. Isso pode acontecer com certos formatos de arquivo ou estruturas de metadados complexas."
+    },
+    "download": {
+      "nothingTitle": "Nada para Baixar",
+      "nothingDescription": "Por favor, processe as imagens antes de baixar.",
+      "startedTitle": "Download Iniciado",
+      "startedSingle": "Sua imagem limpa está sendo baixada.",
+      "startedZip": "Suas {count} imagens limpas estão sendo baixadas como um arquivo ZIP.",
+      "failedTitle": "Falha no Download",
+      "failedDescription": "Falha ao baixar o arquivo. Por favor, tente novamente."    }
   }
 }

@@ -39,6 +39,7 @@ export interface FileProcessingResult {
   success: boolean;
   error?: string;
   pending?: boolean;
+  __uniqueId?: string; // Add unique ID field
 }
 
 export interface SupportedFormat {

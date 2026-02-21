@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MetadataPreview } from '@/components/metadata-preview';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download, Smartphone } from 'lucide-react';
+import { MAX_FILE_SIZE_BYTES } from '@/lib/constants';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -126,8 +127,34 @@ export function Dropzone() {
   }, [state.status, terminalSteps.length]);
 
   const handleFileSelect = (files: File[]) => {
-    if (files.length > 0) {
-      addFilesToQueue(Array.from(files));
+    if (files.length === 0) return;
+    
+    // Filter out files that are too large
+    const validFiles: File[] = [];
+    const oversizedFiles: File[] = [];
+    
+    files.forEach(file => {
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        oversizedFiles.push(file);
+      } else {
+        validFiles.push(file);
+      }
+    });
+    
+    // Show error for oversized files
+    if (oversizedFiles.length > 0) {
+      toast({
+        title: t('toast.errors.fileTooLargeTitle') || 'File Too Large',
+        description: t('toast.errors.fileTooLargeDescription', { 
+          maxSize: '50MB',
+          filename: oversizedFiles[0].name 
+        }) || `Files must be smaller than 50MB. ${oversizedFiles[0].name} is too large.`,
+        variant: "destructive",
+      });
+    }
+    
+    if (validFiles.length > 0) {
+      addFilesToQueue(validFiles);
     }
   };
 

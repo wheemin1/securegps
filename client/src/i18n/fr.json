@@ -24,5 +24,116 @@
       "private": "100% Offline",
       "instant": "Instant Processing"
     }
+  },
+  "preview": {
+    "title": "⚠️ Risque de Pistage Détecté",
+    "subtitle": "Trouvé {count} éléments de métadonnées dans {fileCount} fichiers qui pourraient exposer votre position. Vérifiez ci-dessous.",
+    "confirmButton": "Éliminer les Données de Pistage ({count} éléments)",
+    "cancelButton": "Annuler",
+    "privacyNotice": "Tout le traitement se produit dans votre navigateur - les fichiers ne quittent jamais votre appareil",
+    "gpsTitle": "Position GPS",
+    "gpsFound": "⚠️ Risque de Pistage",
+    "gpsNone": "Sûr",
+    "gpsExposedBadge": "⚠️ EXPOSÉ",
+    "gpsDescription": "Les données de localisation seront éliminées",
+    "gpsNoDescription": "Aucune donnée de pistage GPS",
+    "gpsTagsOnly": "Balises GPS Uniquement (Pas de Coordonnées)",
+    "gpsLocationData": "Données de Localisation",
+    "cameraTitle": "Données de l'Appareil Photo",
+    "cameraFound": "Trouvé",
+    "cameraNone": "Aucune",
+    "cameraDescription": "Les données EXIF seront supprimées",
+    "minor": {
+      "title": "Métadonnées Mineures Détectées",
+      "subtitle": "Trouvé {count} éléments de métadonnées non critiques. Suppression recommandée pour une confidentialité maximale."
+    }
+  },
+  "metadata": {
+    "title": "Qu'est-ce qui est supprimé ?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "Texte PNG",
+      "webp": "Données WebP"
+    },
+    "gps": {
+      "title": "Données GPS et de Localisation",
+      "items": [
+        "Coordonnées de latitude et longitude",
+        "Informations d'altitude",
+        "Horodatages GPS"
+      ]
+    },
+    "device": {
+      "title": "Informations sur l'Appareil",
+      "items": [
+        "Marque et modèle de l'appareil photo",
+        "Numéros de série de l'appareil",
+        "Informations sur l'objectif",
+        "Versions logicielles"
+      ]
+    },
+    "timestamps": {
+      "title": "Horodatages",
+      "items": [
+        "Date/heure de prise de la photo",
+        "Date/heure de création du fichier",
+        "Date/heure de modification du fichier"
+      ]
+    },
+    "other": {
+      "title": "Autres Métadonnées",
+      "items": [
+        "Blocs de données XMP/IPTC",
+        "Images de prévisualisation intégrées",
+        "Images miniatures",
+        "Informations de droits d'auteur"
+      ]
+    },
+    "preserved": {
+      "title": "Ce qui est préservé",
+      "description": "Le contenu réel de l'image, les dimensions et la qualité restent inchangés. Les profils de couleur sont supprimés par défaut mais peuvent être préservés via les options Avancées."
+    }
+  },
+  "footer": {
+    "description": "Tout le traitement se produit localement dans votre navigateur. Pas de téléchargements, pas de pistage."
+  },
+  "dangerMap": {
+    "title": "POSITION EXPOSÉE",
+    "coords": "Coordonnées : {{lat}}, {{lng}}",
+    "viewOnMap": "Voir sur la Carte",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
+  "errors": {
+    "unsupported": "Format de fichier non pris en charge: {filename}",
+    "corrupted": "Le fichier semble être corrompu: {filename}",
+    "processing": "Erreur lors du traitement du fichier: {filename}",
+    "generic": "Une erreur s'est produite lors du traitement de vos images."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Format non pris en charge",
+      "noSupportedTitle": "Aucun fichier pris en charge",
+      "noSupportedDescription": "Veuillez sélectionner des fichiers JPEG, PNG ou WebP.",
+      "processingErrorTitle": "Erreur de traitement",
+      "processingErrorDescription": "Échec du traitement de {filename}: {error}",
+      "genericTitle": "Erreur",
+      "prepareDownloadFailed": "Échec de la préparation du téléchargement. Veuillez réessayer.",
+      "noSuccessfulFiles": "Aucun fichier n'a été traité avec succès.",
+      "fileTooLargeTitle": "Fichier trop volumineux",
+      "fileTooLargeDescription": "Les fichiers doivent être inférieurs à {maxSize}. {filename} est trop volumineux."    },
+    "warnings": {
+      "metadataRemainingTitle": "Des Métadonnées Peuvent Rester",
+      "metadataRemainingDescription": "{filename} peut encore contenir certaines métadonnées. Cela peut se produire avec certains formats de fichier ou des structures de métadonnées complexes."
+    },
+    "download": {
+      "nothingTitle": "Rien à Télécharger",
+      "nothingDescription": "Veuillez d'abord traiter les images avant de télécharger.",
+      "startedTitle": "Téléchargement Commencé",
+      "startedSingle": "Votre image nettoyée est en cours de téléchargement.",
+      "startedZip": "Vos {count} images nettoyées sont en cours de téléchargement dans un fichier ZIP.",
+      "failedTitle": "Échec du Téléchargement",
+      "failedDescription": "Échec du téléchargement du fichier. Veuillez réessayer."    }
   }
 }

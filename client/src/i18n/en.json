@@ -74,6 +74,7 @@
     "gpsTitle": "GPS Location",
     "gpsFound": "⚠️ Tracking Risk",
     "gpsNone": "Safe",
+    "gpsExposedBadge": "⚠️ EXPOSED",
     "gpsDescription": "Location data will be eliminated",
     "gpsNoDescription": "No GPS tracking data",
     "gpsTagsOnly": "GPS Tags Only (No Coordinates)",
@@ -92,10 +93,20 @@
     "safeNotice": "Files are already safe - no additional processing needed",
     "noMetadataDetected": "No metadata detected",
     "filesCount": "{count} Files to be cleaned",
-    "noMetadata": "No metadata detected"
+    "noMetadata": "No metadata detected",
+    "minor": {
+      "title": "Minor Metadata Detected",
+      "subtitle": "Found {count} non-critical metadata items. Removal recommended for maximum privacy."
+    }
   },
   "metadata": {
     "title": "What gets removed?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "PNG Text",
+      "webp": "WebP Data"
+    },
     "gps": {
       "title": "GPS & Location Data",
       "items": [
@@ -199,6 +210,13 @@
     "description": "All processing happens locally in your browser. No uploads, no tracking.",
     "backToHome": "Back to Home"
   },
+  "dangerMap": {
+    "title": "LOCATION EXPOSED",
+    "coords": "Coordinates: {{lat}}, {{lng}}",
+    "viewOnMap": "View on Map",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
   "pwa": {
     "install": {
       "title": "Install SecureGPS",
@@ -224,5 +242,32 @@
     "corrupted": "File appears to be corrupted: {filename}",
     "processing": "Error processing file: {filename}",
     "generic": "An error occurred while processing your images."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Unsupported Format",
+      "noSupportedTitle": "No Supported Files",
+      "noSupportedDescription": "Please select JPEG, PNG, or WebP files.",
+      "processingErrorTitle": "Processing Error",
+      "processingErrorDescription": "Failed to process {filename}: {error}",
+      "genericTitle": "Error",
+      "prepareDownloadFailed": "Failed to prepare download. Please try again.",
+      "noSuccessfulFiles": "No files were successfully processed.",
+      "fileTooLargeTitle": "File Too Large",
+      "fileTooLargeDescription": "Files must be smaller than {maxSize}. {filename} is too large."
+    },
+    "warnings": {
+      "metadataRemainingTitle": "Metadata May Remain",
+      "metadataRemainingDescription": "{filename} may still contain some metadata. This can happen with certain file formats or complex metadata structures."
+    },
+    "download": {
+      "nothingTitle": "Nothing to Download",
+      "nothingDescription": "Please process images first before downloading.",
+      "startedTitle": "Download Started",
+      "startedSingle": "Your cleaned image is downloading.",
+      "startedZip": "Your {count} cleaned images are downloading as a ZIP file.",
+      "failedTitle": "Download Failed",
+      "failedDescription": "Failed to download the file. Please try again."
+    }
   }
 }

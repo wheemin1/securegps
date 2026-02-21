@@ -1,13 +1,16 @@
 import { Link } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { BRAND_NAME, GITHUB_URL } from "@/lib/constants";
 
 export default function Footer() {
+  const { langUrl } = useLanguage();
   return (
     <footer className="border-t border-border bg-card mt-16">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
           {/* Brand */}
           <div>
-            <h3 className="font-semibold text-lg mb-3">SecureGPS</h3>
+            <h3 className="font-semibold text-lg mb-3">{BRAND_NAME}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Eliminate GPS tracking risks from photos instantly. 100% offline, client-side processing.
             </p>
@@ -18,12 +21,12 @@ export default function Footer() {
             <h3 className="font-semibold text-sm mb-3 text-muted-foreground uppercase tracking-wider">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/privacy" className="text-sm text-foreground hover:text-blue-600 transition-colors">
+                <Link href={`/${langUrl}/privacy`} className="text-sm text-foreground hover:text-blue-600 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-sm text-foreground hover:text-blue-600 transition-colors">
+                <Link href={`/${langUrl}/terms`} className="text-sm text-foreground hover:text-blue-600 transition-colors">
                   Terms of Service
                 </Link>
               </li>
@@ -35,13 +38,13 @@ export default function Footer() {
             <h3 className="font-semibold text-sm mb-3 text-muted-foreground uppercase tracking-wider">Contact</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/contact" className="text-sm text-foreground hover:text-blue-600 transition-colors">
+                <Link href={`/${langUrl}/contact`} className="text-sm text-foreground hover:text-blue-600 transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
                 <a 
-                  href="https://github.com/wheemin1/securegps" 
+                  href={GITHUB_URL} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-sm text-foreground hover:text-blue-600 transition-colors"
@@ -56,7 +59,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} SecureGPS. 100% offline processing in your browser. Zero uploads, zero tracking.
+            © 2024-{new Date().getFullYear()} {BRAND_NAME}. 100% offline processing in your browser. Zero uploads, zero tracking.
           </p>
         </div>
       </div>

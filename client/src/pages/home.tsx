@@ -61,10 +61,6 @@ export default function Home() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'accepted') {
-      console.log('PWA installed');
-    }
-
     setDeferredPrompt(null);
     setShowInstallButton(false);
   };
@@ -76,7 +72,13 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+              <svg 
+                className="w-8 h-8 text-primary" 
+                fill="currentColor" 
+                viewBox="0 0 20 20"
+                aria-label="SecureGPS Logo"
+                role="img"
+              >
                 <path fillRule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zM12 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zM12 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3z" clipRule="evenodd"/>
               </svg>
               <div>
@@ -119,7 +121,7 @@ export default function Home() {
       </header>
 
 
-      <main className="container mx-auto px-4 py-8 md:py-12 max-w-lg pb-32 md:pb-12">
+      <main className="container mx-auto px-4 py-8 md:py-12 max-w-4xl pb-32 md:pb-12">
         {/* Hero Section - Toss Style (Ultra Clean) */}
         <section className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white leading-tight">

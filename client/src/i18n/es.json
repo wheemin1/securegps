@@ -66,6 +66,7 @@
     "privacyNotice": "Todo el procesamiento ocurre en tu navegador - los archivos nunca salen de tu dispositivo",
     "gpsFound": "Encontrado",
     "gpsNone": "Ninguno",
+    "gpsExposedBadge": "⚠️ EXPUESTO",
     "gpsDescription": "Los datos de ubicación serán eliminados",
     "gpsNoDescription": "No se detectaron datos GPS",
     "exifFound": "Encontrado",
@@ -73,10 +74,20 @@
     "exifDescription": "Los datos EXIF serán eliminados",
     "exifNoDescription": "No se detectaron datos de cámara",
     "filesCount": "{count} archivos para limpiar",
-    "noMetadata": "No se detectaron metadatos"
+    "noMetadata": "No se detectaron metadatos",
+    "minor": {
+      "title": "Metadatos menores detectados",
+      "subtitle": "Se encontraron {count} elementos de metadatos no críticos. Se recomienda la eliminación para máxima privacidad."
+    }
   },
   "metadata": {
     "title": "¿Qué se elimina?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "Texto PNG",
+      "webp": "Datos WebP"
+    },
     "gps": {
       "title": "Datos GPS y de Ubicación",
       "items": [
@@ -163,10 +174,42 @@
   "footer": {
     "description": "Todo el procesamiento ocurre localmente en tu navegador. Sin subidas, sin seguimiento."
   },
+  "dangerMap": {
+    "title": "UBICACIÓN EXPUESTA",
+    "coords": "Coordenadas: {{lat}}, {{lng}}",
+    "viewOnMap": "Ver en el Mapa",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
   "errors": {
     "unsupported": "Formato de archivo no compatible: {filename}",
     "corrupted": "El archivo parece estar corrupto: {filename}",
     "processing": "Error procesando archivo: {filename}",
     "generic": "Ocurrió un error al procesar tus imágenes."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Formato no compatible",
+      "noSupportedTitle": "No hay archivos compatibles",
+      "noSupportedDescription": "Seleccione archivos JPEG, PNG o WebP.",
+      "processingErrorTitle": "Error de procesamiento",
+      "processingErrorDescription": "Error al procesar {filename}: {error}",
+      "genericTitle": "Error",
+      "prepareDownloadFailed": "Error al preparar la descarga. Por favor, inténtelo de nuevo.",
+      "noSuccessfulFiles": "No se procesaron archivos exitosamente.",
+      "fileTooLargeTitle": "Archivo demasiado grande",
+      "fileTooLargeDescription": "Los archivos deben ser menores de {maxSize}. {filename} es demasiado grande."    },
+    "warnings": {
+      "metadataRemainingTitle": "Pueden Quedar Metadatos",
+      "metadataRemainingDescription": "{filename} puede contener algunos metadatos. Esto puede ocurrir con ciertos formatos de archivo o estructuras de metadatos complejas."
+    },
+    "download": {
+      "nothingTitle": "Nada que Descargar",
+      "nothingDescription": "Por favor, procese las imágenes antes de descargar.",
+      "startedTitle": "Descarga Iniciada",
+      "startedSingle": "Su imagen limpia se está descargando.",
+      "startedZip": "Sus {count} imágenes limpias se están descargando como un archivo ZIP.",
+      "failedTitle": "Descarga Fallida",
+      "failedDescription": "Error al descargar el archivo. Por favor, inténtelo de nuevo."    }
   }
 }

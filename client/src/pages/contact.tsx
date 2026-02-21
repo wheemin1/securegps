@@ -1,6 +1,7 @@
 import { useLanguage } from "@/hooks/use-language";
 import { Link } from "wouter";
 import { Mail, Github } from "lucide-react";
+import { GITHUB_URL } from "@/lib/constants";
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -51,12 +52,12 @@ export default function Contact() {
                   For technical issues, feature requests, or to contribute to the project, visit our GitHub repository:
                 </p>
                 <a 
-                  href="https://github.com/wheemin1/securegps" 
+                  href={GITHUB_URL} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-700 font-medium underline"
                 >
-                  github.com/wheemin1/securegps
+                  {GITHUB_URL.replace('https://', '')}
                 </a>
                 <p className="text-sm text-gray-600 mt-3">
                   Open an issue or submit a pull request. Contributions are welcome!

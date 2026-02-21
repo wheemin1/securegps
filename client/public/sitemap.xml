@@ -3,66 +3,66 @@
 
     <url>
         <loc>https://securegps.netlify.app/en</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/de</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>1.0</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/pt-br</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>1.0</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/id</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/fr</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/ko</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/es</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/ja</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/en/privacy</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://securegps.netlify.app/en/terms</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://securegps.netlify.app/en/contact</loc>
-        <lastmod>2026-01-23</lastmod>
+        <lastmod>2026-02-12</lastmod>
         <priority>0.3</priority>
     </url>
 

@@ -24,5 +24,116 @@
       "private": "100% Offline",
       "instant": "Instant Processing"
     }
+  },
+  "preview": {
+    "title": "⚠️ Risiko Pelacakan Terdeteksi",
+    "subtitle": "Ditemukan {count} item metadata dalam {fileCount} file yang dapat mengekspos lokasi Anda. Tinjau di bawah.",
+    "confirmButton": "Hapus Data Pelacakan ({count} item)",
+    "cancelButton": "Batal",
+    "privacyNotice": "Semua pemrosesan terjadi di browser Anda - file tidak pernah meninggalkan perangkat Anda",
+    "gpsTitle": "Lokasi GPS",
+    "gpsFound": "⚠️ Risiko Pelacakan",
+    "gpsNone": "Aman",
+    "gpsExposedBadge": "⚠️ TERPAPAR",
+    "gpsDescription": "Data lokasi akan dihapus",
+    "gpsNoDescription": "Tidak ada data pelacakan GPS",
+    "gpsTagsOnly": "Hanya Tag GPS (Tidak Ada Koordinat)",
+    "gpsLocationData": "Data Lokasi",
+    "cameraTitle": "Data Kamera",
+    "cameraFound": "Ditemukan",
+    "cameraNone": "Tidak Ada",
+    "cameraDescription": "Data EXIF akan dihapus",
+    "minor": {
+      "title": "Metadata Minor Terdeteksi",
+      "subtitle": "Ditemukan {count} item metadata non-kritis. Penghapusan disarankan untuk privasi maksimum."
+    }
+  },
+  "metadata": {
+    "title": "Apa yang dihapus?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "Teks PNG",
+      "webp": "Data WebP"
+    },
+    "gps": {
+      "title": "Data GPS dan Lokasi",
+      "items": [
+        "Koordinat lintang dan bujur",
+        "Informasi ketinggian",
+        "Stempel waktu GPS"
+      ]
+    },
+    "device": {
+      "title": "Informasi Perangkat",
+      "items": [
+        "Merek dan model kamera",
+        "Nomor seri perangkat",
+        "Informasi lensa",
+        "Versi perangkat lunak"
+      ]
+    },
+    "timestamps": {
+      "title": "Stempel Waktu",
+      "items": [
+        "Tanggal/waktu foto diambil",
+        "Tanggal/waktu file dibuat",
+        "Tanggal/waktu file dimodifikasi"
+      ]
+    },
+    "other": {
+      "title": "Metadata Lainnya",
+      "items": [
+        "Blok data XMP/IPTC",
+        "Gambar pratinjau tertanam",
+        "Gambar thumbnail",
+        "Informasi hak cipta"
+      ]
+    },
+    "preserved": {
+      "title": "Yang dipertahankan",
+      "description": "Konten gambar sebenarnya, dimensi, dan kualitas tetap tidak berubah. Profil warna dihapus secara default tetapi dapat dipertahankan melalui opsi Lanjutan."
+    }
+  },
+  "footer": {
+    "description": "Semua pemrosesan terjadi secara lokal di browser Anda. Tanpa upload, tanpa pelacakan."
+  },
+  "dangerMap": {
+    "title": "LOKASI TERPAPAR",
+    "coords": "Koordinat: {{lat}}, {{lng}}",
+    "viewOnMap": "Lihat di Peta",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
+  "errors": {
+    "unsupported": "Format file tidak didukung: {filename}",
+    "corrupted": "File tampaknya rusak: {filename}",
+    "processing": "Kesalahan memproses file: {filename}",
+    "generic": "Terjadi kesalahan saat memproses gambar Anda."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Format tidak didukung",
+      "noSupportedTitle": "Tidak ada file yang didukung",
+      "noSupportedDescription": "Pilih file JPEG, PNG, atau WebP.",
+      "processingErrorTitle": "Kesalahan pemrosesan",
+      "processingErrorDescription": "Gagal memproses {filename}: {error}",
+      "genericTitle": "Kesalahan",
+      "prepareDownloadFailed": "Gagal menyiapkan unduhan. Silakan coba lagi.",
+      "noSuccessfulFiles": "Tidak ada file yang berhasil diproses.",
+      "fileTooLargeTitle": "File terlalu besar",
+      "fileTooLargeDescription": "File harus lebih kecil dari {maxSize}. {filename} terlalu besar."    },
+    "warnings": {
+      "metadataRemainingTitle": "Metadata Mungkin Tersisa",
+      "metadataRemainingDescription": "{filename} mungkin masih mengandung beberapa metadata. Ini dapat terjadi pada format file tertentu atau struktur metadata yang kompleks."
+    },
+    "download": {
+      "nothingTitle": "Tidak Ada yang Diunduh",
+      "nothingDescription": "Silakan proses gambar terlebih dahulu sebelum mengunduh.",
+      "startedTitle": "Unduhan Dimulai",
+      "startedSingle": "Gambar bersih Anda sedang diunduh.",
+      "startedZip": "{count} gambar bersih Anda sedang diunduh sebagai file ZIP.",
+      "failedTitle": "Unduhan Gagal",
+      "failedDescription": "Gagal mengunduh file. Silakan coba lagi."    }
   }
 }

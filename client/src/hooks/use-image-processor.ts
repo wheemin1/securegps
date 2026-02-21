@@ -80,48 +80,42 @@ export function useImageProcessor() {
       workerRef.current.onmessage = (event) => {
         const { type, id, blob, filename, error } = event.data;
         
-        console.log('Main thread received worker message:', { type, id, filename, error, blobSize: blob?.size });
-        
         if (type === 'PROCESSING_COMPLETE' && blob && filename) {
-          console.log('Processing completed successfully for:', id);
           
           // 처리된 파일의 메타데이터를 재검사
           const verifyCleanedFile = async () => {
             try {
               const cleanedFile = new File([blob], filename, { type: blob.type || 'image/jpeg' });
               const cleanedMetadata = await extractMetadata(cleanedFile);
-              console.log('🔍 Cleaned file metadata verification:', {
-                filename,
-                hasGps: cleanedMetadata.hasGps,
-                hasExif: cleanedMetadata.hasExif,
-                metadataTypes: cleanedMetadata.metadataFound
-              });
               
-              if (cleanedMetadata.hasGps || cleanedMetadata.metadataFound.length > 0) {
-                console.warn('⚠️ Warning: Processed file still contains metadata!', cleanedMetadata);
-              } else {
-                console.log('✅ Confirmed: Processed file is clean of metadata');
+              // 경고: 메타데이터가 여전히 남아있음
+              if (cleanedMetadata.hasGps || cleanedMetadata.hasExif || cleanedMetadata.metadataFound.length > 0) {
+                toast({
+                  title: t('toast.warnings.metadataRemainingTitle') || 'Warning: Metadata Remaining',
+                  description: t('toast.warnings.metadataRemainingDescription', { filename }) || 
+                    `File ${filename} may still contain some metadata. This can happen with certain formats.`,
+                  variant: "default",
+                });
               }
             } catch (error) {
-              console.error('Error verifying cleaned file:', error);
+              // Error verifying cleaned file
             }
           };
           
           verifyCleanedFile();
           
           const result: FileProcessingResult = {
-            originalFile: processingResults.current.find(r => r.originalFile.name === id)?.originalFile!,
+            originalFile: processingResults.current.find(r => r.__uniqueId === id)?.originalFile || ({} as File),
             cleanedBlob: blob,
             filename,
             success: true,
-            pending: false
+            pending: false,
+            __uniqueId: id
           };
           
           processingResults.current = processingResults.current.map(r => 
-            r.originalFile.name === id ? result : r
+            r.__uniqueId === id ? result : r
           );
-          
-          console.log('Updated processing results:', processingResults.current);
           
           setState(prev => ({
             ...prev,
@@ -130,18 +124,18 @@ export function useImageProcessor() {
           }));
           
         } else if (type === 'PROCESSING_ERROR') {
-          console.log('Processing error for:', id, error);
           const result: FileProcessingResult = {
-            originalFile: processingResults.current.find(r => r.originalFile.name === id)?.originalFile!,
+            originalFile: processingResults.current.find(r => r.__uniqueId === id)?.originalFile || ({} as File),
             cleanedBlob: new Blob(),
             filename: '',
             success: false,
             error,
-            pending: false
+            pending: false,
+            __uniqueId: id
           };
           
           processingResults.current = processingResults.current.map(r => 
-            r.originalFile.name === id ? result : r
+            r.__uniqueId === id ? result : r
           );
           
           setState(prev => ({
@@ -155,8 +149,6 @@ export function useImageProcessor() {
   }, []);
 
   const previewFiles = useCallback(async (files: File[]) => {
-    console.log('previewFiles called with:', files);
-    
     // Filter supported files
     const supportedFiles = files.filter(file => {
       if (!isFormatSupported(file)) {
@@ -170,8 +162,6 @@ export function useImageProcessor() {
       return true;
     });
 
-    console.log('supportedFiles:', supportedFiles);
-
     if (supportedFiles.length === 0) {
       return;
     }
@@ -180,12 +170,9 @@ export function useImageProcessor() {
     const previewData = await Promise.all(
       supportedFiles.map(async (file) => {
         const metadata = await extractMetadata(file);
-        console.log('🔍 Metadata extracted for', file.name, metadata);
         return metadata;
       })
     );
-
-    console.log('previewData extracted:', previewData);
 
     // Set preview state
     setState({
@@ -198,8 +185,6 @@ export function useImageProcessor() {
       selectedFiles: supportedFiles,
       previewData
     });
-    
-    console.log('setState called with selectedFiles:', supportedFiles);
   }, [toast, t]);
 
   const addFilesToQueue = useCallback(async (files: File[]) => {
@@ -256,18 +241,12 @@ export function useImageProcessor() {
   }, [state.queuedFiles, state.queuedMetadata]);
 
   const confirmProcessing = useCallback(async (filesToProcess?: File[]) => {
-    console.log('confirmProcessing called with files:', filesToProcess);
-    console.log('current state:', state);
-    
     // Use passed files or state files
     const selectedFiles = filesToProcess || state.selectedFiles;
     
     if (!selectedFiles || selectedFiles.length === 0) {
-      console.log('No files selected, returning');
       return;
     }
-
-    console.log('Processing files:', selectedFiles);
 
     const minDelayMs = 1500 + Math.floor(Math.random() * 1000);
     const processingStartedAt = Date.now();
@@ -286,13 +265,14 @@ export function useImageProcessor() {
       queuedMetadata: []
     }));
 
-    // Initialize results array
-    processingResults.current = selectedFiles.map(file => ({
+    // Initialize results array with unique IDs to prevent collisions
+    processingResults.current = selectedFiles.map((file, index) => ({
       originalFile: file,
       cleanedBlob: new Blob(),
       filename: '',
       success: false,
-      pending: true // Add pending flag
+      pending: true,
+      __uniqueId: `${file.name}_${Date.now()}_${index}` // Add unique ID
     }));
 
     // Initialize worker
@@ -300,14 +280,49 @@ export function useImageProcessor() {
 
     // Process files in batches of 5 to avoid overwhelming the browser
     const batchSize = 5;
+    const PROCESS_TIMEOUT = 30000; // 30 seconds timeout per file
+    
     for (let i = 0; i < selectedFiles.length; i += batchSize) {
       const batch = selectedFiles.slice(i, i + batchSize);
       
       await Promise.all(
-        batch.map((file: File) => {
+        batch.map((file: File, batchIndex: number) => {
+          const fileIndex = i + batchIndex;
+          const uniqueId = processingResults.current[fileIndex].__uniqueId!;
+          
           return new Promise<void>((resolve) => {
+            const startTime = Date.now();
+            
             const checkCompletion = () => {
-              const result = processingResults.current.find(r => r.originalFile.name === file.name);
+              const result = processingResults.current.find(r => r.__uniqueId === uniqueId);
+              
+              // Check timeout
+              if (Date.now() - startTime > PROCESS_TIMEOUT) {
+                // Mark as failed due to timeout
+                const timeoutResult: FileProcessingResult = {
+                  originalFile: file,
+                  cleanedBlob: new Blob(),
+                  filename: '',
+                  success: false,
+                  error: 'Processing timeout (30s exceeded)',
+                  pending: false,
+                  __uniqueId: uniqueId
+                };
+                
+                processingResults.current = processingResults.current.map(r => 
+                  r.__uniqueId === uniqueId ? timeoutResult : r
+                );
+                
+                setState(prev => ({
+                  ...prev,
+                  processed: prev.processed + 1,
+                  progress: ((prev.processed + 1) / prev.total) * 100
+                }));
+                
+                resolve();
+                return;
+              }
+              
               if (result && !result.pending) {
                 setState(prev => ({
                   ...prev,
@@ -320,12 +335,12 @@ export function useImageProcessor() {
               }
             };
             
-            // Send to worker
+            // Send to worker with unique ID
             workerRef.current?.postMessage({
               type: 'PROCESS_IMAGE',
               file,
               options,
-              id: file.name
+              id: uniqueId
             });
             
             checkCompletion();
@@ -335,14 +350,10 @@ export function useImageProcessor() {
     }
 
     // All files processed, handle download
-    console.log('🎯 Processing complete, starting download phase...');
     const successfulResults = processingResults.current.filter(r => r.success);
     const failedResults = processingResults.current.filter(r => !r.success);
-    
-    console.log(`📊 Results summary: ${successfulResults.length} successful, ${failedResults.length} failed`);
 
     if (failedResults.length > 0) {
-      console.log('❌ Failed results:', failedResults);
       failedResults.forEach(result => {
         toast({
           title: t('toast.errors.processingErrorTitle'),

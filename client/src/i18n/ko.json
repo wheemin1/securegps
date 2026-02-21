@@ -74,6 +74,7 @@
     "gpsTitle": "GPS 위치",
     "gpsFound": "발견됨",
     "gpsNone": "없음",
+    "gpsExposedBadge": "⚠️ 위험",
     "gpsDescription": "위치 데이터가 제거됩니다",
     "gpsNoDescription": "GPS 위치 정보가 없습니다",
     "gpsTagsOnly": "GPS 태그만 있음 (좌표 없음)",
@@ -96,10 +97,20 @@
     "exifDescription": "EXIF 데이터가 제거됩니다",
     "exifNoDescription": "카메라 데이터가 감지되지 않음",
     "filesCount": "{count}개 파일 정리 예정",
-    "noMetadata": "메타데이터가 감지되지 않음"
+    "noMetadata": "메타데이터가 감지되지 않음",
+    "minor": {
+      "title": "경미한 메타데이터 감지됨",
+      "subtitle": "{count}개의 비중요 메타데이터 항목이 발견되었습니다. 최대 개인정보 보호를 위해 제거를 권장합니다."
+    }
   },
   "metadata": {
     "title": "무엇이 제거되나요?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "PNG 텍스트",
+      "webp": "WebP 데이터"
+    },
     "gps": {
       "title": "GPS 및 위치 데이터",
       "items": [
@@ -186,10 +197,44 @@
   "footer": {
     "description": "모든 처리는 브라우저에서 로컬로 이루어집니다. 업로드나 추적이 없습니다."
   },
+  "dangerMap": {
+    "title": "위치 노출됨",
+    "coords": "좌표: {{lat}}, {{lng}}",
+    "viewOnMap": "지도에서 보기",
+    "latShort": "위도",
+    "lngShort": "경도"
+  },
   "errors": {
     "unsupported": "지원되지 않는 파일 형식: {filename}",
     "corrupted": "파일이 손상된 것 같습니다: {filename}",
     "processing": "파일 처리 오류: {filename}",
     "generic": "이미지 처리 중 오류가 발생했습니다."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "지원되지 않는 형식",
+      "noSupportedTitle": "지원되는 파일 없음",
+      "noSupportedDescription": "JPEG, PNG 또는 WebP 파일을 선택하세요.",
+      "processingErrorTitle": "처리 오류",
+      "processingErrorDescription": "{filename} 처리 실패: {error}",
+      "genericTitle": "오류",
+      "prepareDownloadFailed": "다운로드 준비 실패. 다시 시도하세요.",
+      "noSuccessfulFiles": "처리된 파일이 없습니다.",
+      "fileTooLargeTitle": "파일 크기 초과",
+      "fileTooLargeDescription": "{maxSize}보다 작아야 합니다. {filename}이(가) 너무 큽니다."
+    },
+    "warnings": {
+      "metadataRemainingTitle": "메타데이터가 남아있을 수 있음",
+      "metadataRemainingDescription": "{filename}에 일부 메타데이터가 남아있을 수 있습니다. 특정 파일 형식이나 복잡한 메타데이터 구조에서 발생할 수 있습니다."
+    },
+    "download": {
+      "nothingTitle": "다운로드할 항목 없음",
+      "nothingDescription": "다운로드하기 전에 먼저 이미지를 처리하세요.",
+      "startedTitle": "다운로드 시작됨",
+      "startedSingle": "정리된 이미지 다운로드 중입니다.",
+      "startedZip": "{count}개의 정리된 이미지가 ZIP 파일로 다운로드 중입니다.",
+      "failedTitle": "다운로드 실패",
+      "failedDescription": "파일 다운로드에 실패했습니다. 다시 시도하세요."
+    }
   }
 }

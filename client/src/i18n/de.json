@@ -24,5 +24,116 @@
       "private": "100% Offline",
       "instant": "Instant Processing"
     }
+  },
+  "preview": {
+    "title": "⚠️ Verfolgungsrisiko Erkannt",
+    "subtitle": "{count} Metadaten-Elemente in {fileCount} Dateien gefunden, die Ihren Standort offenlegen könnten. Überprüfen Sie unten.",
+    "confirmButton": "Tracking-Daten Eliminieren ({count} Elemente)",
+    "cancelButton": "Abbrechen",
+    "privacyNotice": "Alle Verarbeitungen finden in Ihrem Browser statt - Dateien verlassen niemals Ihr Gerät",
+    "gpsTitle": "GPS-Standort",
+    "gpsFound": "⚠️ Verfolgungsrisiko",
+    "gpsNone": "Sicher",
+    "gpsExposedBadge": "⚠️ OFFENGELEGT",
+    "gpsDescription": "Standortdaten werden eliminiert",
+    "gpsNoDescription": "Keine GPS-Tracking-Daten",
+    "gpsTagsOnly": "Nur GPS-Tags (Keine Koordinaten)",
+    "gpsLocationData": "Standortdaten",
+    "cameraTitle": "Kameradaten",
+    "cameraFound": "Gefunden",
+    "cameraNone": "Keine",
+    "cameraDescription": "EXIF-Daten werden entfernt",
+    "minor": {
+      "title": "Geringfügige Metadaten Erkannt",
+      "subtitle": "{count} nicht kritische Metadaten-Elemente gefunden. Entfernung für maximale Privatsphäre empfohlen."
+    }
+  },
+  "metadata": {
+    "title": "Was wird entfernt?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "PNG-Text",
+      "webp": "WebP-Daten"
+    },
+    "gps": {
+      "title": "GPS- und Standortdaten",
+      "items": [
+        "Breiten- und Längengrad-Koordinaten",
+        "Höheninformationen",
+        "GPS-Zeitstempel"
+      ]
+    },
+    "device": {
+      "title": "Geräteinformationen",
+      "items": [
+        "Kameramarke und -modell",
+        "Geräteseriennummern",
+        "Objektivinformationen",
+        "Softwareversionen"
+      ]
+    },
+    "timestamps": {
+      "title": "Zeitstempel",
+      "items": [
+        "Datum/Uhrzeit der Fotoaufnahme",
+        "Datum/Uhrzeit der Dateierstellung",
+        "Datum/Uhrzeit der Dateiänderung"
+      ]
+    },
+    "other": {
+      "title": "Andere Metadaten",
+      "items": [
+        "XMP/IPTC-Datenblöcke",
+        "Eingebettete Vorschaubilder",
+        "Miniaturbilder",
+        "Urheberrechtsinformationen"
+      ]
+    },
+    "preserved": {
+      "title": "Was bleibt erhalten",
+      "description": "Der tatsächliche Bildinhalt, die Abmessungen und die Qualität bleiben unverändert. Farbprofile werden standardmäßig entfernt, können aber über erweiterte Optionen beibehalten werden."
+    }
+  },
+  "footer": {
+    "description": "Alle Verarbeitungen finden lokal in Ihrem Browser statt. Keine Uploads, kein Tracking."
+  },
+  "dangerMap": {
+    "title": "STANDORT OFFENGELEGT",
+    "coords": "Koordinaten: {{lat}}, {{lng}}",
+    "viewOnMap": "Auf Karte Anzeigen",
+    "latShort": "Br",
+    "lngShort": "Lg"
+  },
+  "errors": {
+    "unsupported": "Nicht unterstütztes Dateiformat: {filename}",
+    "corrupted": "Die Datei scheint beschädigt zu sein: {filename}",
+    "processing": "Fehler beim Verarbeiten der Datei: {filename}",
+    "generic": "Beim Verarbeiten Ihrer Bilder ist ein Fehler aufgetreten."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Nicht unterstütztes Format",
+      "noSupportedTitle": "Keine unterstützten Dateien",
+      "noSupportedDescription": "Bitte wählen Sie JPEG-, PNG- oder WebP-Dateien.",
+      "processingErrorTitle": "Verarbeitungsfehler",
+      "processingErrorDescription": "Fehler beim Verarbeiten von {filename}: {error}",
+      "genericTitle": "Fehler",
+      "prepareDownloadFailed": "Download-Vorbereitung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "noSuccessfulFiles": "Es wurden keine Dateien erfolgreich verarbeitet.",
+      "fileTooLargeTitle": "Datei zu groß",
+      "fileTooLargeDescription": "Dateien müssen kleiner als {maxSize} sein. {filename} ist zu groß."    },
+    "warnings": {
+      "metadataRemainingTitle": "Metadaten Können Verbleiben",
+      "metadataRemainingDescription": "{filename} kann noch einige Metadaten enthalten. Dies kann bei bestimmten Dateiformaten oder komplexen Metadatenstrukturen vorkommen."
+    },
+    "download": {
+      "nothingTitle": "Nichts zum Herunterladen",
+      "nothingDescription": "Bitte verarbeiten Sie zuerst Bilder, bevor Sie herunterladen.",
+      "startedTitle": "Download Gestartet",
+      "startedSingle": "Ihr bereinigtes Bild wird heruntergeladen.",
+      "startedZip": "Ihre {count} bereinigten Bilder werden als ZIP-Datei heruntergeladen.",
+      "failedTitle": "Download Fehlgeschlagen",
+      "failedDescription": "Fehler beim Herunterladen der Datei. Bitte versuchen Sie es erneut."    }
   }
 }

@@ -18,6 +18,12 @@ export const LANGUAGES: Record<string, LanguageConfig> = {
 
 export const DEFAULT_LANG_URL = 'en';
 
+// Brand Constants
+export const BRAND_NAME = 'SecureGPS';
+export const GITHUB_URL = 'https://github.com/wheemin1/securegps';
+export const MAX_FILE_SIZE_MB = 50;
+export const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 export function isSupportedLangUrl(urlSegment: string | undefined | null): urlSegment is keyof typeof LANGUAGES {
   if (!urlSegment) return false;
   return urlSegment.toLowerCase() in LANGUAGES;

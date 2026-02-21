@@ -11,6 +11,13 @@ export const supportedFormats: SupportedFormat[] = [
 
 export function isFormatSupported(file: File): boolean {
   const extension = file.name.split('.').pop()?.toLowerCase();
+  const format = supportedFormats.find(f => f.extension === extension);
+  
+  // Provide helpful message for unsupported formats
+  if (format && !format.canProcess) {
+    return false; // HEIC/AVIF not yet supported
+  }
+  
   return supportedFormats.some(format => 
     format.extension === extension && 
     format.mimeTypes.includes(file.type) &&
@@ -124,7 +131,6 @@ export function generateZipFilename(): string {
 
 export async function downloadFile(blob: Blob, filename: string): Promise<void> {
   try {
-    console.log(`📥 Starting download: ${filename} (${blob.size} bytes)`);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -133,9 +139,7 @@ export async function downloadFile(blob: Blob, filename: string): Promise<void> 
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    console.log(`✅ Download initiated successfully: ${filename}`);
   } catch (error) {
-    console.error('❌ Download failed:', error);
     throw error;
   }
 }
