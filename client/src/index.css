@@ -277,6 +277,26 @@
   background: transparent;
 }
 
+/* Philippine flag */
+.flag-tl {
+  background: linear-gradient(to right, 
+    #0038A8 0%, #0038A8 50%, 
+    #CE1126 50%, #CE1126 100%);
+  position: relative;
+}
+
+.flag-tl::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 12px solid #FFFFFF;
+}
+
 .scale-102 {
   transform: scale(1.02);
 }

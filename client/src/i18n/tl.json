@@ -1,0 +1,286 @@
+{
+  "app": {
+    "title": "SecureGPS",
+    "tagline": "Privacy-first na pag-alis ng metadata sa larawan"
+  },
+  "meta": {
+    "title": "Libreng GPS & Geotag Remover - 100% Offline, Walang Upload",
+    "description": "Alisin ang GPS location, geotags, at EXIF metadata mula sa mga larawan agad. Libreng online tool. 100% offline sa iyong browser. Zero upload, zero tracking."
+  },
+  "hero": {
+    "title": "Alisin ang GPS & Geotags mula sa mga Larawan",
+    "subtitle": "100% Offline Processing - Zero Server Upload",
+    "description": "Alisin ang GPS location, geotags, at EXIF metadata mula sa mga larawan agad. Libreng online tool. Gumagana offline sa iyong browser. Ginawa ng mga security experts.",
+    "privacy": "🔒 100% Offline: Ang mga larawan ay hindi umaalis sa iyong device. Walang tracking, walang upload.",
+    "mainTitle": "Libreng GPS & Geotag Remover — Ligtas & Offline",
+    "mainDescription": "Tanggalin ang GPS location at geotag data agad. Libreng tool. Gumagana sa phone & desktop. Zero upload."
+  },
+  "dropzone": {
+    "title": "Alisin ang GPS Location & Geotags mula sa mga Larawan",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Zero Upload",
+    "chooseFiles": "Pumili ng mga Larawan",
+    "features": {
+      "noUpload": "Zero Upload",
+      "private": "100% Offline",
+      "instant": "Agarang Processing"
+    }
+  },
+  "processing": {
+    "cleaning": "Tinatanggal ang tracking data {current}/{total}",
+    "removing": "Tinatanggal ang GPS at tracking metadata",
+    "currentFile": "Pinoproseso: {filename}",
+    "filesCompleted": "na-secure",
+    "step": {
+      "reading": "Nag-scan",
+      "cleaning": "Tinatanggal",
+      "finalizing": "Tapos na"
+    }
+  },
+  "success": {
+    "title": "✅ Natanggal ang mga Tracking Risk — Ligtas na Ibahagi",
+    "allClean": "✅ Natanggal na lahat ng tracking data. Ligtas na ibahagi.",
+    "singleFile": "✅ Na-secure: {filename}",
+    "multipleFiles": "✅ {count} larawang na-secure sa {filename}",
+    "cleanMore": "Mag-secure ng Higit Pang Larawan",
+    "processMore": "Mag-secure ng higit pang larawan",
+    "stats": {
+      "files": "Mga larawang na-anonymize",
+      "metadata": "Natanggal ang GPS data",
+      "privacy": "100% Private & Ligtas"
+    }
+  },
+  "advanced": {
+    "title": "Advanced",
+    "keepICC": {
+      "label": "Panatilihin ang ICC color profile",
+      "description": "Pinapanatili ang color accuracy ngunit lumalaki ang file size. Inirerekomenda para sa mga larawang nangangailangan ng color precision."
+    },
+    "forceJPEG": {
+      "label": "I-convert sa JPEG",
+      "description": "Kino-convert ang PNG/WebP sa JPEG. Maaaring lumaki ang file size para sa mga larawang may transparency."
+    },
+    "quality": {
+      "label": "JPEG/WebP Quality:",
+      "smaller": "Mas maliit na file",
+      "better": "Mas magandang kalidad"
+    }
+  },
+  "preview": {
+    "title": "⚠️ May Tracking Risk na Natuklasan",
+    "subtitle": "Nakahanap ng {count} metadata items sa {fileCount} files na maaaring maglantad ng iyong lokasyon. Suriin sa ibaba.",
+    "confirmButton": "Tanggalin ang Tracking Data ({count} items)",
+    "cancelButton": "Kanselahin",
+    "privacyNotice": "Lahat ng processing ay nangyayari sa iyong browser - ang mga file ay hindi umaalis sa iyong device",
+    "gpsTitle": "GPS Location",
+    "gpsFound": "⚠️ Tracking Risk",
+    "gpsNone": "Ligtas",
+    "gpsExposedBadge": "⚠️ NAKALANTAD",
+    "gpsDescription": "Ang location data ay tatanggalin",
+    "gpsNoDescription": "Walang GPS tracking data",
+    "gpsTagsOnly": "GPS Tags Lang (Walang Coordinates)",
+    "gpsLocationData": "Location Data",
+    "cameraTitle": "Camera Data",
+    "cameraFound": "May Nahanap",
+    "cameraNone": "Wala",
+    "cameraDescription": "Tatanggalin ang EXIF data",
+    "cameraNoDescription": "Walang camera data na natuklasan",
+    "filesTitle": "Mga File",
+    "filesToClean": "File na lilinisin",
+    "safeFiles": "Ligtas na mga file",
+    "safeTitle": "Ligtas ang mga file!",
+    "safeSubtitle": "Walang metadata na nahanap sa {fileCount} files. Ligtas na ang mga ito.",
+    "safeDownload": "I-download ang mga file as-is",
+    "safeNotice": "Ligtas na ang mga file - walang kailangang additional processing",
+    "noMetadataDetected": "Walang metadata na natuklasan",
+    "filesCount": "{count} Files na lilinisin",
+    "noMetadata": "Walang metadata na natuklasan",
+    "minor": {
+      "title": "May Minor Metadata na Natuklasan",
+      "subtitle": "Nakahanap ng {count} non-critical metadata items. Inirerekomendang tanggalin para sa maximum privacy."
+    }
+  },
+  "metadata": {
+    "title": "Ano ang tatanggalin?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "PNG Text",
+      "webp": "WebP Data"
+    },
+    "gps": {
+      "title": "GPS & Location Data",
+      "items": [
+        "Latitude at longitude coordinates",
+        "Altitude information",
+        "GPS timestamps"
+      ]
+    },
+    "device": {
+      "title": "Device Information",
+      "items": [
+        "Camera make at model",
+        "Device serial numbers",
+        "Lens information",
+        "Software versions"
+      ]
+    },
+    "timestamps": {
+      "title": "Timestamps",
+      "items": [
+        "Petsa/oras ng pagkuha ng larawan",
+        "Petsa/oras ng paggawa ng file",
+        "Petsa/oras ng pagbago sa file"
+      ]
+    },
+    "other": {
+      "title": "Iba Pang Metadata",
+      "items": [
+        "XMP/IPTC data blocks",
+        "Embedded preview images",
+        "Thumbnail images",
+        "Copyright information"
+      ]
+    },
+    "preserved": {
+      "title": "Ano ang pinapanatili",
+      "description": "Ang aktwal na larawan, dimensions, at kalidad ay nananatiling hindi binabago. Ang color profiles ay tinatanggal by default pero maaaring panatilihin sa pamamagitan ng Advanced options."
+    }
+  },
+  "disclaimers": {
+    "important": {
+      "title": "Mahalagang Disclaimer",
+      "content": "Tinatanggal namin ang standard metadata (EXIF/IPTC/XMP/GPS), ngunit hindi kami makagarantiya ng pag-alis ng bawat vendor-specific tag. Para sa highly sensitive files, i-verify bago ibahagi."
+    },
+    "content": {
+      "title": "Paalala sa Content",
+      "content": "Ang content mismo ng larawan ay maaaring maglantad ng impormasyon (halimbawa, mga karatula, lokasyon, mga mukha) na hiwalay sa metadata."
+    }
+  },
+  "features": {
+    "title": "Bakit SecureGPS?",
+    "privacy": {
+      "title": "100% Private Processing",
+      "description": "Ang iyong mga larawan ay hindi umaalis sa iyong device. Walang upload, walang servers, walang data collection."
+    },
+    "speed": {
+      "title": "Napakabilis",
+      "description": "Iproseso ang maraming larawan agad gamit ang modernong browser technology."
+    },
+    "install": {
+      "title": "Walang Kailangang Installation",
+      "description": "Gumagana sa anumang modernong browser. I-bookmark at gamitin kahit saan, kahit kailan."
+    }
+  },
+  "faq": {
+    "title": "Mga Madalas Itanong Tungkol sa Pag-alis ng Photo Metadata",
+    "upload": {
+      "question": "Ina-upload ba ninyo ang aking mga larawan o itinatago sa kahit saan?",
+      "answer": "Hindi talaga. Lahat ng photo processing ay nangyayari lamang sa iyong browser gamit ang advanced Web Worker technology. Ang iyong mga larawan ay hindi kailanman umaalis sa iyong device, hindi kailanman ina-upload sa kahit anong server, at hindi namin makita o ma-access ang iyong mga larawan sa anumang paraan. Ito ay nagsisiguro ng kumpletong privacy at security."
+    },
+    "metadata": {
+      "question": "Anong uri ng metadata at GPS data ang natatanggal mula sa aking mga larawan?",
+      "answer": "Ang aming tool ay nagtanggal ng lahat ng potensyal na nakikilalang metadata kabilang ang: GPS coordinates (latitude/longitude), mga pangalan ng lokasyon, device information (camera make/model, detalye ng phone), timestamps (kailan kinuha/binago ang larawan), EXIF technical data (camera settings, lens info), XMP at IPTC data blocks, embedded thumbnail images, software information, at user comments. Ang komprehensibong paglilinis na ito ay ganap na nagpoprotekta sa iyong privacy."
+    },
+    "formats": {
+      "question": "Aling photo formats ang maaari kong linisin? Gumagana ba ito sa mga larawan ng iPhone?",
+      "answer": "Sinusuportahan namin ng lubos ang JPEG/JPG (pinakakaraniwan), PNG, at WebP formats. Para sa iPhone HEIC photos at mas bagong AVIF format, ang processing ay depende sa built-in support ng iyong browser. Karamihan ng mga modernong browser at device ay kayang mag-handle ng HEIC files. Maaari mo ring i-convert muna ang HEIC sa JPEG para sa garantisadong compatibility."
+    },
+    "limits": {
+      "question": "May mga limitasyon ba sa file size o bilang ng mga larawang maaari kong iproseso?",
+      "answer": "Walang artificial limits - ang aming tool ay ganap na libre na may unlimited usage. Ang processing ay limitado lamang ng available memory at processing power ng iyong device. Para sa pinakamahusay na performance, inirerekomenda naming mag-proseso ng 10-20 larawan sa isang pagkakataon, lalo na para sa malalaking file o mas lumang device."
+    },
+    "safety": {
+      "question": "Ligtas ba gamitin ang tool na ito sa mga sensitibo o pribadong larawan?",
+      "answer": "Oo, ganap na ligtas. Dahil ang lahat ng processing ay nangyayari locally sa iyong browser na walang kailangang internet connection para sa cleaning process, ang iyong pribadong larawan ay nananatiling 100% sa iyong device. Hindi namin ma-access, makita, o maiimbak ang iyong mga larawan. Ito ay mas ligtas kaysa sa mga online service na nag-a-upload ng iyong mga larawan."
+    },
+    "quality": {
+      "question": "Bababa ba ang kalidad ng larawan o file size kapag tinanggal ang metadata?",
+      "answer": "Ang pag-alis ng metadata ay karaniwang nagpapaliit ng file size nang kaunti (karaniwang 1-5%) nang hindi naaapektuhan ang kalidad ng larawan. Ang visual content ay nananatiling pareho - tinatanggal lang namin ang invisible data tags. Sa bihirang kaso na may napakaraming embedded metadata, maaaring makita ang mas malaking pagbawas sa sukat."
+    },
+    "detection": {
+      "question": "Paano ko malalaman kung ang aking mga larawan ay naglalaman ng GPS location data?",
+      "answer": "Ang aming tool ay awtomatikong nag-scan at nagpapakita sa iyo ng eksaktong metadata na umiiral sa iyong mga larawan bago linisin. Makikita mo ang detalyadong preview na nagpapakita ng GPS coordinates (kung mayroon), camera information, at iba pang metadata. Ang mga larawang kinuha na may naka-enable na location services ay karaniwang naglalaman ng GPS data."
+    },
+    "download": {
+      "question": "Paano ko makukuha ang aking mga nalinisang larawan?",
+      "answer": "Pagkatapos ng processing, makakakuha ka agad ng download ng iyong mga nalinisang larawan. Ang mga single photo ay dina-download nang hiwalay, habang ang maraming larawan ay inilalagay sa isang convenient na ZIP file. Ang mga nalinisang larawan ay pareho sa iyong mga orihinal maliban sa lahat ng metadata ay tinanggal na."
+    }
+  },
+  "footer": {
+    "description": "Lahat ng processing ay nangyayari locally sa iyong browser. Walang upload, walang tracking.",
+    "backToHome": "Bumalik sa Home"
+  },
+  "dangerMap": {
+    "title": "NAKALANTAD ANG LOKASYON",
+    "coords": "Coordinates: {{lat}}, {{lng}}",
+    "viewOnMap": "Tingnan sa Map",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
+  "pwa": {
+    "install": {
+      "title": "I-install ang SecureGPS",
+      "description": "Kumuha ng instant access mula sa iyong home screen. Gumagana offline, 100% private.",
+      "installButton": "I-install ang App",
+      "notNow": "Hindi muna",
+      "worksOffline": "Gumagana offline",
+      "noAds": "Walang upload",
+      "private": "Private"
+    },
+    "update": {
+      "title": "May bagong version na available",
+      "description": "Mag-update ngayon para sa pinakabagong features",
+      "updateButton": "Mag-update"
+    },
+    "offline": {
+      "mode": "Offline mode",
+      "ready": "Gumagana offline"
+    }
+  },
+  "errors": {
+    "unsupported": "Hindi suportadong file format: {filename}",
+    "corrupted": "Mukhang sira ang file: {filename}",
+    "processing": "Error sa pag-proseso ng file: {filename}",
+    "generic": "May naganap na error habang pinoproseso ang iyong mga larawan."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Hindi Suportadong Format",
+      "noSupportedTitle": "Walang Suportadong Files",
+      "noSupportedDescription": "Mangyaring pumili ng JPEG, PNG, o WebP files.",
+      "processingErrorTitle": "Processing Error",
+      "processingErrorDescription": "Nabigong iproseso ang {filename}: {error}",
+      "genericTitle": "Error",
+      "prepareDownloadFailed": "Nabigong ihanda ang download. Subukan ulit.",
+      "noSuccessfulFiles": "Walang files na matagumpay na na-proseso.",
+      "fileTooLargeTitle": "Masyadong Malaki ang File",
+      "fileTooLargeDescription": "Ang mga file ay dapat mas maliit sa {maxSize}. Masyadong malaki ang {filename}."
+    },
+    "warnings": {
+      "metadataRemainingTitle": "May Maaaring Natitirang Metadata",
+      "metadataRemainingDescription": "Maaaring may natitirang metadata pa ang {filename}. Maaaring mangyari ito sa ilang file formats o kumplikadong metadata structures."
+    },
+    "download": {
+      "nothingTitle": "Walang I-download",
+      "nothingDescription": "Mag-proseso muna ng mga larawan bago mag-download.",
+      "startedTitle": "Nagsimula ang Download",
+      "startedSingle": "Dina-download na ang iyong nalinisang larawan.",
+      "startedZip": "Dina-download na ang iyong {count} nalinisang larawan bilang ZIP file.",
+      "failedTitle": "Nabigo ang Download",
+      "failedDescription": "Nabigong i-download ang file. Subukan ulit."
+    },
+    "share": {
+      "title": "Ibahagi sa mga kaibigan",
+      "copyLink": "Kopyahin ang Link",
+      "copied": {
+        "title": "Nakopya!",
+        "description": "Nakopya na sa clipboard ang share text",
+        "short": "Nakopya!"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Nabigong kopyahin sa clipboard"
+      }
+    }
+  }
+}
