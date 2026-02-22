@@ -268,6 +268,19 @@
       "startedZip": "Your {count} cleaned images are downloading as a ZIP file.",
       "failedTitle": "Download Failed",
       "failedDescription": "Failed to download the file. Please try again."
+    },
+    "share": {
+      "title": "Share with friends",
+      "copyLink": "Copy Link",
+      "copied": {
+        "title": "Copied!",
+        "description": "Share text copied to clipboard",
+        "short": "Copied!"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to copy to clipboard"
+      }
     }
   }
 }

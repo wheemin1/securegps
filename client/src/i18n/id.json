@@ -134,6 +134,19 @@
       "startedSingle": "Gambar bersih Anda sedang diunduh.",
       "startedZip": "{count} gambar bersih Anda sedang diunduh sebagai file ZIP.",
       "failedTitle": "Unduhan Gagal",
-      "failedDescription": "Gagal mengunduh file. Silakan coba lagi."    }
+      "failedDescription": "Gagal mengunduh file. Silakan coba lagi."    },
+    "share": {
+      "title": "Bagikan dengan teman",
+      "copyLink": "Salin tautan",
+      "copied": {
+        "title": "Disalin!",
+        "description": "Teks berbagi disalin ke clipboard",
+        "short": "Disalin!"
+      },
+      "error": {
+        "title": "Kesalahan",
+        "description": "Gagal menyalin ke clipboard"
+      }
+    }
   }
 }

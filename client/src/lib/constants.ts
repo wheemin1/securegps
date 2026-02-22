@@ -13,7 +13,8 @@ export const LANGUAGES: Record<string, LanguageConfig> = {
   id: { url: 'id', hreflang: 'id', label: 'Bahasa Indonesia', flag: 'flag-id' },
   fr: { url: 'fr', hreflang: 'fr', label: 'Français', flag: 'flag-fr' },
   ja: { url: 'ja', hreflang: 'ja', label: '日本語', flag: 'flag-ja' },
-  ko: { url: 'ko', hreflang: 'ko', label: '한국어', flag: 'flag-ko' }
+  ko: { url: 'ko', hreflang: 'ko', label: '한국어', flag: 'flag-ko' },
+  hi: { url: 'hi', hreflang: 'hi', label: 'हिन्दी', flag: 'flag-hi' }
 };
 
 export const DEFAULT_LANG_URL = 'en';

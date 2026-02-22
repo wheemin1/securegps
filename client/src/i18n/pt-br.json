@@ -174,6 +174,19 @@
       "startedSingle": "Sua imagem limpa está sendo baixada.",
       "startedZip": "Suas {count} imagens limpas estão sendo baixadas como um arquivo ZIP.",
       "failedTitle": "Falha no Download",
-      "failedDescription": "Falha ao baixar o arquivo. Por favor, tente novamente."    }
+      "failedDescription": "Falha ao baixar o arquivo. Por favor, tente novamente."    },
+    "share": {
+      "title": "Compartilhar com amigos",
+      "copyLink": "Copiar link",
+      "copied": {
+        "title": "Copiado!",
+        "description": "Texto de compartilhamento copiado para a área de transferência",
+        "short": "Copiado!"
+      },
+      "error": {
+        "title": "Erro",
+        "description": "Falha ao copiar para a área de transferência"
+      }
+    }
   }
 }

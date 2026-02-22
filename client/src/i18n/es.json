@@ -210,6 +210,19 @@
       "startedSingle": "Su imagen limpia se está descargando.",
       "startedZip": "Sus {count} imágenes limpias se están descargando como un archivo ZIP.",
       "failedTitle": "Descarga Fallida",
-      "failedDescription": "Error al descargar el archivo. Por favor, inténtelo de nuevo."    }
+      "failedDescription": "Error al descargar el archivo. Por favor, inténtelo de nuevo."    },
+    "share": {
+      "title": "Compartir con amigos",
+      "copyLink": "Copiar enlace",
+      "copied": {
+        "title": "¡Copiado!",
+        "description": "Texto compartido copiado al portapapeles",
+        "short": "¡Copiado!"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Error al copiar al portapapeles"
+      }
+    }
   }
 }

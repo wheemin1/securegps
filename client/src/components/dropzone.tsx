@@ -5,6 +5,7 @@ import { useImageProcessor } from '@/hooks/use-image-processor';
 import { useLanguage } from '@/hooks/use-language';
 import { useToast } from '@/hooks/use-toast';
 import { MetadataPreview } from '@/components/metadata-preview';
+import { ShareButtons } from '@/components/share-buttons';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download, Smartphone } from 'lucide-react';
 import { MAX_FILE_SIZE_BYTES } from '@/lib/constants';
@@ -469,6 +470,9 @@ export function Dropzone() {
               <Download className="w-5 h-5 mr-2" />
               {state.download?.kind === 'zip' ? t('success.downloadZip') : t('success.downloadSingle')}
             </Button>
+
+            {/* Social Share Buttons - Critical for viral growth */}
+            <ShareButtons fileCount={state.processed} />
             
             {/* Enhanced Result feedback card */}
             <div className="bg-white dark:bg-gray-800 border-none rounded-xl p-6 mb-6 mx-auto max-w-md shadow-sm success-stats">

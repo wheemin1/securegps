@@ -134,6 +134,19 @@
       "startedSingle": "Ihr bereinigtes Bild wird heruntergeladen.",
       "startedZip": "Ihre {count} bereinigten Bilder werden als ZIP-Datei heruntergeladen.",
       "failedTitle": "Download Fehlgeschlagen",
-      "failedDescription": "Fehler beim Herunterladen der Datei. Bitte versuchen Sie es erneut."    }
+      "failedDescription": "Fehler beim Herunterladen der Datei. Bitte versuchen Sie es erneut."    },
+    "share": {
+      "title": "Mit Freunden teilen",
+      "copyLink": "Link kopieren",
+      "copied": {
+        "title": "Kopiert!",
+        "description": "Teilungstext in die Zwischenablage kopiert",
+        "short": "Kopiert!"
+      },
+      "error": {
+        "title": "Fehler",
+        "description": "Fehler beim Kopieren in die Zwischenablage"
+      }
+    }
   }
 }

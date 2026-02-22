@@ -258,6 +258,25 @@
   background: linear-gradient(to right, #0055A4 0%, #0055A4 33%, #FFFFFF 33%, #FFFFFF 66%, #EF4135 66%, #EF4135 100%);
 }
 
+/* 인도 국기 */
+.flag-hi {
+  background: linear-gradient(to bottom, #FF9933 0%, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%, #138808 100%);
+  position: relative;
+}
+
+.flag-hi::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid #000080;
+  background: transparent;
+}
+
 .scale-102 {
   transform: scale(1.02);
 }

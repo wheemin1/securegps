@@ -234,7 +234,18 @@
       "startedSingle": "정리된 이미지 다운로드 중입니다.",
       "startedZip": "{count}개의 정리된 이미지가 ZIP 파일로 다운로드 중입니다.",
       "failedTitle": "다운로드 실패",
-      "failedDescription": "파일 다운로드에 실패했습니다. 다시 시도하세요."
-    }
+      "failedDescription": "파일 다운로드에 실패했습니다. 다시 시도하세요."    },
+    "share": {
+      "title": "친구들과 공유하기",
+      "copyLink": "링크 복사",
+      "copied": {
+        "title": "복사 완료!",
+        "description": "공유 텍스트가 클립보드에 복사되었습니다",
+        "short": "복사됨!"
+      },
+      "error": {
+        "title": "오류",
+        "description": "클립보드 복사에 실패했습니다"
+      }    }
   }
 }

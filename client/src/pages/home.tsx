@@ -346,6 +346,21 @@ export default function Home() {
 
       <Footer />
 
+      {/* Sticky CTA for mobile - appears after scrolling */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 p-4 bg-gradient-to-t from-background via-background to-transparent pointer-events-none">
+        <div className="pointer-events-auto">
+          <Button 
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-xl shadow-lg transition-all hover:shadow-xl"
+          >
+            <Shield className="w-5 h-5 mr-2" />
+            {t('dropzone.chooseFiles') || 'Secure Your Photos Now'}
+          </Button>
+        </div>
+      </div>
+
       {/* Disclaimers Dialog */}
       <Dialog open={showDisclaimers} onOpenChange={setShowDisclaimers}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">

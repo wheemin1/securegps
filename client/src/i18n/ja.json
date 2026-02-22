@@ -210,6 +210,19 @@
       "startedSingle": "クリーンな画像をダウンロード中です。",
       "startedZip": "{count}個のクリーンな画像をZIPファイルとしてダウンロード中です。",
       "failedTitle": "ダウンロード失敗",
-      "failedDescription": "ファイルのダウンロードに失敗しました。再試行してください。"    }
+      "failedDescription": "ファイルのダウンロードに失敗しました。再試行してください。"    },
+    "share": {
+      "title": "友達と共有",
+      "copyLink": "リンクをコピー",
+      "copied": {
+        "title": "コピーしました！",
+        "description": "共有テキストをクリップボードにコピーしました",
+        "short": "コピー済み！"
+      },
+      "error": {
+        "title": "エラー",
+        "description": "クリップボードへのコピーに失敗しました"
+      }
+    }
   }
 }

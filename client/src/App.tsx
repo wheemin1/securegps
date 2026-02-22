@@ -6,28 +6,39 @@ import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { PWAUpdatePrompt } from "@/components/pwa-update-prompt";
 import SeoHead from "@/components/seo-head";
 import ErrorBoundary from "@/components/error-boundary";
-import Home from "@/pages/home";
-import Privacy from "@/pages/privacy";
-import Terms from "@/pages/terms";
-import Contact from "@/pages/contact";
-import NotFound from "@/pages/not-found";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { detectBestLangUrlFromNavigator, DEFAULT_LANG_URL, isSupportedLangUrl } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+// Lazy load pages for better performance
+const Home = lazy(() => import("@/pages/home"));
+const Privacy = lazy(() => import("@/pages/privacy"));
+const Terms = lazy(() => import("@/pages/terms"));
+const Contact = lazy(() => import("@/pages/contact"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+
 function AppRoutes() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/privacy" component={Privacy} />
-      <Route path="/terms" component={Terms} />
-      <Route path="/contact" component={Contact} />
-      <Route path="/remove-gps" component={Home} />
-      <Route path="/metadata-remover" component={Home} />
-      <Route path="/photo-privacy" component={Home} />
-      <Route path="/exif-remover" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/privacy" component={Privacy} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/remove-gps" component={Home} />
+        <Route path="/metadata-remover" component={Home} />
+        <Route path="/photo-privacy" component={Home} />
+        <Route path="/exif-remover" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 

@@ -134,6 +134,19 @@
       "startedSingle": "Votre image nettoyée est en cours de téléchargement.",
       "startedZip": "Vos {count} images nettoyées sont en cours de téléchargement dans un fichier ZIP.",
       "failedTitle": "Échec du Téléchargement",
-      "failedDescription": "Échec du téléchargement du fichier. Veuillez réessayer."    }
+      "failedDescription": "Échec du téléchargement du fichier. Veuillez réessayer."    },
+    "share": {
+      "title": "Partager avec des amis",
+      "copyLink": "Copier le lien",
+      "copied": {
+        "title": "Copié !",
+        "description": "Texte de partage copié dans le presse-papiers",
+        "short": "Copié !"
+      },
+      "error": {
+        "title": "Erreur",
+        "description": "Échec de la copie dans le presse-papiers"
+      }
+    }
   }
 }
