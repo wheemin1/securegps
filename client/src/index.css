@@ -297,6 +297,33 @@
   border-left: 12px solid #FFFFFF;
 }
 
+/* Vietnamese flag */
+.flag-vi {
+  background: #DA251D;
+  position: relative;
+}
+
+.flag-vi::before {
+  content: '★';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #FFFF00;
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Thai flag */
+.flag-th {
+  background: linear-gradient(to bottom,
+    #ED1C24 0%, #ED1C24 20%,
+    #FFFFFF 20%, #FFFFFF 30%,
+    #241D4F 30%, #241D4F 70%,
+    #FFFFFF 70%, #FFFFFF 80%,
+    #ED1C24 80%, #ED1C24 100%);
+}
+
 .scale-102 {
   transform: scale(1.02);
 }

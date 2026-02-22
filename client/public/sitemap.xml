@@ -65,6 +65,20 @@
         <priority>1.0</priority>
     </url>
 
+    <!-- Vietnamese - New -->
+    <url>
+        <loc>https://securegps.netlify.app/vi</loc>
+        <lastmod>2026-02-22</lastmod>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Thai - New -->
+    <url>
+        <loc>https://securegps.netlify.app/th</loc>
+        <lastmod>2026-02-22</lastmod>
+        <priority>1.0</priority>
+    </url>
+
     <!-- Landing Pages - High Priority -->
     <url>
         <loc>https://securegps.netlify.app/en/for-instagram</loc>

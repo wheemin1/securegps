@@ -24,7 +24,9 @@ export function ShareButtons({ fileCount }: ShareButtonsProps) {
       'pt-br': `Acabei de remover rastreamento GPS de ${fileCount} foto${fileCount > 1 ? 's' : ''} em 30 segundos — 100% grátis e offline! 🔒`,
       id: `Saya baru saja menghapus pelacakan GPS dari ${fileCount} foto dalam 30 detik — 100% gratis & offline! 🔒`,
       hi: `मैंने अभी 30 सेकंड में ${fileCount} फोटो से GPS ट्रैकिंग हटा दिया — 100% मुफ्त और ऑफलाइन! 🔒`,
-      tl: `Tinanggal ko ang GPS tracking mula sa ${fileCount} litrato sa loob ng 30 segundo — 100% libre at offline! 🔒`
+      tl: `Tinanggal ko ang GPS tracking mula sa ${fileCount} litrato sa loob ng 30 segundo — 100% libre at offline! 🔒`,
+      vi: `Tôi vừa xóa theo dõi GPS khỏi ${fileCount} ảnh trong 30 giây — 100% miễn phí và offline! 🔒`,
+      th: `ฉันเพิ่งลบการติดตาม GPS ออกจากรูปภาพ ${fileCount} รูปใน 30 วินาที — 100% ฟรีและออฟไลน์! 🔒`
     };
 
     return translations[currentLanguage.code] || translations.en;

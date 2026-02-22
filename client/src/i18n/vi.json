@@ -1,0 +1,286 @@
+{
+  "app": {
+    "title": "SecureGPS",
+    "tagline": "Xóa metadata hình ảnh ưu tiên quyền riêng tư"
+  },
+  "meta": {
+    "title": "Xóa GPS & Geotag Miễn Phí - 100% Offline, Không Tải Lên",
+    "description": "Xóa vị trí GPS, geotags và metadata EXIF khỏi ảnh ngay lập tức. Công cụ trực tuyến miễn phí. Hoạt động 100% offline trong trình duyệt. Không tải lên, không theo dõi."
+  },
+  "hero": {
+    "title": "Xóa GPS & Geotags Khỏi Ảnh",
+    "subtitle": "Xử Lý 100% Offline - Không Tải Lên Server",
+    "description": "Xóa vị trí GPS, geotags và metadata EXIF khỏi hình ảnh ngay lập tức. Công cụ trực tuyến miễn phí. Hoạt động offline trong trình duyệt. Được xây dựng bởi các chuyên gia bảo mật.",
+    "privacy": "🔒 100% Offline: Ảnh không bao giờ rời khỏi thiết bị của bạn. Không theo dõi, không tải lên.",
+    "mainTitle": "Xóa GPS & Geotag Miễn Phí — An Toàn & Offline",
+    "mainDescription": "Xóa dữ liệu vị trí GPS và geotag ngay lập tức. Công cụ miễn phí. Hoạt động trên điện thoại & máy tính. Không tải lên."
+  },
+  "dropzone": {
+    "title": "Xóa Vị Trí GPS & Geotags Khỏi Ảnh",
+    "supportedFormats": "JPEG, PNG, WebP • 100% Offline • Không Tải Lên",
+    "chooseFiles": "Chọn Ảnh",
+    "features": {
+      "noUpload": "Không Tải Lên",
+      "private": "100% Offline",
+      "instant": "Xử Lý Ngay Lập Tức"
+    }
+  },
+  "processing": {
+    "cleaning": "Đang xóa dữ liệu theo dõi {current}/{total}",
+    "removing": "Đang xóa GPS và metadata theo dõi",
+    "currentFile": "Đang xử lý: {filename}",
+    "filesCompleted": "đã bảo mật",
+    "step": {
+      "reading": "Đang quét",
+      "cleaning": "Đang xóa",
+      "finalizing": "Hoàn tất"
+    }
+  },
+  "success": {
+    "title": "✅ Đã Loại Bỏ Rủi Ro Theo Dõi — An Toàn Để Chia Sẻ",
+    "allClean": "✅ Đã xóa tất cả dữ liệu theo dõi. An toàn để chia sẻ.",
+    "singleFile": "✅ Đã bảo mật: {filename}",
+    "multipleFiles": "✅ {count} ảnh đã được bảo mật trong {filename}",
+    "cleanMore": "Bảo Mật Thêm Ảnh",
+    "processMore": "Bảo mật thêm ảnh",
+    "stats": {
+      "files": "Ảnh đã ẩn danh",
+      "metadata": "Dữ liệu GPS đã xóa",
+      "privacy": "100% Riêng Tư & An Toàn"
+    }
+  },
+  "advanced": {
+    "title": "Nâng cao",
+    "keepICC": {
+      "label": "Giữ hồ sơ màu ICC",
+      "description": "Bảo toàn độ chính xác màu sắc nhưng tăng kích thước tệp. Khuyến nghị cho ảnh yêu cầu độ chính xác màu sắc."
+    },
+    "forceJPEG": {
+      "label": "Chuyển đổi sang JPEG",
+      "description": "Chuyển đổi PNG/WebP sang JPEG. Có thể tăng kích thước tệp cho hình ảnh có độ trong suốt."
+    },
+    "quality": {
+      "label": "Chất lượng JPEG/WebP:",
+      "smaller": "Tệp nhỏ hơn",
+      "better": "Chất lượng tốt hơn"
+    }
+  },
+  "preview": {
+    "title": "⚠️ Phát Hiện Rủi Ro Theo Dõi",
+    "subtitle": "Tìm thấy {count} mục metadata trong {fileCount} tệp có thể tiết lộ vị trí của bạn. Xem xét bên dưới.",
+    "confirmButton": "Loại Bỏ Dữ Liệu Theo Dõi ({count} mục)",
+    "cancelButton": "Hủy",
+    "privacyNotice": "Tất cả xử lý đều diễn ra trong trình duyệt của bạn - tệp không bao giờ rời khỏi thiết bị của bạn",
+    "gpsTitle": "Vị Trí GPS",
+    "gpsFound": "⚠️ Rủi Ro Theo Dõi",
+    "gpsNone": "An Toàn",
+    "gpsExposedBadge": "⚠️ BỊ LỘ",
+    "gpsDescription": "Dữ liệu vị trí sẽ được loại bỏ",
+    "gpsNoDescription": "Không có dữ liệu theo dõi GPS",
+    "gpsTagsOnly": "Chỉ Thẻ GPS (Không Có Tọa Độ)",
+    "gpsLocationData": "Dữ Liệu Vị Trí",
+    "cameraTitle": "Dữ Liệu Camera",
+    "cameraFound": "Đã Tìm Thấy",
+    "cameraNone": "Không Có",
+    "cameraDescription": "Dữ liệu EXIF sẽ được xóa",
+    "cameraNoDescription": "Không phát hiện dữ liệu camera",
+    "filesTitle": "Tệp",
+    "filesToClean": "Tệp cần làm sạch",
+    "safeFiles": "Tệp an toàn",
+    "safeTitle": "Các tệp đã an toàn!",
+    "safeSubtitle": "Không tìm thấy metadata trong {fileCount} tệp. Những tệp này đã an toàn.",
+    "safeDownload": "Tải xuống tệp nguyên trạng",
+    "safeNotice": "Các tệp đã an toàn - không cần xử lý thêm",
+    "noMetadataDetected": "Không phát hiện metadata",
+    "filesCount": "{count} Tệp cần làm sạch",
+    "noMetadata": "Không phát hiện metadata",
+    "minor": {
+      "title": "Phát Hiện Metadata Nhỏ",
+      "subtitle": "Tìm thấy {count} mục metadata không quan trọng. Khuyến nghị xóa để đạt quyền riêng tư tối đa."
+    }
+  },
+  "metadata": {
+    "title": "Những gì sẽ được xóa?",
+    "types": {
+      "gpsExif": "GPS (EXIF)",
+      "gpsXmp": "GPS (XMP)",
+      "pngText": "Văn bản PNG",
+      "webp": "Dữ liệu WebP"
+    },
+    "gps": {
+      "title": "Dữ Liệu GPS & Vị Trí",
+      "items": [
+        "Tọa độ vĩ độ và kinh độ",
+        "Thông tin độ cao",
+        "Dấu thời gian GPS"
+      ]
+    },
+    "device": {
+      "title": "Thông Tin Thiết Bị",
+      "items": [
+        "Hãng và mẫu máy ảnh",
+        "Số sê-ri thiết bị",
+        "Thông tin ống kính",
+        "Phiên bản phần mềm"
+      ]
+    },
+    "timestamps": {
+      "title": "Dấu Thời Gian",
+      "items": [
+        "Ngày/giờ chụp ảnh",
+        "Ngày/giờ tạo tệp",
+        "Ngày/giờ chỉnh sửa tệp"
+      ]
+    },
+    "other": {
+      "title": "Metadata Khác",
+      "items": [
+        "Khối dữ liệu XMP/IPTC",
+        "Hình ảnh xem trước nhúng",
+        "Hình ảnh thu nhỏ",
+        "Thông tin bản quyền"
+      ]
+    },
+    "preserved": {
+      "title": "Những gì được bảo toàn",
+      "description": "Nội dung hình ảnh thực tế, kích thước và chất lượng vẫn không thay đổi. Hồ sơ màu sắc được xóa theo mặc định nhưng có thể được bảo toàn thông qua tùy chọn Nâng cao."
+    }
+  },
+  "disclaimers": {
+    "important": {
+      "title": "Tuyên Bố Quan Trọng",
+      "content": "Chúng tôi xóa metadata chuẩn (EXIF/IPTC/XMP/GPS), nhưng không thể đảm bảo xóa mọi thẻ đặc thù của nhà cung cấp. Đối với các tệp rất nhạy cảm, hãy xác minh trước khi chia sẻ."
+    },
+    "content": {
+      "title": "Thông Báo Nội Dung",
+      "content": "Bản thân nội dung hình ảnh có thể tiết lộ thông tin (ví dụ: biển báo, vị trí, khuôn mặt) độc lập với metadata."
+    }
+  },
+  "features": {
+    "title": "Tại Sao Chọn SecureGPS?",
+    "privacy": {
+      "title": "Xử Lý 100% Riêng Tư",
+      "description": "Hình ảnh của bạn không bao giờ rời khỏi thiết bị. Không tải lên, không máy chủ, không thu thập dữ liệu."
+    },
+    "speed": {
+      "title": "Cực Kỳ Nhanh",
+      "description": "Xử lý nhiều hình ảnh ngay lập tức với công nghệ trình duyệt hiện đại."
+    },
+    "install": {
+      "title": "Không Cần Cài Đặt",
+      "description": "Hoạt động trên mọi trình duyệt hiện đại. Đánh dấu và sử dụng mọi lúc, mọi nơi."
+    }
+  },
+  "faq": {
+    "title": "Câu Hỏi Thường Gặp Về Xóa Metadata Ảnh",
+    "upload": {
+      "question": "Bạn có tải lên ảnh của tôi hoặc lưu trữ chúng ở đâu đó không?",
+      "answer": "Hoàn toàn không. Tất cả xử lý ảnh diễn ra hoàn toàn trong trình duyệt của bạn bằng công nghệ Web Worker tiên tiến. Ảnh của bạn không bao giờ rời khỏi thiết bị, không bao giờ được tải lên bất kỳ máy chủ nào, và chúng tôi không thể xem hoặc truy cập hình ảnh của bạn theo bất kỳ cách nào. Điều này đảm bảo quyền riêng tư và bảo mật hoàn toàn."
+    },
+    "metadata": {
+      "question": "Những loại metadata và dữ liệu GPS nào được xóa khỏi ảnh của tôi?",
+      "answer": "Công cụ của chúng tôi xóa tất cả metadata có khả năng nhận dạng bao gồm: tọa độ GPS (vĩ độ/kinh độ), tên vị trí, thông tin thiết bị (hãng/mẫu máy ảnh, chi tiết điện thoại), dấu thời gian (khi ảnh được chụp/chỉnh sửa), dữ liệu kỹ thuật EXIF (cài đặt máy ảnh, thông tin ống kính), khối dữ liệu XMP và IPTC, hình ảnh thu nhỏ nhúng, thông tin phần mềm và nhận xét người dùng. Việc làm sạch toàn diện này bảo vệ quyền riêng tư của bạn hoàn toàn."
+    },
+    "formats": {
+      "question": "Tôi có thể làm sạch định dạng ảnh nào? Nó có hoạt động với ảnh iPhone không?",
+      "answer": "Chúng tôi hỗ trợ hoàn toàn các định dạng JPEG/JPG (phổ biến nhất), PNG và WebP. Đối với ảnh HEIC của iPhone và định dạng AVIF mới hơn, việc xử lý phụ thuộc vào hỗ trợ tích hợp của trình duyệt. Hầu hết các trình duyệt và thiết bị hiện đại đều có thể xử lý tệp HEIC. Bạn cũng có thể chuyển đổi HEIC sang JPEG trước để đảm bảo tương thích."
+    },
+    "limits": {
+      "question": "Có giới hạn nào về kích thước tệp hoặc số lượng ảnh tôi có thể xử lý không?",
+      "answer": "Không có giới hạn nhân tạo - công cụ của chúng tôi hoàn toàn miễn phí với việc sử dụng không giới hạn. Xử lý chỉ bị giới hạn bởi bộ nhớ khả dụng và sức mạnh xử lý của thiết bị. Để đạt hiệu suất tốt nhất, chúng tôi khuyến nghị xử lý 10-20 ảnh mỗi lần, đặc biệt đối với tệp lớn hoặc thiết bị cũ."
+    },
+    "safety": {
+      "question": "Sử dụng công cụ này với ảnh nhạy cảm hoặc riêng tư có an toàn không?",
+      "answer": "Có, hoàn toàn an toàn. Vì tất cả xử lý diễn ra cục bộ trong trình duyệt của bạn mà không cần kết nối internet cho quá trình làm sạch, ảnh riêng tư của bạn vẫn 100% trên thiết bị. Chúng tôi không thể truy cập, xem hoặc lưu trữ hình ảnh của bạn. Điều này làm cho nó an toàn hơn các dịch vụ trực tuyến tải lên ảnh của bạn."
+    },
+    "quality": {
+      "question": "Việc làm sạch metadata có làm giảm chất lượng ảnh hoặc kích thước tệp không?",
+      "answer": "Xóa metadata thường làm giảm kích thước tệp một chút (thường là 1-5%) mà không ảnh hưởng đến chất lượng hình ảnh. Nội dung hình ảnh vẫn giống hệt nhau - chúng tôi chỉ xóa các thẻ dữ liệu vô hình. Trong trường hợp hiếm gặp với metadata nhúng nhiều, bạn có thể thấy giảm kích thước lớn hơn."
+    },
+    "detection": {
+      "question": "Làm cách nào để biết ảnh của tôi có chứa dữ liệu vị trí GPS không?",
+      "answer": "Công cụ của chúng tôi tự động quét và hiển thị chính xác metadata nào tồn tại trong ảnh của bạn trước khi làm sạch. Bạn sẽ thấy bản xem trước chi tiết hiển thị tọa độ GPS (nếu có), thông tin máy ảnh và metadata khác. Ảnh được chụp với dịch vụ vị trí được bật thường chứa dữ liệu GPS."
+    },
+    "download": {
+      "question": "Làm cách nào để lấy lại ảnh đã làm sạch?",
+      "answer": "Sau khi xử lý, bạn sẽ nhận được tải xuống ngay lập tức các ảnh đã làm sạch. Ảnh đơn lẻ được tải xuống riêng lẻ, trong khi nhiều ảnh được đóng gói trong tệp ZIP tiện lợi. Các hình ảnh đã làm sạch giống hệt với bản gốc của bạn ngoại trừ tất cả metadata đã được xóa."
+    }
+  },
+  "footer": {
+    "description": "Tất cả xử lý diễn ra cục bộ trong trình duyệt của bạn. Không tải lên, không theo dõi.",
+    "backToHome": "Quay Lại Trang Chủ"
+  },
+  "dangerMap": {
+    "title": "VỊ TRÍ BỊ LỘ",
+    "coords": "Tọa độ: {{lat}}, {{lng}}",
+    "viewOnMap": "Xem trên Bản đồ",
+    "latShort": "Lat",
+    "lngShort": "Lng"
+  },
+  "pwa": {
+    "install": {
+      "title": "Cài Đặt SecureGPS",
+      "description": "Truy cập ngay lập tức từ màn hình chính. Hoạt động offline, 100% riêng tư.",
+      "installButton": "Cài Đặt Ứng Dụng",
+      "notNow": "Để sau",
+      "worksOffline": "Hoạt động offline",
+      "noAds": "Không tải lên",
+      "private": "Riêng tư"
+    },
+    "update": {
+      "title": "Phiên bản mới có sẵn",
+      "description": "Cập nhật ngay để có các tính năng mới nhất",
+      "updateButton": "Cập Nhật"
+    },
+    "offline": {
+      "mode": "Chế độ offline",
+      "ready": "Hoạt động offline"
+    }
+  },
+  "errors": {
+    "unsupported": "Định dạng tệp không được hỗ trợ: {filename}",
+    "corrupted": "Tệp có vẻ bị hỏng: {filename}",
+    "processing": "Lỗi xử lý tệp: {filename}",
+    "generic": "Đã xảy ra lỗi khi xử lý hình ảnh của bạn."
+  },
+  "toast": {
+    "errors": {
+      "unsupportedTitle": "Định Dạng Không Được Hỗ Trợ",
+      "noSupportedTitle": "Không Có Tệp Được Hỗ Trợ",
+      "noSupportedDescription": "Vui lòng chọn tệp JPEG, PNG hoặc WebP.",
+      "processingErrorTitle": "Lỗi Xử Lý",
+      "processingErrorDescription": "Không thể xử lý {filename}: {error}",
+      "genericTitle": "Lỗi",
+      "prepareDownloadFailed": "Không thể chuẩn bị tải xuống. Vui lòng thử lại.",
+      "noSuccessfulFiles": "Không có tệp nào được xử lý thành công.",
+      "fileTooLargeTitle": "Tệp Quá Lớn",
+      "fileTooLargeDescription": "Tệp phải nhỏ hơn {maxSize}. {filename} quá lớn."
+    },
+    "warnings": {
+      "metadataRemainingTitle": "Metadata Có Thể Còn Lại",
+      "metadataRemainingDescription": "{filename} có thể vẫn chứa một số metadata. Điều này có thể xảy ra với một số định dạng tệp hoặc cấu trúc metadata phức tạp."
+    },
+    "download": {
+      "nothingTitle": "Không Có Gì Để Tải Xuống",
+      "nothingDescription": "Vui lòng xử lý hình ảnh trước khi tải xuống.",
+      "startedTitle": "Đã Bắt Đầu Tải Xuống",
+      "startedSingle": "Hình ảnh đã làm sạch của bạn đang được tải xuống.",
+      "startedZip": "{count} hình ảnh đã làm sạch của bạn đang được tải xuống dưới dạng tệp ZIP.",
+      "failedTitle": "Tải Xuống Thất Bại",
+      "failedDescription": "Không thể tải xuống tệp. Vui lòng thử lại."
+    },
+    "share": {
+      "title": "Chia sẻ với bạn bè",
+      "copyLink": "Sao Chép Liên Kết",
+      "copied": {
+        "title": "Đã sao chép!",
+        "description": "Văn bản chia sẻ đã được sao chép vào clipboard",
+        "short": "Đã sao chép!"
+      },
+      "error": {
+        "title": "Lỗi",
+        "description": "Không thể sao chép vào clipboard"
+      }
+    }
+  }
+}

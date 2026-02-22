@@ -15,7 +15,9 @@ export const LANGUAGES: Record<string, LanguageConfig> = {
   ja: { url: 'ja', hreflang: 'ja', label: '日本語', flag: 'flag-ja' },
   ko: { url: 'ko', hreflang: 'ko', label: '한국어', flag: 'flag-ko' },
   hi: { url: 'hi', hreflang: 'hi', label: 'हिन्दी', flag: 'flag-hi' },
-  tl: { url: 'tl', hreflang: 'tl', label: 'Tagalog', flag: 'flag-tl' }
+  tl: { url: 'tl', hreflang: 'tl', label: 'Tagalog', flag: 'flag-tl' },
+  vi: { url: 'vi', hreflang: 'vi', label: 'Tiếng Việt', flag: 'flag-vi' },
+  th: { url: 'th', hreflang: 'th', label: 'ภาษาไทย', flag: 'flag-th' }
 };
 
 export const DEFAULT_LANG_URL = 'en';
