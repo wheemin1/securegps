@@ -1,68 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+    <!-- Main Language Pages -->
     <url>
         <loc>https://securegps.netlify.app/en</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/de</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>1.0</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/pt-br</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>1.0</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/id</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/fr</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/ko</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/es</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.8</priority>
     </url>
 
     <url>
         <loc>https://securegps.netlify.app/ja</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.8</priority>
     </url>
 
+    <!-- Hindi - New -->
+    <url>
+        <loc>https://securegps.netlify.app/hi</loc>
+        <lastmod>2026-02-22</lastmod>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Landing Pages - High Priority -->
+    <url>
+        <loc>https://securegps.netlify.app/en/for-instagram</loc>
+        <lastmod>2026-02-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/en/for-tinder</loc>
+        <lastmod>2026-02-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/en/for-whatsapp</loc>
+        <lastmod>2026-02-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://securegps.netlify.app/en/alternatives</loc>
+        <lastmod>2026-02-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Utility Pages -->
     <url>
         <loc>https://securegps.netlify.app/en/privacy</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://securegps.netlify.app/en/terms</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://securegps.netlify.app/en/contact</loc>
-        <lastmod>2026-02-12</lastmod>
+        <lastmod>2026-02-22</lastmod>
         <priority>0.3</priority>
     </url>
 

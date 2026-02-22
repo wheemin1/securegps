@@ -16,6 +16,10 @@ const Privacy = lazy(() => import("@/pages/privacy"));
 const Terms = lazy(() => import("@/pages/terms"));
 const Contact = lazy(() => import("@/pages/contact"));
 const NotFound = lazy(() => import("@/pages/not-found"));
+const ForInstagram = lazy(() => import("@/pages/for-instagram"));
+const ForTinder = lazy(() => import("@/pages/for-tinder"));
+const ForWhatsApp = lazy(() => import("@/pages/for-whatsapp"));
+const Alternatives = lazy(() => import("@/pages/alternatives"));
 
 function AppRoutes() {
   return (
@@ -36,6 +40,10 @@ function AppRoutes() {
         <Route path="/metadata-remover" component={Home} />
         <Route path="/photo-privacy" component={Home} />
         <Route path="/exif-remover" component={Home} />
+        <Route path="/for-instagram" component={ForInstagram} />
+        <Route path="/for-tinder" component={ForTinder} />
+        <Route path="/for-whatsapp" component={ForWhatsApp} />
+        <Route path="/alternatives" component={Alternatives} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
