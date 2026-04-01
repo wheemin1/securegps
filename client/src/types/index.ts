@@ -4,6 +4,31 @@ export interface ProcessingOptions {
   quality: number;
 }
 
+export type ProcessingOperation = 'remove' | 'edit';
+
+export interface GpsCoordinate {
+  latitude: number;
+  longitude: number;
+}
+
+export type GpsEditByIndex = Record<number, GpsCoordinate>;
+
+export interface ProcessingPayload {
+  operation: ProcessingOperation;
+  gpsEdits?: GpsEditByIndex;
+  metadataEdits?: Record<number, { dateTime?: string; device?: string }>;
+}
+
+export type TableRowStatus = 'analyzing' | 'ready' | 'processing' | 'done' | 'failed';
+
+export interface TableRowEdit {
+  latitude: string;
+  longitude: string;
+  dateTime: string;
+  device: string;
+  status: TableRowStatus;
+}
+
 export interface ProcessingState {
   status: 'idle' | 'queued' | 'preview' | 'processing' | 'result' | 'error';
   currentFile: string | null;
@@ -24,6 +49,25 @@ export interface ProcessingState {
     fileName: string;
     entries: Array<{ label: string; before: string }>;
   }>;
+  operation?: ProcessingOperation;
+  editSummary?: {
+    locationAdded: number;
+    locationUpdated: number;
+    locationRemoved: number;
+    dateUpdated: number;
+    deviceUpdated: number;
+  };
+  tableEdits?: Record<number, TableRowEdit>;
+  selectedRowIndices?: number[];
+  bulkDraftLocation?: {
+    latitude: string;
+    longitude: string;
+  };
+  bulkTimeDraft?: {
+    mode: 'offset' | 'absolute';
+    offsetMinutes: number;
+    absoluteDateTime: string;
+  };
 }
 
 export interface Language {

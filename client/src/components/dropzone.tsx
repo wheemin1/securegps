@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MetadataPreview } from '@/components/metadata-preview';
 import { ShareButtons } from '@/components/share-buttons';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Upload, Shield, Lock, Zap, RotateCcw, CheckCircle, FileCheck, Trash2, X, AlertTriangle, Loader2, Download, Smartphone } from 'lucide-react';
+import { Upload, Shield, CheckCircle, FileCheck, Loader2, Download, Smartphone } from 'lucide-react';
 import { MAX_FILE_SIZE_BYTES } from '@/lib/constants';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -17,11 +17,27 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function Dropzone() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { state, previewFiles, addFilesToQueue, removeFileFromQueue, startBatchProcessing, confirmProcessing, downloadResults, reset } = useImageProcessor();
+  const {
+    state,
+    previewFiles,
+    confirmProcessing,
+    downloadResults,
+    reset,
+    setOperation,
+    updateTableField,
+    toggleRowSelection,
+    toggleSelectAllRows,
+    updateBulkDraftLocation,
+    applyBulkLocationToSelection,
+    applyLocationToSelected,
+    clearGpsForSelection,
+    applyRiskCleanupForSelection,
+    updateBulkTimeDraft,
+    applyBulkTimeToSelection,
+  } = useImageProcessor();
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isDragOver, setIsDragOver] = useState(false);
-  const [showScanOverlay, setShowScanOverlay] = useState(false);
   const previousStatusRef = useRef<string>('');
 
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -71,46 +87,6 @@ export function Dropzone() {
 
   const [terminalIndex, setTerminalIndex] = useState(0);
 
-  const scanSteps = useMemo(
-    () => {
-      const hasGpsCoords = (state.queuedMetadata || []).some(
-        (m) => Boolean(m.hasGps && m.location)
-      );
-      const hasGpsTagsOnly = !hasGpsCoords && (state.queuedMetadata || []).some(
-        (m) => Boolean(m.hasGps)
-      );
-
-      const lastLine = hasGpsCoords
-        ? t('dropzone.scan.foundCoords')
-        : hasGpsTagsOnly
-          ? t('dropzone.scan.foundTagsOnly')
-          : t('dropzone.scan.noGps');
-
-      return [
-        t('dropzone.scan.readingExif'),
-        t('dropzone.scan.detectingGps'),
-        t('dropzone.scan.checkingDevice'),
-        t('dropzone.scan.buildingReport'),
-        lastLine
-      ];
-    },
-    [state.queuedMetadata, t]
-  );
-  const [scanIndex, setScanIndex] = useState(0);
-
-  useEffect(() => {
-    if (!showScanOverlay) {
-      setScanIndex(0);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setScanIndex((prev) => Math.min(prev + 1, scanSteps.length - 1));
-    }, 350);
-
-    return () => clearInterval(interval);
-  }, [showScanOverlay, scanSteps.length]);
-
   useEffect(() => {
     if (state.status !== 'processing') {
       setTerminalIndex(0);
@@ -155,7 +131,7 @@ export function Dropzone() {
     }
     
     if (validFiles.length > 0) {
-      addFilesToQueue(validFiles);
+      previewFiles(validFiles);
     }
   };
 
@@ -212,157 +188,25 @@ export function Dropzone() {
     }
   };
 
-  if (state.status === 'queued' && state.queuedFiles && state.queuedMetadata) {
-    return (
-      <>
-        <div className="toss-card p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {state.queuedFiles.length === 1
-                ? t('dropzone.queue.readyTitleSingle', { count: state.queuedFiles.length })
-                : t('dropzone.queue.readyTitleMultiple', { count: state.queuedFiles.length })}
-            </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t('dropzone.queue.readySubtitle')}
-            </p>
-          </div>
-
-          <div className="space-y-2 max-h-80 overflow-y-auto">
-            {state.queuedFiles.map((file, index) => {
-              const meta = state.queuedMetadata![index];
-              const hasWarning = meta.metadataFound.length > 0;
-              
-              return (
-                <div 
-                  key={`${file.name}-${index}`}
-                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      hasWarning ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-blue-100 dark:bg-blue-900/30'
-                    }`}>
-                      {hasWarning ? (
-                        <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                      ) : (
-                        <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
-                      )}
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        {file.name}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                        <span>{(file.size / 1024).toFixed(1)} KB</span>
-                        <span>•</span>
-                        <span>{meta.fileType.replace('image/', '').toUpperCase()}</span>
-                        {hasWarning && (
-                          <>
-                            <span>•</span>
-                            <span className="text-orange-600 dark:text-orange-400 font-medium">
-                              {t('dropzone.queue.metadataCount', { count: meta.metadataFound.length })}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={() => removeFileFromQueue(index)}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
-                    aria-label={t('dropzone.queue.removeFileAria')}
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="space-y-3">
-            <Button
-              onClick={() => {
-                if (showScanOverlay) return;
-                setShowScanOverlay(true);
-                setTimeout(() => {
-                  startBatchProcessing();
-                  setShowScanOverlay(false);
-                }, 1500);
-              }}
-              disabled={showScanOverlay}
-              className="w-full h-14 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-base font-semibold rounded-xl shadow-sm transition-colors"
-            >
-              {showScanOverlay ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  {t('dropzone.queue.scanning')}
-                </>
-              ) : (
-                <>
-                  {state.queuedFiles.length === 1
-                    ? t('dropzone.queue.cleanButtonSingle', { count: state.queuedFiles.length })
-                    : t('dropzone.queue.cleanButtonMultiple', { count: state.queuedFiles.length })}
-                </>
-              )}
-            </Button>
-            
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={showScanOverlay}
-              className="w-full h-14 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-base font-medium rounded-xl transition-colors"
-            >
-              {t('dropzone.queue.addMore')}
-            </button>
-          </div>
-        </div>
-
-        {showScanOverlay && (
-          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-xl p-6">
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                  <Loader2 className="w-7 h-7 text-blue-600 dark:text-blue-400 animate-spin" />
-                </div>
-              </div>
-              <div className="text-center mb-3">
-                <h2 className="text-xl font-semibold text-foreground">{t('dropzone.queue.scanningMetadataTitle')}</h2>
-                <p className="text-sm text-muted-foreground">{t('dropzone.queue.scanningMetadataSubtitle')}</p>
-              </div>
-              <div className="rounded-xl border border-border bg-muted/30 p-3">
-                <div className="font-mono text-xs text-foreground/90 truncate">
-                  {scanSteps[scanIndex]}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files) {
-              handleFileSelect(Array.from(e.target.files));
-            }
-          }}
-          data-testid="input-file-select"
-        />
-      </>
-    );
-  }
-
   if (state.status === 'preview' && state.selectedFiles && state.previewData) {
     return (
       <MetadataPreview 
         files={state.selectedFiles}
         metadata={state.previewData}
+        state={state}
         onConfirm={confirmProcessing}
         onCancel={reset}
+        onModeChange={setOperation}
+        onFieldChange={updateTableField}
+        onToggleRow={toggleRowSelection}
+        onToggleAllRows={toggleSelectAllRows}
+        onBulkDraftChange={updateBulkDraftLocation}
+        onApplyBulkLocation={applyBulkLocationToSelection}
+        onApplyLocationFromMap={applyLocationToSelected}
+        onClearSelectedGps={clearGpsForSelection}
+        onRiskCleanup={applyRiskCleanupForSelection}
+        onBulkTimeDraftChange={updateBulkTimeDraft}
+        onApplyBulkTime={applyBulkTimeToSelection}
       />
     );
   }
@@ -455,6 +299,16 @@ export function Dropzone() {
                 })}
             </p>
 
+            {state.editSummary && (
+              <div className="mb-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+                <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-700">GPS +{state.editSummary.locationAdded}</span>
+                <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700">GPS ~{state.editSummary.locationUpdated}</span>
+                <span className="px-2 py-1 rounded-full bg-rose-100 text-rose-700">GPS -{state.editSummary.locationRemoved}</span>
+                <span className="px-2 py-1 rounded-full bg-amber-100 text-amber-700">Time {state.editSummary.dateUpdated}</span>
+                <span className="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">Device {state.editSummary.deviceUpdated}</span>
+              </div>
+            )}
+
             <Button
               onClick={async () => {
                 if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
@@ -516,7 +370,7 @@ export function Dropzone() {
             </div>
 
             {/* Deletion Log (receipt) */}
-            {state.deletionLog && state.deletionLog.some(section => section.entries.length > 0) && (
+            {state.deletionLog && state.deletionLog.some((section: { fileName: string; entries: Array<{ label: string; before: string }> }) => section.entries.length > 0) && (
               <div className="mt-6 mx-auto max-w-md text-left">
                 <div className="rounded-xl bg-white/70 dark:bg-gray-900/40 border border-border p-4">
                   <div className="text-sm font-semibold text-foreground mb-2">{t('deletionLog.title')}</div>
@@ -527,7 +381,7 @@ export function Dropzone() {
                       </AccordionTrigger>
                       <AccordionContent className="pt-2">
                         <div className="space-y-4">
-                          {state.deletionLog.map((section) => (
+                          {state.deletionLog.map((section: { fileName: string; entries: Array<{ label: string; before: string }> }) => (
                             <div key={section.fileName} className="rounded-lg border border-border bg-background/40 p-3">
                               <div className="text-xs font-semibold text-foreground mb-2 truncate">
                                 {section.fileName}
@@ -536,7 +390,7 @@ export function Dropzone() {
                                 {section.entries.length === 0 ? (
                                   <div className="text-xs text-muted-foreground">{t('deletionLog.none')}</div>
                                 ) : (
-                                  section.entries.map((entry) => (
+                                  section.entries.map((entry: { label: string; before: string }) => (
                                     <div key={`${entry.label}-${entry.before}`} className="text-xs flex items-center justify-between gap-3">
                                       <div className="text-muted-foreground">{entry.label}</div>
                                       <div className="font-mono text-right">

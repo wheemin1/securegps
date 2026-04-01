@@ -3,7 +3,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { BRAND_NAME, GITHUB_URL } from "@/lib/constants";
 
 export default function Footer() {
-  const { langUrl } = useLanguage();
+  const { currentLanguage } = useLanguage();
+  const langUrl = currentLanguage.code;
   return (
     <footer className="border-t border-border bg-card mt-16">
       <div className="container mx-auto px-4 py-8">

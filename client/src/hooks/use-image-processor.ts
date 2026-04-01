@@ -1,10 +1,45 @@
 import { useState, useCallback, useRef } from 'react';
-import { ProcessingOptions, ProcessingState, FileProcessingResult } from '@/types';
+import {
+  ProcessingOptions,
+  ProcessingState,
+  FileProcessingResult,
+  ProcessingPayload,
+  ProcessingOperation,
+  FileMetadata,
+  GpsEditByIndex,
+  TableRowEdit,
+} from '@/types';
 import { isFormatSupported, generateZipFilename, downloadFile } from '@/utils/image-processor';
 import { createZipFile } from '@/utils/zip-handler';
 import { extractMetadata } from '@/utils/metadata-extractor';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/use-language';
+
+const toExifLikeDate = (input: string): string => {
+  const trimmed = input.trim();
+  if (!trimmed) return '';
+  if (trimmed.includes(':') && trimmed.includes(' ')) return trimmed;
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) return trimmed;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${parsed.getFullYear()}:${pad(parsed.getMonth() + 1)}:${pad(parsed.getDate())} ${pad(parsed.getHours())}:${pad(parsed.getMinutes())}:${pad(parsed.getSeconds())}`;
+};
+
+const parseExifLikeDate = (input: string): Date | null => {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  const normalized = trimmed.includes(':') && trimmed.includes(' ')
+    ? trimmed.replace(/^(\d{4}):(\d{2}):(\d{2})\s/, '$1-$2-$3T')
+    : trimmed;
+  const d = new Date(normalized);
+  return Number.isNaN(d.getTime()) ? null : d;
+};
+
+const isValidCoordinate = (lat: string, lng: string) => {
+  const latitude = Number(lat);
+  const longitude = Number(lng);
+  return Number.isFinite(latitude) && Number.isFinite(longitude) && latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180;
+};
 
 export function useImageProcessor() {
   const [state, setState] = useState<ProcessingState>({
@@ -14,463 +49,443 @@ export function useImageProcessor() {
     total: 0,
     progress: 0,
     message: '',
+    operation: 'remove',
     selectedFiles: [],
     previewData: [],
-    queuedFiles: [],
-    queuedMetadata: []
+    tableEdits: {},
+    selectedRowIndices: [],
+    bulkDraftLocation: { latitude: '', longitude: '' },
+    bulkTimeDraft: { mode: 'offset', offsetMinutes: 0, absoluteDateTime: '' },
   });
-  
+
   const [options, setOptions] = useState<ProcessingOptions>({
     keepICC: false,
     forceJPEG: false,
-    quality: 85
+    quality: 85,
   });
-  
+
   const { toast } = useToast();
   const { t } = useLanguage();
   const workerRef = useRef<Worker | null>(null);
   const processingResults = useRef<FileProcessingResult[]>([]);
+  const resultIndexById = useRef<Record<string, number>>({});
   const downloadableRef = useRef<{ blob: Blob; filename: string; kind: 'single' | 'zip'; count: number } | null>(null);
+
+  const calculateProgress = (processed: number, total: number) => {
+    if (total <= 0) return 0;
+    return Math.min(100, (processed / total) * 100);
+  };
 
   const buildDeletionLog = useCallback((files: File[], previewData?: FileMetadata[]) => {
     if (!previewData || previewData.length === 0) return [];
-
     return files.map((file, index) => {
       const meta = previewData[index];
       const entries: Array<{ label: string; before: string }> = [];
-
       if (meta?.hasGps) {
-        if (meta.location) {
-          entries.push({ label: 'GPS Latitude', before: meta.location.latitude.toFixed(6) });
-          entries.push({ label: 'GPS Longitude', before: meta.location.longitude.toFixed(6) });
-        } else {
-          entries.push({ label: 'GPS Tags', before: 'Present' });
-        }
+        entries.push({ label: 'GPS', before: meta.location ? `${meta.location.latitude.toFixed(6)}, ${meta.location.longitude.toFixed(6)}` : 'Present' });
       }
-
-      if (meta?.cameraInfo) {
-        entries.push({ label: 'Device / Camera', before: meta.cameraInfo });
-      }
-
-      if (meta?.dateTimeOriginal) {
-        entries.push({ label: 'Date Taken', before: meta.dateTimeOriginal });
-      }
-
-      const otherTypes = (meta?.metadataFound || []).filter(
-        (type) => !type.includes('GPS')
-      );
-      if (otherTypes.length > 0) {
-        entries.push({ label: 'Other Metadata', before: otherTypes.join(', ') });
-      }
-
-      return {
-        fileName: meta?.fileName || file.name,
-        entries
-      };
+      if (meta?.dateTimeOriginal) entries.push({ label: 'Date Taken', before: meta.dateTimeOriginal });
+      if (meta?.cameraInfo) entries.push({ label: 'Device', before: meta.cameraInfo });
+      return { fileName: meta?.fileName || file.name, entries };
     });
   }, []);
 
-  const initWorker = useCallback(() => {
-    if (!workerRef.current) {
-      workerRef.current = new Worker(
-        new URL('../workers/image-worker.ts', import.meta.url),
-        { type: 'module' }
-      );
-      
-      workerRef.current.onmessage = (event) => {
-        const { type, id, blob, filename, error } = event.data;
-        
-        if (type === 'PROCESSING_COMPLETE' && blob && filename) {
-          
-          // 처리된 파일의 메타데이터를 재검사
-          const verifyCleanedFile = async () => {
-            try {
-              const cleanedFile = new File([blob], filename, { type: blob.type || 'image/jpeg' });
-              const cleanedMetadata = await extractMetadata(cleanedFile);
-              
-              // 경고: 메타데이터가 여전히 남아있음
-              if (cleanedMetadata.hasGps || cleanedMetadata.hasExif || cleanedMetadata.metadataFound.length > 0) {
-                toast({
-                  title: t('toast.warnings.metadataRemainingTitle') || 'Warning: Metadata Remaining',
-                  description: t('toast.warnings.metadataRemainingDescription', { filename }) || 
-                    `File ${filename} may still contain some metadata. This can happen with certain formats.`,
-                  variant: "default",
-                });
-              }
-            } catch (error) {
-              // Error verifying cleaned file
-            }
-          };
-          
-          verifyCleanedFile();
-          
-          const result: FileProcessingResult = {
-            originalFile: processingResults.current.find(r => r.__uniqueId === id)?.originalFile || ({} as File),
-            cleanedBlob: blob,
-            filename,
-            success: true,
-            pending: false,
-            __uniqueId: id
-          };
-          
-          processingResults.current = processingResults.current.map(r => 
-            r.__uniqueId === id ? result : r
-          );
-          
-          setState(prev => ({
-            ...prev,
-            processed: prev.processed + 1,
-            progress: ((prev.processed + 1) / prev.total) * 100
-          }));
-          
-        } else if (type === 'PROCESSING_ERROR') {
-          const result: FileProcessingResult = {
-            originalFile: processingResults.current.find(r => r.__uniqueId === id)?.originalFile || ({} as File),
-            cleanedBlob: new Blob(),
-            filename: '',
-            success: false,
-            error,
-            pending: false,
-            __uniqueId: id
-          };
-          
-          processingResults.current = processingResults.current.map(r => 
-            r.__uniqueId === id ? result : r
-          );
-          
-          setState(prev => ({
-            ...prev,
-            processed: prev.processed + 1,
-            progress: ((prev.processed + 1) / prev.total) * 100
-          }));
+  const buildGpsEdits = (operation: ProcessingOperation, tableEdits: Record<number, TableRowEdit>): GpsEditByIndex => {
+    if (operation !== 'edit') return {};
+    const result: GpsEditByIndex = {};
+    Object.entries(tableEdits).forEach(([idxText, row]) => {
+      if (isValidCoordinate(row.latitude.trim(), row.longitude.trim())) {
+        result[Number(idxText)] = {
+          latitude: Number(row.latitude.trim()),
+          longitude: Number(row.longitude.trim()),
+        };
+      }
+    });
+    return result;
+  };
+
+  const buildSummary = (
+    operation: ProcessingOperation,
+    previewData: FileMetadata[] | undefined,
+    tableEdits: Record<number, TableRowEdit>
+  ) => {
+    return Object.entries(tableEdits).reduce(
+      (acc, [idxText, row]) => {
+        const idx = Number(idxText);
+        const meta = previewData?.[idx];
+        const hasOriginalGps = Boolean(meta?.hasGps);
+
+        if (operation === 'remove') {
+          if (hasOriginalGps) acc.locationRemoved += 1;
+          return acc;
         }
-      };
-    }
+
+        const hasNewGps = isValidCoordinate(row.latitude, row.longitude);
+        if (!hasOriginalGps && hasNewGps) acc.locationAdded += 1;
+        if (hasOriginalGps && hasNewGps) acc.locationUpdated += 1;
+        if (hasOriginalGps && !hasNewGps) acc.locationRemoved += 1;
+        if ((meta?.dateTimeOriginal || '') !== row.dateTime.trim()) acc.dateUpdated += 1;
+        if ((meta?.cameraInfo || '') !== row.device.trim()) acc.deviceUpdated += 1;
+        return acc;
+      },
+      { locationAdded: 0, locationUpdated: 0, locationRemoved: 0, dateUpdated: 0, deviceUpdated: 0 }
+    );
+  };
+
+  const initWorker = useCallback(() => {
+    if (workerRef.current) return;
+    workerRef.current = new Worker(new URL('../workers/image-worker.ts', import.meta.url), { type: 'module' });
+    workerRef.current.onmessage = (event) => {
+      const { type, id, blob, filename, error } = event.data;
+      const fileIndex = resultIndexById.current[id];
+
+      if (type === 'PROCESSING_COMPLETE' && blob && filename) {
+        const result: FileProcessingResult = {
+          originalFile: processingResults.current.find((r) => r.__uniqueId === id)?.originalFile || ({} as File),
+          cleanedBlob: blob,
+          filename,
+          success: true,
+          pending: false,
+          __uniqueId: id,
+        };
+        processingResults.current = processingResults.current.map((r) => (r.__uniqueId === id ? result : r));
+
+        setState((prev) => {
+          const processed = prev.processed + 1;
+          const tableEdits = { ...(prev.tableEdits || {}) };
+          if (typeof fileIndex === 'number' && tableEdits[fileIndex]) {
+            tableEdits[fileIndex] = { ...tableEdits[fileIndex], status: 'done' };
+          }
+          return { ...prev, processed, progress: calculateProgress(processed, prev.total), tableEdits };
+        });
+      }
+
+      if (type === 'PROCESSING_ERROR') {
+        const result: FileProcessingResult = {
+          originalFile: processingResults.current.find((r) => r.__uniqueId === id)?.originalFile || ({} as File),
+          cleanedBlob: new Blob(),
+          filename: '',
+          success: false,
+          error,
+          pending: false,
+          __uniqueId: id,
+        };
+        processingResults.current = processingResults.current.map((r) => (r.__uniqueId === id ? result : r));
+
+        setState((prev) => {
+          const processed = prev.processed + 1;
+          const tableEdits = { ...(prev.tableEdits || {}) };
+          if (typeof fileIndex === 'number' && tableEdits[fileIndex]) {
+            tableEdits[fileIndex] = { ...tableEdits[fileIndex], status: 'failed' };
+          }
+          return { ...prev, processed, progress: calculateProgress(processed, prev.total), tableEdits };
+        });
+      }
+    };
   }, []);
 
   const previewFiles = useCallback(async (files: File[]) => {
-    // Filter supported files
-    const supportedFiles = files.filter(file => {
+    const supportedFiles = files.filter((file) => {
       if (!isFormatSupported(file)) {
-        toast({
-          title: t('toast.errors.unsupportedTitle'),
-          description: t('errors.unsupported', { filename: file.name }),
-          variant: "destructive",
-        });
+        toast({ title: t('toast.errors.unsupportedTitle'), description: t('errors.unsupported', { filename: file.name }), variant: 'destructive' });
         return false;
       }
       return true;
     });
+    if (supportedFiles.length === 0) return;
 
-    if (supportedFiles.length === 0) {
-      return;
-    }
-
-    // Extract metadata from all files
-    const previewData = await Promise.all(
-      supportedFiles.map(async (file) => {
-        const metadata = await extractMetadata(file);
-        return metadata;
-      })
-    );
-
-    // Set preview state
-    setState({
-      status: 'preview',
-      currentFile: null,
-      processed: 0,
-      total: supportedFiles.length,
-      progress: 0,
-      message: t('dropzone.preview.readyMessage', { count: supportedFiles.length }),
-      selectedFiles: supportedFiles,
-      previewData
-    });
-  }, [toast, t]);
-
-  const addFilesToQueue = useCallback(async (files: File[]) => {
-    const supportedFiles = files.filter(isFormatSupported);
-    
-    if (supportedFiles.length === 0) {
-      toast({
-        title: t('toast.errors.noSupportedTitle'),
-        description: t('toast.errors.noSupportedDescription'),
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    const newMetadata = await Promise.all(
-      supportedFiles.map(file => extractMetadata(file))
-    );
-
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      status: 'queued',
-      queuedFiles: [...(prev.queuedFiles || []), ...supportedFiles],
-      queuedMetadata: [...(prev.queuedMetadata || []), ...newMetadata],
-      message: t('dropzone.queue.readyMessage', { count: (prev.queuedFiles?.length || 0) + supportedFiles.length })
+      status: 'preview',
+      total: supportedFiles.length,
+      selectedFiles: supportedFiles,
+      previewData: [],
+      selectedRowIndices: supportedFiles.map((_, idx) => idx),
+      tableEdits: Object.fromEntries(supportedFiles.map((_, idx) => [idx, { latitude: '', longitude: '', dateTime: '', device: '', status: 'analyzing' }])),
     }));
-  }, [toast, t]);
 
-  const removeFileFromQueue = useCallback((index: number) => {
-    setState(prev => {
-      const newQueuedFiles = [...(prev.queuedFiles || [])];
-      const newQueuedMetadata = [...(prev.queuedMetadata || [])];
-      newQueuedFiles.splice(index, 1);
-      newQueuedMetadata.splice(index, 1);
-      
+    const previewData = await Promise.all(supportedFiles.map((file) => extractMetadata(file)));
+    setState((prev) => ({
+      ...prev,
+      previewData,
+      tableEdits: Object.fromEntries(
+        previewData.map((meta, idx) => [
+          idx,
+          {
+            latitude: meta.location ? String(meta.location.latitude) : '',
+            longitude: meta.location ? String(meta.location.longitude) : '',
+            dateTime: meta.dateTimeOriginal || '',
+            device: meta.cameraInfo || '',
+            status: 'ready',
+          },
+        ])
+      ),
+    }));
+  }, [t, toast]);
+
+  const setOperation = useCallback((operation: ProcessingOperation) => setState((prev) => ({ ...prev, operation })), []);
+
+  const updateTableField = useCallback((index: number, field: 'latitude' | 'longitude' | 'dateTime' | 'device', value: string) => {
+    setState((prev) => ({
+      ...prev,
+      tableEdits: {
+        ...(prev.tableEdits || {}),
+        [index]: {
+          ...(prev.tableEdits?.[index] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' }),
+          [field]: value,
+          status: prev.tableEdits?.[index]?.status === 'analyzing' ? 'analyzing' : 'ready',
+        },
+      },
+    }));
+  }, []);
+
+  const toggleRowSelection = useCallback((index: number) => {
+    setState((prev) => {
+      const set = new Set(prev.selectedRowIndices || []);
+      if (set.has(index)) set.delete(index); else set.add(index);
+      return { ...prev, selectedRowIndices: Array.from(set).sort((a, b) => a - b) };
+    });
+  }, []);
+
+  const toggleSelectAllRows = useCallback(() => {
+    setState((prev) => {
+      const total = prev.selectedFiles?.length || 0;
+      const selected = prev.selectedRowIndices?.length || 0;
+      return { ...prev, selectedRowIndices: selected === total ? [] : Array.from({ length: total }, (_, i) => i) };
+    });
+  }, []);
+
+  const updateBulkDraftLocation = useCallback((field: 'latitude' | 'longitude', value: string) => {
+    setState((prev) => ({
+      ...prev,
+      bulkDraftLocation: {
+        latitude: prev.bulkDraftLocation?.latitude || '',
+        longitude: prev.bulkDraftLocation?.longitude || '',
+        [field]: value,
+      },
+    }));
+  }, []);
+
+  const applyBulkLocationToSelection = useCallback(() => {
+    setState((prev) => {
+      const lat = prev.bulkDraftLocation?.latitude || '';
+      const lng = prev.bulkDraftLocation?.longitude || '';
+      if (!isValidCoordinate(lat, lng)) return prev;
+      const tableEdits = { ...(prev.tableEdits || {}) };
+      (prev.selectedRowIndices || []).forEach((idx) => {
+        const row = tableEdits[idx] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' };
+        tableEdits[idx] = { ...row, latitude: lat, longitude: lng, status: 'ready' };
+      });
+      return { ...prev, tableEdits };
+    });
+  }, []);
+
+  const applyLocationToSelected = useCallback((latitude: number, longitude: number) => {
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
+    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return;
+
+    setState((prev) => {
+      const lat = String(latitude);
+      const lng = String(longitude);
+      const tableEdits = { ...(prev.tableEdits || {}) };
+      (prev.selectedRowIndices || []).forEach((idx) => {
+        const row = tableEdits[idx] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' };
+        tableEdits[idx] = { ...row, latitude: lat, longitude: lng, status: 'ready' };
+      });
+
       return {
         ...prev,
-        status: newQueuedFiles.length === 0 ? 'idle' : 'queued',
-        queuedFiles: newQueuedFiles,
-        queuedMetadata: newQueuedMetadata,
-        message: newQueuedFiles.length === 0 ? '' : t('dropzone.queue.readyMessage', { count: newQueuedFiles.length })
+        bulkDraftLocation: { latitude: lat, longitude: lng },
+        tableEdits,
       };
     });
-  }, [t]);
+  }, []);
 
-  const startBatchProcessing = useCallback(() => {
-    if (!state.queuedFiles || state.queuedFiles.length === 0) return;
-    
-    setState(prev => ({
+  const clearGpsForSelection = useCallback(() => {
+    setState((prev) => {
+      const tableEdits = { ...(prev.tableEdits || {}) };
+      (prev.selectedRowIndices || []).forEach((idx) => {
+        const row = tableEdits[idx] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' };
+        tableEdits[idx] = { ...row, latitude: '', longitude: '', status: 'ready' };
+      });
+      return { ...prev, tableEdits };
+    });
+  }, []);
+
+  const applyRiskCleanupForSelection = useCallback(() => {
+    setState((prev) => {
+      const tableEdits = { ...(prev.tableEdits || {}) };
+      (prev.selectedRowIndices || []).forEach((idx) => {
+        const row = tableEdits[idx] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' };
+        tableEdits[idx] = { ...row, latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' };
+      });
+      return { ...prev, tableEdits };
+    });
+  }, []);
+
+  const updateBulkTimeDraft = useCallback((field: 'mode' | 'offsetMinutes' | 'absoluteDateTime', value: string | number) => {
+    setState((prev) => ({
       ...prev,
-      status: 'preview',
-      selectedFiles: prev.queuedFiles,
-      previewData: prev.queuedMetadata
+      bulkTimeDraft: {
+        mode: prev.bulkTimeDraft?.mode || 'offset',
+        offsetMinutes: prev.bulkTimeDraft?.offsetMinutes || 0,
+        absoluteDateTime: prev.bulkTimeDraft?.absoluteDateTime || '',
+        [field]: value,
+      },
     }));
-  }, [state.queuedFiles, state.queuedMetadata]);
+  }, []);
 
-  const confirmProcessing = useCallback(async (filesToProcess?: File[]) => {
-    // Use passed files or state files
+  const applyBulkTimeToSelection = useCallback(() => {
+    setState((prev) => {
+      const draft = prev.bulkTimeDraft || { mode: 'offset', offsetMinutes: 0, absoluteDateTime: '' };
+      const tableEdits = { ...(prev.tableEdits || {}) };
+      (prev.selectedRowIndices || []).forEach((idx) => {
+        const row = tableEdits[idx] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'ready' };
+        if (draft.mode === 'absolute') {
+          tableEdits[idx] = { ...row, dateTime: toExifLikeDate(String(draft.absoluteDateTime || '')), status: 'ready' };
+        } else {
+          const baseDate = parseExifLikeDate(row.dateTime);
+          if (!baseDate) return;
+          const shifted = new Date(baseDate.getTime() + (Number(draft.offsetMinutes) || 0) * 60000);
+          tableEdits[idx] = { ...row, dateTime: toExifLikeDate(shifted.toISOString()), status: 'ready' };
+        }
+      });
+      return { ...prev, tableEdits };
+    });
+  }, []);
+
+  const confirmProcessing = useCallback(async (filesToProcess?: File[], payload?: ProcessingPayload) => {
     const selectedFiles = filesToProcess || state.selectedFiles;
-    
-    if (!selectedFiles || selectedFiles.length === 0) {
-      return;
-    }
+    const operation: ProcessingOperation = payload?.operation || state.operation || 'remove';
+    if (!selectedFiles || selectedFiles.length === 0) return;
 
-    const minDelayMs = 1500 + Math.floor(Math.random() * 1000);
-    const processingStartedAt = Date.now();
+    const tableEdits = state.tableEdits || {};
+    const gpsEdits = payload?.gpsEdits || buildGpsEdits(operation, tableEdits);
+    const metadataEdits = payload?.metadataEdits || Object.fromEntries(
+      Object.entries(tableEdits).map(([idx, row]) => [idx, { dateTime: toExifLikeDate(row.dateTime), device: row.device.trim() }])
+    );
 
     const deletionLog = buildDeletionLog(selectedFiles, state.previewData);
+    const editSummary = buildSummary(operation, state.previewData, tableEdits);
 
-    // Initialize processing state
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       status: 'processing',
+      operation,
       currentFile: selectedFiles[0].name,
       processed: 0,
       progress: 0,
-      message: `Cleaning ${0} / ${selectedFiles.length}...`,
-      queuedFiles: [],
-      queuedMetadata: []
+      editSummary,
+      tableEdits: Object.fromEntries(
+        Object.entries(prev.tableEdits || {}).map(([idx, row]) => [idx, { ...row, status: 'processing' }])
+      ),
     }));
 
-    // Initialize results array with unique IDs to prevent collisions
     processingResults.current = selectedFiles.map((file, index) => ({
       originalFile: file,
       cleanedBlob: new Blob(),
       filename: '',
       success: false,
       pending: true,
-      __uniqueId: `${file.name}_${Date.now()}_${index}` // Add unique ID
+      __uniqueId: `${file.name}_${Date.now()}_${index}`,
     }));
+    resultIndexById.current = Object.fromEntries(processingResults.current.map((r, idx) => [String(r.__uniqueId), idx]));
 
-    // Initialize worker
     initWorker();
 
-    // Process files in batches of 5 to avoid overwhelming the browser
     const batchSize = 5;
-    const PROCESS_TIMEOUT = 30000; // 30 seconds timeout per file
-    
     for (let i = 0; i < selectedFiles.length; i += batchSize) {
       const batch = selectedFiles.slice(i, i + batchSize);
-      
       await Promise.all(
-        batch.map((file: File, batchIndex: number) => {
-          const fileIndex = i + batchIndex;
-          const uniqueId = processingResults.current[fileIndex].__uniqueId!;
-          
+        batch.map((file, localIndex) => {
+          const idx = i + localIndex;
+          const uniqueId = processingResults.current[idx].__uniqueId!;
           return new Promise<void>((resolve) => {
-            const startTime = Date.now();
-            
-            const checkCompletion = () => {
-              const result = processingResults.current.find(r => r.__uniqueId === uniqueId);
-              
-              // Check timeout
-              if (Date.now() - startTime > PROCESS_TIMEOUT) {
-                // Mark as failed due to timeout
-                const timeoutResult: FileProcessingResult = {
-                  originalFile: file,
-                  cleanedBlob: new Blob(),
-                  filename: '',
-                  success: false,
-                  error: 'Processing timeout (30s exceeded)',
-                  pending: false,
-                  __uniqueId: uniqueId
-                };
-                
-                processingResults.current = processingResults.current.map(r => 
-                  r.__uniqueId === uniqueId ? timeoutResult : r
-                );
-                
-                setState(prev => ({
-                  ...prev,
-                  processed: prev.processed + 1,
-                  progress: ((prev.processed + 1) / prev.total) * 100
-                }));
-                
+            const startedAt = Date.now();
+            const check = () => {
+              const result = processingResults.current.find((r) => r.__uniqueId === uniqueId);
+              if (Date.now() - startedAt > 30000) {
+                processingResults.current = processingResults.current.map((r) => r.__uniqueId === uniqueId ? { ...r, success: false, pending: false, error: 'timeout' } : r);
                 resolve();
                 return;
               }
-              
               if (result && !result.pending) {
-                setState(prev => ({
-                  ...prev,
-                  currentFile: file.name,
-                  message: `Cleaning ${prev.processed} / ${prev.total}...`
-                }));
                 resolve();
-              } else {
-                setTimeout(checkCompletion, 100);
+                return;
               }
+              setTimeout(check, 100);
             };
-            
-            // Send to worker with unique ID
+
             workerRef.current?.postMessage({
               type: 'PROCESS_IMAGE',
               file,
               options,
-              id: uniqueId
+              id: uniqueId,
+              operation,
+              gpsLocation: gpsEdits[idx],
+              metadataEdit: metadataEdits[idx],
             });
-            
-            checkCompletion();
+            check();
           });
         })
       );
     }
 
-    // All files processed, handle download
-    const successfulResults = processingResults.current.filter(r => r.success);
-    const failedResults = processingResults.current.filter(r => !r.success);
-
-    if (failedResults.length > 0) {
-      failedResults.forEach(result => {
-        toast({
-          title: t('toast.errors.processingErrorTitle'),
-          description: t('toast.errors.processingErrorDescription', {
-            filename: result.originalFile.name,
-            error: result.error || ''
-          }),
-          variant: "destructive",
-        });
-      });
+    const successful = processingResults.current.filter((r) => r.success);
+    if (successful.length === 0) {
+      setState((prev) => ({ ...prev, status: 'error', message: t('toast.errors.noSuccessfulFiles') }));
+      return;
     }
 
-    if (successfulResults.length > 0) {
-      try {
-        const elapsed = Date.now() - processingStartedAt;
-        if (elapsed < minDelayMs) {
-          await new Promise<void>((resolve) => setTimeout(resolve, minDelayMs - elapsed));
-        }
-
-        if (successfulResults.length === 1) {
-          downloadableRef.current = {
-            blob: successfulResults[0].cleanedBlob,
-            filename: successfulResults[0].filename,
-            kind: 'single',
-            count: 1
-          };
-          setState({
-            status: 'result',
-            currentFile: null,
-            processed: 1,
-            total: selectedFiles.length,
-            progress: 100,
-            message: '',
-            selectedFiles,
-            previewData: state.previewData,
-            deletionLog,
-            download: {
-              kind: 'single',
-              filename: successfulResults[0].filename,
-              count: 1
-            }
-          });
-        } else {
-          const zipBlob = await createZipFile(
-            successfulResults.map(r => ({
-              blob: r.cleanedBlob,
-              filename: r.filename
-            }))
-          );
-          const zipFilename = generateZipFilename();
-          downloadableRef.current = {
-            blob: zipBlob,
-            filename: zipFilename,
-            kind: 'zip',
-            count: successfulResults.length
-          };
-          setState({
-            status: 'result',
-            currentFile: null,
-            processed: successfulResults.length,
-            total: selectedFiles.length,
-            progress: 100,
-            message: '',
-            selectedFiles,
-            previewData: state.previewData,
-            deletionLog,
-            download: {
-              kind: 'zip',
-              filename: zipFilename,
-              count: successfulResults.length
-            }
-          });
-        }
-      } catch (error) {
-        toast({
-          title: t('toast.errors.genericTitle'),
-          description: t('toast.errors.prepareDownloadFailed'),
-          variant: 'destructive'
-        });
-        setState(prev => ({ ...prev, status: 'error' }));
-      }
+    if (successful.length === 1) {
+      downloadableRef.current = {
+        blob: successful[0].cleanedBlob,
+        filename: successful[0].filename,
+        kind: 'single',
+        count: 1,
+      };
     } else {
-      setState(prev => ({ ...prev, status: 'error', message: t('toast.errors.noSuccessfulFiles') }));
+      const zipBlob = await createZipFile(successful.map((r) => ({ blob: r.cleanedBlob, filename: r.filename })));
+      downloadableRef.current = {
+        blob: zipBlob,
+        filename: generateZipFilename(),
+        kind: 'zip',
+        count: successful.length,
+      };
     }
-  }, [buildDeletionLog, options, state.previewData, toast, initWorker, t]);
+
+    setState((prev) => ({
+      ...prev,
+      status: 'result',
+      currentFile: null,
+      processed: successful.length,
+      total: selectedFiles.length,
+      progress: 100,
+      deletionLog,
+      download: downloadableRef.current ? {
+        kind: downloadableRef.current.kind,
+        filename: downloadableRef.current.filename,
+        count: downloadableRef.current.count,
+      } : undefined,
+    }));
+  }, [buildDeletionLog, initWorker, options, state.operation, state.previewData, state.selectedFiles, state.tableEdits, t]);
 
   const downloadResults = useCallback(async () => {
     const downloadable = downloadableRef.current;
     if (!downloadable) {
-      toast({
-        title: t('toast.download.nothingTitle'),
-        description: t('toast.download.nothingDescription'),
-        variant: 'destructive'
-      });
+      toast({ title: t('toast.download.nothingTitle'), description: t('toast.download.nothingDescription'), variant: 'destructive' });
       return;
     }
-
     try {
       await downloadFile(downloadable.blob, downloadable.filename);
       toast({
         title: t('toast.download.startedTitle'),
-        description: downloadable.kind === 'zip'
-          ? t('toast.download.startedZip', { count: downloadable.count })
-          : t('toast.download.startedSingle')
+        description: downloadable.kind === 'zip' ? t('toast.download.startedZip', { count: downloadable.count }) : t('toast.download.startedSingle'),
       });
-      setState(prev => ({
-        ...prev,
-        message: ''
-      }));
     } catch {
-      toast({
-        title: t('toast.download.failedTitle'),
-        description: t('toast.download.failedDescription'),
-        variant: 'destructive'
-      });
+      toast({ title: t('toast.download.failedTitle'), description: t('toast.download.failedDescription'), variant: 'destructive' });
     }
-  }, [toast, t]);
+  }, [t, toast]);
 
   const reset = useCallback(() => {
     setState({
@@ -480,27 +495,41 @@ export function useImageProcessor() {
       total: 0,
       progress: 0,
       message: '',
+      operation: 'remove',
       selectedFiles: [],
-      previewData: []
+      previewData: [],
+      tableEdits: {},
+      selectedRowIndices: [],
+      bulkDraftLocation: { latitude: '', longitude: '' },
+      bulkTimeDraft: { mode: 'offset', offsetMinutes: 0, absoluteDateTime: '' },
     });
     processingResults.current = [];
+    resultIndexById.current = {};
     downloadableRef.current = null;
   }, []);
 
   const updateOptions = useCallback((newOptions: Partial<ProcessingOptions>) => {
-    setOptions(prev => ({ ...prev, ...newOptions }));
+    setOptions((prev) => ({ ...prev, ...newOptions }));
   }, []);
 
   return {
     state,
     options,
     previewFiles,
-    addFilesToQueue,
-    removeFileFromQueue,
-    startBatchProcessing,
     confirmProcessing,
     downloadResults,
     reset,
-    updateOptions
+    updateOptions,
+    setOperation,
+    updateTableField,
+    toggleRowSelection,
+    toggleSelectAllRows,
+    updateBulkDraftLocation,
+    applyBulkLocationToSelection,
+    applyLocationToSelected,
+    clearGpsForSelection,
+    applyRiskCleanupForSelection,
+    updateBulkTimeDraft,
+    applyBulkTimeToSelection,
   };
 }

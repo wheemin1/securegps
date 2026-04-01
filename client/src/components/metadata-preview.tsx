@@ -1,498 +1,340 @@
-import { FileMetadata } from '@/types';
+import { ProcessingPayload, ProcessingState } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, MapPin, Camera, FileImage, HardDrive, Calendar, Shield, Trash2 } from 'lucide-react';
 import { useLanguage } from '@/hooks/use-language';
-import { useEffect } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
-
-function DangerMap({ lat, lng }: { lat: number; lng: number }) {
-  const { t, currentLanguage } = useLanguage();
-  
-  // Google Maps language code (convert pt-br to pt)
-  const googleMapsLang = currentLanguage.code === 'pt-br' ? 'pt' : currentLanguage.code;
-  
-  return (
-    <div className="relative w-full h-48 sm:h-56 md:h-64 rounded-2xl overflow-hidden mt-6 border-2 border-red-500 shadow-2xl bg-slate-100 dark:bg-slate-950 group">
-      {/* Background live map (non-interactive) */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 filter contrast-125 saturate-150 transition-transform duration-700 group-hover:scale-110">
-          <MapContainer
-            center={[lat, lng]}
-            zoom={16}
-            zoomControl={false}
-            scrollWheelZoom={false}
-            dragging={false}
-            doubleClickZoom={false}
-            touchZoom={false}
-            keyboard={false}
-            attributionControl={false}
-            className="w-full h-full"
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          </MapContainer>
-        </div>
-        <div className="absolute inset-0 bg-black/10" />
-      </div>
-
-      {/* Warning overlay (translucent so the map shows through) */}
-      <div className="absolute inset-0 z-10 bg-red-900/15 backdrop-blur-sm flex flex-col items-center justify-center">
-        <div className="relative">
-          <MapPin className="w-16 h-16 text-red-500 fill-red-500 animate-bounce drop-shadow-[0_2px_10px_rgba(255,0,0,0.65)]" />
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 bg-red-600 rounded-full animate-ping opacity-50" />
-        </div>
-        <div className="mt-3 bg-red-600 text-white px-6 py-2 rounded-lg font-black text-2xl md:text-3xl shadow-[0_0_20px_rgba(220,38,38,0.8)] border-2 border-white tracking-widest uppercase">
-          {t('dangerMap.title')}
-        </div>
-        <div className="mt-3 bg-black/80 text-red-200 font-mono text-sm px-3 py-1 rounded border border-red-500/40 font-bold opacity-90">
-          {t('dangerMap.coords', { lat: lat.toFixed(5), lng: lng.toFixed(5) })}
-        </div>
-        <a
-          href={`https://www.google.com/maps?q=${lat},${lng}&hl=${googleMapsLang}`}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 bg-white text-red-600 font-bold text-sm md:text-base px-6 py-2.5 rounded-lg shadow-lg hover:bg-red-50 hover:shadow-xl transition-all duration-200 border-2 border-red-200"
-        >
-          🗺️ {t('dangerMap.viewOnMap')}
-        </a>
-      </div>
-
-      {/* Subtle scanline overlay */}
-      <div className="absolute inset-0 z-20 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.12)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_3px,4px_100%] opacity-50" />
-    </div>
-  );
-}
+import { ChevronDown, ChevronUp, Loader2, Trash2, Wand2, Clock3 } from 'lucide-react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
 interface MetadataPreviewProps {
   files: File[];
-  metadata: FileMetadata[];
-  onConfirm: (files?: File[]) => void;
+  metadata: ProcessingState['previewData'];
+  state: ProcessingState;
+  onConfirm: (files?: File[], payload?: ProcessingPayload) => void;
   onCancel: () => void;
+  onModeChange: (mode: 'remove' | 'edit') => void;
+  onFieldChange: (index: number, field: 'latitude' | 'longitude' | 'dateTime' | 'device', value: string) => void;
+  onToggleRow: (index: number) => void;
+  onToggleAllRows: () => void;
+  onBulkDraftChange: (field: 'latitude' | 'longitude', value: string) => void;
+  onApplyBulkLocation: () => void;
+  onApplyLocationFromMap: (latitude: number, longitude: number) => void;
+  onClearSelectedGps: () => void;
+  onRiskCleanup: () => void;
+  onBulkTimeDraftChange: (field: 'mode' | 'offsetMinutes' | 'absoluteDateTime', value: string | number) => void;
+  onApplyBulkTime: () => void;
 }
 
-export function MetadataPreview({ files, metadata, onConfirm, onCancel }: MetadataPreviewProps) {
-  const { t } = useLanguage();
+const isValidCoordinate = (latText: string, lngText: string) => {
+  const lat = Number(latText);
+  const lng = Number(lngText);
+  return Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+};
 
-  const translateMetadataType = (metaType: string) => {
-    switch (metaType) {
-      case 'GPS (found in EXIF)':
-        return t('metadata.types.gpsExif');
-      case 'GPS (found in XMP)':
-        return t('metadata.types.gpsXmp');
-      case 'PNG text chunks':
-        return t('metadata.types.pngText');
-      case 'WebP metadata':
-        return t('metadata.types.webp');
-      default:
-        return metaType;
-    }
+const StaticMapContainer = MapContainer as any;
+
+function MapClickCapture({ onPick }: { onPick: (lat: number, lng: number) => void }) {
+  const map = useMapEvents({
+    click(event: any) {
+      map.flyTo(event.latlng, Math.max(map.getZoom(), 12), {
+        animate: true,
+        duration: 0.45,
+      });
+      onPick(event.latlng.lat, event.latlng.lng);
+    },
+  });
+  return null;
+}
+
+export function MetadataPreview({
+  files,
+  metadata,
+  state,
+  onConfirm,
+  onCancel,
+  onModeChange,
+  onFieldChange,
+  onToggleRow,
+  onToggleAllRows,
+  onBulkDraftChange,
+  onApplyBulkLocation,
+  onApplyLocationFromMap,
+  onClearSelectedGps,
+  onRiskCleanup,
+  onBulkTimeDraftChange,
+  onApplyBulkTime,
+}: MetadataPreviewProps) {
+  const { t } = useLanguage();
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const [pickedLocation, setPickedLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+
+  const operation = state.operation || 'remove';
+  const tableEdits = state.tableEdits || {};
+  const selectedRows = state.selectedRowIndices || [];
+  const allSelected = files.length > 0 && selectedRows.length === files.length;
+
+  const gpsEdits = useMemo(() => {
+    if (operation !== 'edit') return {};
+    const edits: Record<number, { latitude: number; longitude: number }> = {};
+    Object.entries(tableEdits).forEach(([idxText, row]) => {
+      const idx = Number(idxText);
+      const lat = row.latitude.trim();
+      const lng = row.longitude.trim();
+      if (isValidCoordinate(lat, lng)) {
+        edits[idx] = { latitude: Number(lat), longitude: Number(lng) };
+      }
+    });
+    return edits;
+  }, [operation, tableEdits]);
+
+  const metadataEdits = useMemo(() => {
+    return Object.fromEntries(
+      Object.entries(tableEdits).map(([idxText, row]) => [
+        Number(idxText),
+        {
+          dateTime: row.dateTime.trim(),
+          device: row.device.trim(),
+        },
+      ])
+    );
+  }, [tableEdits]);
+
+  const toggleExpanded = (index: number) => {
+    setExpandedRows((prev) => (prev.includes(index) ? prev.filter((v) => v !== index) : [...prev, index]));
   };
 
-  // ESC 키로 취소 기능
+  const defaultLat = Number(state.bulkDraftLocation?.latitude || 20.5937);
+  const defaultLng = Number(state.bulkDraftLocation?.longitude || 78.9629);
+
   useEffect(() => {
+    if (!isMapOpen) return;
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onCancel();
+        setIsMapOpen(false);
       }
     };
-
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onCancel]);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMapOpen]);
 
-  const totalMetadataItems = metadata.reduce((sum, meta) => sum + meta.metadataFound.length, 0);
-  const hasGps = metadata.some(meta => meta.hasGps);
-  const hasGpsLocation = metadata.some(meta => meta.hasGps && meta.location);
-  const hasExif = metadata.some(meta => meta.hasExif);
-  
-  // 기타 메타데이터 계산 (GPS/EXIF 제외)
-  const otherMetadata = metadata.reduce((sum, meta) => {
-    const otherTypes = meta.metadataFound.filter(
-      type => !type.includes('GPS') && !type.includes('EXIF') && !type.includes('Camera')
-    );
-    return sum + otherTypes.length;
-  }, 0);
-  
-  // 중요한 메타데이터가 있는지 확인
-  const hasCriticalMetadata = hasGps || hasExif;
-  const hasOnlyOtherMetadata = !hasCriticalMetadata && otherMetadata > 0;
+  const openMapModal = () => {
+    const lat = state.bulkDraftLocation?.latitude?.trim() || '';
+    const lng = state.bulkDraftLocation?.longitude?.trim() || '';
+    if (isValidCoordinate(lat, lng)) {
+      setPickedLocation({ latitude: Number(lat), longitude: Number(lng) });
+    } else {
+      setPickedLocation(null);
+    }
+    setIsMapOpen(true);
+  };
 
-  // GPS가 있는 첫 번째 파일의 위치 정보 가져오기
-  const gpsMetadata = metadata.find(meta => meta.hasGps && meta.location);
-
-  // 메타데이터가 없는 경우의 UI
-  if (totalMetadataItems === 0) {
-    return (
-      <div className="rounded-2xl p-4 md:p-6 bg-green-50/50 dark:bg-green-950/50">
-        <div className="space-y-6">
-          {/* Header */}
-          <div className="text-center">
-            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
-              <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
-            </div>
-            <h2 className="text-2xl font-semibold text-green-800 dark:text-green-200 mb-2">
-              {t('preview.safeTitle')}
-            </h2>
-            <p className="text-green-700 dark:text-green-300">
-              {t('preview.safeSubtitle', { fileCount: files.length })}
-            </p>
+  return (
+    <div className="rounded-2xl p-4 md:p-6 bg-card border border-border shadow-sm">
+      <div className="space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold text-foreground">{t('table.title') || 'Instant Matrix Editor'}</h2>
+            <p className="text-sm text-muted-foreground">{t('table.subtitle') || 'Top 3 first: Location, Time, Device.'}</p>
           </div>
-
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]">
-              <CardHeader className="p-4 pb-2">
-                <CardTitle className="flex items-center space-x-2 text-base">
-                  <MapPin className="w-4 h-4 text-green-600" />
-                  <span>{t('preview.gpsTitle')}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-semibold">
-                  <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                    {t('preview.gpsNone')}
-                  </Badge>
-                </div>
-                <CardDescription className="text-sm mt-1">
-                  {t('preview.gpsNoDescription')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]">
-              <CardHeader className="p-4 pb-2">
-                <CardTitle className="flex items-center space-x-2 text-base">
-                  <Camera className="w-4 h-4 text-green-600" />
-                  <span>{t('preview.cameraTitle')}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-semibold">
-                  <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                    {t('preview.cameraNone')}
-                  </Badge>
-                </div>
-                <CardDescription className="text-sm mt-1">
-                  {t('preview.cameraNoDescription')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]">
-              <CardHeader className="p-4 pb-2">
-                <CardTitle className="flex items-center space-x-2 text-base">
-                  <FileImage className="w-4 h-4 text-green-600" />
-                  <span>{t('preview.filesTitle')}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-semibold">
-                  {files.length}
-                </div>
-                <CardDescription className="text-sm mt-1">
-                  {t('preview.safeFiles')}
-                </CardDescription>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-2 gap-2 w-full md:w-auto">
+            <Button type="button" variant={operation === 'remove' ? 'default' : 'outline'} onClick={() => onModeChange('remove')} className={operation === 'remove' ? 'bg-red-600 hover:bg-red-700 text-white' : ''}>
+              {t('table.mode.remove') || 'Remove'}
+            </Button>
+            <Button type="button" variant={operation === 'edit' ? 'default' : 'outline'} onClick={() => onModeChange('edit')} className={operation === 'edit' ? 'bg-blue-600 hover:bg-blue-700 text-white' : ''}>
+              {t('table.mode.edit') || 'Add / Edit'}
+            </Button>
           </div>
+        </div>
 
-          {/* Detailed File List */}
-          <div className="max-h-64 overflow-y-auto space-y-3">
-            {files.map((file, index) => {
-              const meta = metadata[index];
-              return (
-                <Card key={file.name} className="border border-green-200 bg-white dark:bg-gray-800">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <FileImage className="w-4 h-4 text-gray-500" />
-                          <span className="font-medium text-sm truncate">{file.name}</span>
-                          <Badge variant="outline" className="text-xs">
-                            {meta.fileType.replace('image/', '')}
-                          </Badge>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
-                          <div className="flex items-center space-x-1">
-                            <HardDrive className="w-3 h-3" />
-                            <span>{(file.size / 1024).toFixed(1)}KB</span>
+        <div className="overflow-x-auto border border-border rounded-xl">
+          <table className="w-full text-sm">
+            <thead className="bg-muted/30 text-xs text-muted-foreground">
+              <tr>
+                <th className="py-2 px-2 text-left"><input type="checkbox" checked={allSelected} onChange={onToggleAllRows} className="h-4 w-4" /></th>
+                <th className="py-2 px-2 text-left">{t('table.columns.file') || 'File'}</th>
+                <th className="py-2 px-2 text-left">{t('table.columns.location') || 'Location (GPS)'}</th>
+                <th className="py-2 px-2 text-left">{t('table.columns.time') || 'Date / Time'}</th>
+                <th className="py-2 px-2 text-left">{t('table.columns.device') || 'Device'}</th>
+                <th className="py-2 px-2 text-left">{t('table.columns.state') || 'State'}</th>
+                <th className="py-2 px-2 text-left">{t('table.columns.more') || 'More'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {files.map((file, index) => {
+                const row = tableEdits[index] || { latitude: '', longitude: '', dateTime: '', device: '', status: 'analyzing' as const };
+                const hasDetectedGps = Boolean(metadata?.[index]?.hasGps);
+                const lat = row.latitude.trim();
+                const lng = row.longitude.trim();
+                const hasInput = lat.length > 0 || lng.length > 0;
+                const valid = isValidCoordinate(lat, lng);
+                const expanded = expandedRows.includes(index);
+
+                return (
+                  <Fragment key={`group-${file.name}-${index}`}>
+                    <tr className="border-t border-border/70">
+                      <td className="py-2 px-2"><input type="checkbox" checked={selectedRows.includes(index)} onChange={() => onToggleRow(index)} className="h-4 w-4" /></td>
+                      <td className="py-2 px-2 max-w-[220px] truncate" title={file.name}>{file.name}</td>
+                      <td className="py-2 px-2">
+                        <div className="space-y-1">
+                          <div>
+                            {hasDetectedGps ? (
+                              <Badge variant="outline" className="border-orange-300 text-orange-700">{t('table.status.detected') || 'Detected'}</Badge>
+                            ) : (
+                              <Badge variant="outline">{t('table.status.empty') || 'Empty'}</Badge>
+                            )}
                           </div>
-                          {meta.dimensions && (
-                            <div className="flex items-center space-x-1">
-                              <span>{meta.dimensions.width}×{meta.dimensions.height}</span>
-                            </div>
-                          )}
+                          <div className="grid grid-cols-2 gap-1">
+                            <input type="text" value={row.latitude} onChange={(e) => onFieldChange(index, 'latitude', e.target.value)} className="h-8 rounded-md border border-border bg-background px-2 text-xs" placeholder="Lat" />
+                            <input type="text" value={row.longitude} onChange={(e) => onFieldChange(index, 'longitude', e.target.value)} className="h-8 rounded-md border border-border bg-background px-2 text-xs" placeholder="Lng" />
+                          </div>
+                          {!valid && hasInput && <div className="text-[11px] text-red-600">{t('table.status.invalid') || 'Invalid'}</div>}
                         </div>
-
-                        <div className="flex items-center space-x-1 text-green-600 dark:text-green-400">
-                          <Shield className="w-3 h-3" />
-                          <span className="text-xs">{t('preview.noMetadataDetected')}</span>
+                      </td>
+                      <td className="py-2 px-2">
+                        <input type="text" value={row.dateTime} onChange={(e) => onFieldChange(index, 'dateTime', e.target.value)} className="w-full h-8 rounded-md border border-border bg-background px-2 text-xs" placeholder="YYYY:MM:DD HH:mm:ss" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <input type="text" value={row.device} onChange={(e) => onFieldChange(index, 'device', e.target.value)} className="w-full h-8 rounded-md border border-border bg-background px-2 text-xs" placeholder="iPhone 15" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <div className="flex items-center gap-2">
+                          {(row.status === 'analyzing' || row.status === 'processing') && <Loader2 className="w-4 h-4 animate-spin text-blue-600" />}
+                          {row.status === 'analyzing' && <Badge variant="outline">{t('table.rowState.analyzing') || 'Analyzing'}</Badge>}
+                          {row.status === 'ready' && <Badge variant="outline" className="text-green-700 border-green-300">{t('table.rowState.ready') || 'Ready'}</Badge>}
+                          {row.status === 'processing' && <Badge variant="outline">{t('table.rowState.processing') || 'Processing'}</Badge>}
+                          {row.status === 'done' && <Badge variant="outline" className="text-green-700 border-green-300">{t('table.rowState.done') || 'Done'}</Badge>}
+                          {row.status === 'failed' && <Badge variant="outline" className="text-red-700 border-red-300">{t('table.rowState.failed') || 'Failed'}</Badge>}
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                      </td>
+                      <td className="py-2 px-2">
+                        <button type="button" onClick={() => toggleExpanded(index)} className="h-8 w-8 inline-flex items-center justify-center rounded-md border border-border hover:bg-muted/40" aria-label="toggle-row-details">
+                          {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        </button>
+                      </td>
+                    </tr>
+                    {expanded && (
+                      <tr className="border-t border-border/40 bg-muted/20">
+                        <td colSpan={7} className="py-3 px-3">
+                          <div className="text-xs text-muted-foreground mb-2">{t('table.details.title') || 'Detailed metadata'}</div>
+                          <div className="flex flex-wrap gap-2">
+                            {(metadata?.[index]?.metadataFound || []).length > 0 ? (
+                              metadata?.[index]?.metadataFound?.map((item) => <Badge key={`${index}-${item}`} variant="secondary">{item}</Badge>)
+                            ) : (
+                              <Badge variant="outline">{t('table.details.none') || 'No additional metadata'}</Badge>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
-          {/* Action Button - Single Primary CTA */}
-          <div className="flex justify-center pt-4">
-            <Button
-              onClick={() => onConfirm(files)}
-              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold"
-            >
-              <Shield className="w-5 h-5 mr-2" />
-              {t('preview.safeDownload')}
+        <div className="flex flex-col md:flex-row gap-2 md:justify-between">
+          <Button type="button" variant="ghost" onClick={onCancel}>{t('table.actions.reset') || 'Reset'}</Button>
+          <Button type="button" onClick={() => onConfirm(files, { operation, gpsEdits: operation === 'edit' ? gpsEdits : undefined, metadataEdits })} className={operation === 'edit' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}>
+            {operation === 'edit' ? (t('table.actions.applyEdits') || 'Apply edits') : (t('table.actions.removeAll') || 'Remove metadata')}
+          </Button>
+        </div>
+      </div>
+
+      {selectedRows.length > 0 && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[min(960px,calc(100%-1rem))] rounded-2xl border border-border bg-card/95 backdrop-blur shadow-xl p-3">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <Badge variant="outline">{t('table.quick.selected', { count: selectedRows.length }) || `Selected ${selectedRows.length}`}</Badge>
+            <Button type="button" size="sm" variant="outline" onClick={onRiskCleanup}>
+              <Trash2 className="w-4 h-4 mr-1" />
+              {t('table.quick.safeMode') || 'Safe mode'}
+            </Button>
+            <Button type="button" size="sm" variant="outline" onClick={onClearSelectedGps}>
+              {t('table.quick.clearLocation') || 'Clear location'}
             </Button>
           </div>
 
-          {/* Privacy Notice */}
-          <div className="text-center">
-            <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-2">
-              <div className="flex items-center justify-center space-x-2 text-green-800 dark:text-green-200">
-                <Shield className="w-4 h-4" />
-                <span className="text-sm font-medium">
-                  {t('preview.safeNotice')}
-                </span>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Press ESC to go back
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto_auto] gap-2 mb-2">
+            <input type="text" value={state.bulkDraftLocation?.latitude || ''} onChange={(e) => onBulkDraftChange('latitude', e.target.value)} placeholder={t('table.quick.bulkLat') || 'Bulk latitude'} className="h-9 rounded-md border border-border bg-background px-2 text-sm" />
+            <input type="text" value={state.bulkDraftLocation?.longitude || ''} onChange={(e) => onBulkDraftChange('longitude', e.target.value)} placeholder={t('table.quick.bulkLng') || 'Bulk longitude'} className="h-9 rounded-md border border-border bg-background px-2 text-sm" />
+            <Button type="button" size="sm" variant="outline" onClick={onApplyBulkLocation}>
+              <Wand2 className="w-4 h-4 mr-1" />
+              {t('table.quick.applyLocation') || 'Apply location'}
+            </Button>
+            <Button type="button" size="sm" variant="outline" onClick={openMapModal}>
+              {t('table.quick.pickOnMap') || 'Pick on map'}
+            </Button>
           </div>
-        </div>
-      </div>
-    );
-  }
 
-  return (
-    <div className={`rounded-2xl p-4 md:p-6 ${
-      hasOnlyOtherMetadata 
-        ? 'bg-blue-50/50 dark:bg-blue-950/30' 
-        : 'bg-orange-50/50 dark:bg-orange-950/50'
-    }`}>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
-            hasOnlyOtherMetadata
-              ? 'bg-blue-100 dark:bg-blue-900'
-              : 'bg-orange-100 dark:bg-orange-900'
-          }`}>
-            {hasOnlyOtherMetadata ? (
-              <Shield className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-2 items-center">
+            <select value={state.bulkTimeDraft?.mode || 'offset'} onChange={(e) => onBulkTimeDraftChange('mode', e.target.value)} className="h-9 rounded-md border border-border bg-background px-2 text-sm">
+              <option value="offset">{t('table.quick.timeOffset') || 'Time offset'}</option>
+              <option value="absolute">{t('table.quick.timeAbsolute') || 'Absolute time'}</option>
+            </select>
+            {state.bulkTimeDraft?.mode === 'absolute' ? (
+              <input type="text" value={state.bulkTimeDraft?.absoluteDateTime || ''} onChange={(e) => onBulkTimeDraftChange('absoluteDateTime', e.target.value)} placeholder="YYYY:MM:DD HH:mm:ss" className="h-9 rounded-md border border-border bg-background px-2 text-sm" />
             ) : (
-              <AlertTriangle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              <input type="number" value={state.bulkTimeDraft?.offsetMinutes || 0} onChange={(e) => onBulkTimeDraftChange('offsetMinutes', Number(e.target.value))} placeholder="minutes" className="h-9 rounded-md border border-border bg-background px-2 text-sm" />
             )}
+            <Button type="button" size="sm" variant="outline" onClick={onApplyBulkTime}>
+              <Clock3 className="w-4 h-4 mr-1" />
+              {t('table.quick.applyTime') || 'Apply time'}
+            </Button>
           </div>
-          <h2 className={`text-2xl font-semibold mb-2 ${
-            hasOnlyOtherMetadata
-              ? 'text-blue-800 dark:text-blue-200'
-              : 'text-orange-800 dark:text-orange-200'
-          }`}>
-            {hasOnlyOtherMetadata 
-              ? t('preview.minor.title')
-              : t('preview.title')
-            }
-          </h2>
-          <p className={hasOnlyOtherMetadata
-              ? 'text-blue-700 dark:text-blue-300'
-              : 'text-orange-700 dark:text-orange-300'
-          }>
-            {hasOnlyOtherMetadata
-              ? t('preview.minor.subtitle', { count: otherMetadata })
-              : t('preview.subtitle', { count: totalMetadataItems, fileCount: files.length })
-            }
-          </p>
         </div>
+      )}
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          <Card className={hasGps ? "border-none bg-red-50/80 dark:bg-red-950/30 shadow-sm min-h-[140px]" : "border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]"}>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="flex items-center space-x-2 text-base">
-                <MapPin className={`w-4 h-4 ${hasGps ? 'text-red-600' : 'text-gray-400'}`} />
-                <span>{t('preview.gpsTitle') || 'GPS Location'}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg font-semibold">
-                {hasGpsLocation && gpsMetadata?.location ? (
-                  <div className="space-y-2">
-                    <div className="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded font-bold animate-pulse opacity-90">
-                      {t('preview.gpsExposedBadge')}
-                    </div>
-                    <div className="text-xs text-red-800 dark:text-red-200 font-mono opacity-70">
-                      {t('dangerMap.latShort')}: {gpsMetadata.location.latitude.toFixed(4)}<br/>
-                      {t('dangerMap.lngShort')}: {gpsMetadata.location.longitude.toFixed(4)}
-                    </div>
-                  </div>
-                ) : hasGps ? (
-                  <Badge variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
-                    {t('preview.gpsTagsOnly')}
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="text-xs">
-                    {t('preview.gpsNone')}
-                  </Badge>
+      {isMapOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-border bg-card shadow-xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <h3 className="text-base font-semibold text-foreground">{t('table.map.title') || 'Select location on map'}</h3>
+                <p className="text-xs text-muted-foreground">{t('table.map.subtitle') || 'Click on map and apply to selected rows.'}</p>
+              </div>
+              <Button type="button" size="sm" variant="ghost" onClick={() => setIsMapOpen(false)}>
+                {t('table.map.close') || 'Close'}
+              </Button>
+            </div>
+            <div className="h-72 rounded-xl overflow-hidden border border-border">
+              <StaticMapContainer center={[defaultLat, defaultLng]} zoom={5} className="w-full h-full">
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <MapClickCapture onPick={(lat, lng) => setPickedLocation({ latitude: lat, longitude: lng })} />
+                {pickedLocation && (
+                  <Marker
+                    position={[pickedLocation.latitude, pickedLocation.longitude]}
+                  />
                 )}
+              </StaticMapContainer>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="text-xs text-muted-foreground">
+                {pickedLocation
+                  ? `${t('table.map.picked') || 'Picked'}: ${pickedLocation.latitude.toFixed(6)}, ${pickedLocation.longitude.toFixed(6)}`
+                  : (t('table.map.noPick') || 'No point selected')}
               </div>
-              <CardDescription className="text-sm mt-1">
-                {hasGps ? t('preview.gpsDescription') : t('preview.gpsNoDescription')}
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className={hasExif ? "border-none bg-yellow-50/80 dark:bg-yellow-950/30 shadow-sm min-h-[140px]" : "border-none bg-white dark:bg-gray-800 shadow-sm min-h-[140px]"}>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="flex items-center space-x-2 text-base">
-                <Camera className={`w-4 h-4 ${hasExif ? 'text-yellow-600' : 'text-gray-400'}`} />
-                <span>{t('preview.cameraTitle')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg font-semibold">
-                {hasExif ? (
-                  <Badge variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
-                    {t('preview.cameraFound')}
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="text-xs">
-                    {t('preview.cameraNone')}
-                  </Badge>
-                )}
-              </div>
-              <CardDescription className="text-sm mt-1">
-                {hasExif ? t('preview.cameraDescription') : t('preview.cameraNoDescription')}
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className="border-none bg-blue-50/80 dark:bg-blue-950/30 shadow-sm min-h-[140px]">
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="flex items-center space-x-2 text-base">
-                <FileImage className="w-4 h-4 text-blue-600" />
-                <span>{t('preview.filesTitle')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg font-semibold">
-                {files.length}
-              </div>
-              <CardDescription className="text-sm mt-1">
-                {t('preview.filesToClean')}
-              </CardDescription>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Full-width danger map (place OUTSIDE the 3-card grid) */}
-        {hasGpsLocation && gpsMetadata?.location && (
-          <DangerMap lat={gpsMetadata.location.latitude} lng={gpsMetadata.location.longitude} />
-        )}
-
-        {/* Detailed File List */}
-        <div className="max-h-64 overflow-y-auto space-y-3">
-          {files.map((file, index) => {
-            const meta = metadata[index];
-            return (
-              <Card key={file.name} className="border border-gray-200 bg-white dark:bg-gray-800">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <FileImage className="w-4 h-4 text-gray-500" />
-                        <span className="font-medium text-sm truncate">{file.name}</span>
-                        <Badge variant="outline" className="text-xs">
-                          {meta.fileType.replace('image/', '')}
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-600 dark:text-gray-400 mb-2">
-                        <div className="flex items-center space-x-1">
-                          <HardDrive className="w-3 h-3" />
-                          <span>{(file.size / 1024).toFixed(1)}KB</span>
-                        </div>
-                        {meta.dimensions && (
-                          <div className="flex items-center space-x-1">
-                            <span>{meta.dimensions.width}×{meta.dimensions.height}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {meta.metadataFound.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
-                          {meta.metadataFound.map((metaType, idx) => (
-                            <Badge 
-                              key={idx} 
-                              variant={metaType.includes('GPS') ? 'destructive' : 'secondary'}
-                              className="text-xs"
-                            >
-                              <Trash2 className="w-3 h-3 mr-1" />
-                              {translateMetadataType(metaType)}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-
-                      {meta.metadataFound.length === 0 && (
-                        <div className="flex items-center space-x-1 text-green-600 dark:text-green-400">
-                          <Shield className="w-3 h-3" />
-                          <span className="text-xs">{t('preview.noMetadata')}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* Action Button - Single Primary CTA */}
-        <div className="flex justify-center pt-4">
-          <Button
-            onClick={() => {
-              if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-                // Small haptic to make it feel like an app
-                navigator.vibrate(40);
-              }
-              onConfirm(files);
-            }}
-            className={`w-full md:w-auto h-12 md:h-14 px-8 text-white text-base font-semibold rounded-xl shadow-sm transition-colors ${
-              hasOnlyOtherMetadata
-                ? 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
-                : (hasCriticalMetadata
-                    ? 'bg-red-600 hover:bg-red-700 active:bg-red-800'
-                    : 'bg-orange-600 hover:bg-orange-700 active:bg-orange-800')
-            }`}
-          >
-            <Trash2 className="w-5 h-5 mr-2" />
-            {hasOnlyOtherMetadata
-              ? `Clean ${otherMetadata} Minor Items`
-              : t('preview.confirmButton', { count: totalMetadataItems })
-            }
-          </Button>
-        </div>
-
-        {/* Privacy Notice */}
-        <div className="text-center">
-          <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-2">
-            <div className="flex items-center justify-center space-x-2 text-green-800 dark:text-green-200">
-              <Shield className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {t('preview.privacyNotice')}
-              </span>
+              <Button
+                type="button"
+                disabled={!pickedLocation}
+                onClick={() => {
+                  if (!pickedLocation) return;
+                  onApplyLocationFromMap(pickedLocation.latitude, pickedLocation.longitude);
+                  setIsMapOpen(false);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {t('table.map.applySelected') || 'Apply to selected'}
+              </Button>
             </div>
           </div>
-          <div className="text-xs text-muted-foreground">
-            Press ESC to go back
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

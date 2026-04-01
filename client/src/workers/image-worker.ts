@@ -1,11 +1,18 @@
 // Web Worker for processing images in background
-import { ProcessingOptions } from '@/types';
+import piexif from 'piexifjs';
+import { GpsCoordinate, ProcessingOperation, ProcessingOptions } from '@/types';
 
 interface WorkerMessage {
   type: 'PROCESS_IMAGE';
   file: File;
   options: ProcessingOptions;
   id: string;
+  operation?: ProcessingOperation;
+  gpsLocation?: GpsCoordinate;
+  metadataEdit?: {
+    dateTime?: string;
+    device?: string;
+  };
 }
 
 interface WorkerResponse {
@@ -16,8 +23,76 @@ interface WorkerResponse {
   error?: string;
 }
 
+const toRational = (value: number, scale = 1000000): [number, number] => {
+  const numerator = Math.round(value * scale);
+  return [numerator, scale];
+};
+
+const toGpsDms = (decimal: number): [[number, number], [number, number], [number, number]] => {
+  const abs = Math.abs(decimal);
+  const degrees = Math.floor(abs);
+  const minutesFloat = (abs - degrees) * 60;
+  const minutes = Math.floor(minutesFloat);
+  const seconds = (minutesFloat - minutes) * 60;
+
+  return [
+    [degrees, 1],
+    [minutes, 1],
+    toRational(seconds),
+  ];
+};
+
+const blobToDataUrl = async (blob: Blob): Promise<string> => {
+  return await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error('Failed to read image blob as data URL'));
+    reader.readAsDataURL(blob);
+  });
+};
+
+const applyMetadataToJpeg = async (
+  jpegBlob: Blob,
+  gps: GpsCoordinate | undefined,
+  metadataEdit: { dateTime?: string; device?: string } | undefined
+): Promise<Blob> => {
+  const dataUrl = await blobToDataUrl(jpegBlob);
+  const dateTime = metadataEdit?.dateTime?.trim() || '';
+  const device = metadataEdit?.device?.trim() || '';
+  const exifObj = {
+    '0th': {},
+    Exif: {},
+    GPS: gps
+      ? {
+          [piexif.GPSIFD.GPSLatitudeRef]: gps.latitude >= 0 ? 'N' : 'S',
+          [piexif.GPSIFD.GPSLatitude]: toGpsDms(gps.latitude),
+          [piexif.GPSIFD.GPSLongitudeRef]: gps.longitude >= 0 ? 'E' : 'W',
+          [piexif.GPSIFD.GPSLongitude]: toGpsDms(gps.longitude),
+        }
+      : {},
+    Interop: {},
+    '1st': {},
+    thumbnail: undefined,
+  } as any;
+
+  if (dateTime) {
+    exifObj['0th'][piexif.ImageIFD.DateTime] = dateTime;
+    exifObj.Exif[piexif.ExifIFD.DateTimeOriginal] = dateTime;
+    exifObj.Exif[piexif.ExifIFD.DateTimeDigitized] = dateTime;
+  }
+  if (device) {
+    exifObj['0th'][piexif.ImageIFD.Model] = device;
+    exifObj['0th'][piexif.ImageIFD.Make] = 'SecureGPS';
+  }
+
+  const exifBytes = piexif.dump(exifObj);
+  const inserted = piexif.insert(exifBytes, dataUrl);
+  const response = await fetch(inserted);
+  return await response.blob();
+};
+
 self.onmessage = async (event: MessageEvent<WorkerMessage>) => {
-  const { type, file, options, id } = event.data;
+  const { type, file, options, id, operation = 'remove', gpsLocation, metadataEdit } = event.data;
   
   if (type === 'PROCESS_IMAGE') {
     try {
@@ -44,25 +119,33 @@ self.onmessage = async (event: MessageEvent<WorkerMessage>) => {
       ctx.drawImage(imageBitmap, 0, 0);
       
       // Determine output format
-      let outputType = file.type;
-      if (options.forceJPEG || file.type === 'image/jpeg') {
-        outputType = 'image/jpeg';
-      }
-      
-      // Convert to blob
-      const blob = await canvas.convertToBlob({
+      const outputType = operation === 'edit'
+        ? 'image/jpeg'
+        : (options.forceJPEG || file.type === 'image/jpeg')
+          ? 'image/jpeg'
+          : file.type;
+
+      let blob = await canvas.convertToBlob({
         type: outputType,
-        quality: outputType === 'image/jpeg' || outputType === 'image/webp' 
-          ? options.quality / 100 
+        quality: outputType === 'image/jpeg' || outputType === 'image/webp'
+          ? options.quality / 100
           : undefined
       });
+
+      if (operation === 'edit') {
+        blob = await applyMetadataToJpeg(blob, gpsLocation, metadataEdit);
+      }
+
+      imageBitmap.close();
       
       // Generate clean filename
       const nameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.'));
       const extension = file.name.split('.').pop()?.toLowerCase() || '';
       
       let filename: string;
-      if (options.forceJPEG && ['png', 'webp'].includes(extension)) {
+      if (operation === 'edit') {
+        filename = `${nameWithoutExt}_geotag.jpg`;
+      } else if (options.forceJPEG && ['png', 'webp'].includes(extension)) {
         filename = `${nameWithoutExt}_clean.jpg`;
       } else {
         filename = `${nameWithoutExt}_clean.${extension}`;

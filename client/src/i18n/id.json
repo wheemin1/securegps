@@ -122,7 +122,8 @@
       "prepareDownloadFailed": "Gagal menyiapkan unduhan. Silakan coba lagi.",
       "noSuccessfulFiles": "Tidak ada file yang berhasil diproses.",
       "fileTooLargeTitle": "File terlalu besar",
-      "fileTooLargeDescription": "File harus lebih kecil dari {maxSize}. {filename} terlalu besar."    },
+      "fileTooLargeDescription": "File harus lebih kecil dari {maxSize}. {filename} terlalu besar."
+    },
     "warnings": {
       "metadataRemainingTitle": "Metadata Mungkin Tersisa",
       "metadataRemainingDescription": "{filename} mungkin masih mengandung beberapa metadata. Ini dapat terjadi pada format file tertentu atau struktur metadata yang kompleks."
@@ -134,7 +135,8 @@
       "startedSingle": "Gambar bersih Anda sedang diunduh.",
       "startedZip": "{count} gambar bersih Anda sedang diunduh sebagai file ZIP.",
       "failedTitle": "Unduhan Gagal",
-      "failedDescription": "Gagal mengunduh file. Silakan coba lagi."    },
+      "failedDescription": "Gagal mengunduh file. Silakan coba lagi."
+    },
     "share": {
       "title": "Bagikan dengan teman",
       "copyLink": "Salin tautan",
@@ -147,6 +149,63 @@
         "title": "Kesalahan",
         "description": "Gagal menyalin ke clipboard"
       }
+    }
+  },
+  "table": {
+    "title": "Instant Matrix Editor",
+    "subtitle": "Top 3 first: Location, Time, Device.",
+    "mode": {
+      "remove": "Remove",
+      "edit": "Add / Edit"
+    },
+    "columns": {
+      "file": "File",
+      "location": "Location (GPS)",
+      "time": "Date / Time",
+      "device": "Device",
+      "state": "State",
+      "more": "More"
+    },
+    "details": {
+      "title": "Detailed metadata",
+      "none": "No additional metadata"
+    },
+    "status": {
+      "detected": "Detected",
+      "empty": "Empty",
+      "invalid": "Invalid"
+    },
+    "rowState": {
+      "analyzing": "Analyzing",
+      "ready": "Ready",
+      "processing": "Processing",
+      "done": "Done",
+      "failed": "Failed"
+    },
+    "actions": {
+      "reset": "Reset",
+      "applyEdits": "Apply edits",
+      "removeAll": "Remove metadata"
+    },
+    "quick": {
+      "selected": "Selected {count}",
+      "safeMode": "Safe mode",
+      "clearLocation": "Clear location",
+      "bulkLat": "Bulk latitude",
+      "bulkLng": "Bulk longitude",
+      "applyLocation": "Apply location",
+      "pickOnMap": "Pick on map",
+      "timeOffset": "Time offset",
+      "timeAbsolute": "Absolute time",
+      "applyTime": "Apply time"
+    },
+    "map": {
+      "title": "Select location on map",
+      "subtitle": "Click on map and apply to selected rows.",
+      "close": "Close",
+      "picked": "Picked",
+      "noPick": "No point selected",
+      "applySelected": "Apply to selected"
     }
   }
 }

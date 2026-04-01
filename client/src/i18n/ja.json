@@ -71,7 +71,7 @@
     "gpsNoDescription": "GPSデータは検出されませんでした",
     "exifFound": "発見",
     "exifNone": "なし",
-    "exifDescription": "EXIFデータが削除されます", 
+    "exifDescription": "EXIFデータが削除されます",
     "exifNoDescription": "カメラデータは検出されませんでした",
     "filesCount": "{count}個のファイルを清浄化予定",
     "noMetadata": "メタデータは検出されませんでした",
@@ -198,7 +198,8 @@
       "prepareDownloadFailed": "ダウンロードの準備に失敗しました。もう一度お試しください。",
       "noSuccessfulFiles": "正常に処理されたファイルがありません。",
       "fileTooLargeTitle": "ファイルサイズが大きすぎます",
-      "fileTooLargeDescription": "ファイルは{maxSize}より小さくする必要があります。{filename}は大きすぎます。"    },
+      "fileTooLargeDescription": "ファイルは{maxSize}より小さくする必要があります。{filename}は大きすぎます。"
+    },
     "warnings": {
       "metadataRemainingTitle": "メタデータが残る可能性",
       "metadataRemainingDescription": "{filename}に一部のメタデータが残る可能性があります。特定のファイル形式や複雑なメタデータ構造で発生することがあります。"
@@ -210,7 +211,8 @@
       "startedSingle": "クリーンな画像をダウンロード中です。",
       "startedZip": "{count}個のクリーンな画像をZIPファイルとしてダウンロード中です。",
       "failedTitle": "ダウンロード失敗",
-      "failedDescription": "ファイルのダウンロードに失敗しました。再試行してください。"    },
+      "failedDescription": "ファイルのダウンロードに失敗しました。再試行してください。"
+    },
     "share": {
       "title": "友達と共有",
       "copyLink": "リンクをコピー",
@@ -223,6 +225,63 @@
         "title": "エラー",
         "description": "クリップボードへのコピーに失敗しました"
       }
+    }
+  },
+  "table": {
+    "title": "Instant Matrix Editor",
+    "subtitle": "Top 3 first: Location, Time, Device.",
+    "mode": {
+      "remove": "Remove",
+      "edit": "Add / Edit"
+    },
+    "columns": {
+      "file": "File",
+      "location": "Location (GPS)",
+      "time": "Date / Time",
+      "device": "Device",
+      "state": "State",
+      "more": "More"
+    },
+    "details": {
+      "title": "Detailed metadata",
+      "none": "No additional metadata"
+    },
+    "status": {
+      "detected": "Detected",
+      "empty": "Empty",
+      "invalid": "Invalid"
+    },
+    "rowState": {
+      "analyzing": "Analyzing",
+      "ready": "Ready",
+      "processing": "Processing",
+      "done": "Done",
+      "failed": "Failed"
+    },
+    "actions": {
+      "reset": "Reset",
+      "applyEdits": "Apply edits",
+      "removeAll": "Remove metadata"
+    },
+    "quick": {
+      "selected": "Selected {count}",
+      "safeMode": "Safe mode",
+      "clearLocation": "Clear location",
+      "bulkLat": "Bulk latitude",
+      "bulkLng": "Bulk longitude",
+      "applyLocation": "Apply location",
+      "pickOnMap": "Pick on map",
+      "timeOffset": "Time offset",
+      "timeAbsolute": "Absolute time",
+      "applyTime": "Apply time"
+    },
+    "map": {
+      "title": "Select location on map",
+      "subtitle": "Click on map and apply to selected rows.",
+      "close": "Close",
+      "picked": "Picked",
+      "noPick": "No point selected",
+      "applySelected": "Apply to selected"
     }
   }
 }

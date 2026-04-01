@@ -10,10 +10,10 @@ export function PWAUpdatePrompt() {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegistered(r) {
+    onRegistered(_registration: ServiceWorkerRegistration | undefined) {
       // SW Registered
     },
-    onRegisterError(error) {
+    onRegisterError(_error: unknown) {
       // SW registration error
     },
   });

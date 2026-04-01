@@ -122,7 +122,8 @@
       "prepareDownloadFailed": "Échec de la préparation du téléchargement. Veuillez réessayer.",
       "noSuccessfulFiles": "Aucun fichier n'a été traité avec succès.",
       "fileTooLargeTitle": "Fichier trop volumineux",
-      "fileTooLargeDescription": "Les fichiers doivent être inférieurs à {maxSize}. {filename} est trop volumineux."    },
+      "fileTooLargeDescription": "Les fichiers doivent être inférieurs à {maxSize}. {filename} est trop volumineux."
+    },
     "warnings": {
       "metadataRemainingTitle": "Des Métadonnées Peuvent Rester",
       "metadataRemainingDescription": "{filename} peut encore contenir certaines métadonnées. Cela peut se produire avec certains formats de fichier ou des structures de métadonnées complexes."
@@ -134,7 +135,8 @@
       "startedSingle": "Votre image nettoyée est en cours de téléchargement.",
       "startedZip": "Vos {count} images nettoyées sont en cours de téléchargement dans un fichier ZIP.",
       "failedTitle": "Échec du Téléchargement",
-      "failedDescription": "Échec du téléchargement du fichier. Veuillez réessayer."    },
+      "failedDescription": "Échec du téléchargement du fichier. Veuillez réessayer."
+    },
     "share": {
       "title": "Partager avec des amis",
       "copyLink": "Copier le lien",
@@ -147,6 +149,63 @@
         "title": "Erreur",
         "description": "Échec de la copie dans le presse-papiers"
       }
+    }
+  },
+  "table": {
+    "title": "Instant Matrix Editor",
+    "subtitle": "Top 3 first: Location, Time, Device.",
+    "mode": {
+      "remove": "Remove",
+      "edit": "Add / Edit"
+    },
+    "columns": {
+      "file": "File",
+      "location": "Location (GPS)",
+      "time": "Date / Time",
+      "device": "Device",
+      "state": "State",
+      "more": "More"
+    },
+    "details": {
+      "title": "Detailed metadata",
+      "none": "No additional metadata"
+    },
+    "status": {
+      "detected": "Detected",
+      "empty": "Empty",
+      "invalid": "Invalid"
+    },
+    "rowState": {
+      "analyzing": "Analyzing",
+      "ready": "Ready",
+      "processing": "Processing",
+      "done": "Done",
+      "failed": "Failed"
+    },
+    "actions": {
+      "reset": "Reset",
+      "applyEdits": "Apply edits",
+      "removeAll": "Remove metadata"
+    },
+    "quick": {
+      "selected": "Selected {count}",
+      "safeMode": "Safe mode",
+      "clearLocation": "Clear location",
+      "bulkLat": "Bulk latitude",
+      "bulkLng": "Bulk longitude",
+      "applyLocation": "Apply location",
+      "pickOnMap": "Pick on map",
+      "timeOffset": "Time offset",
+      "timeAbsolute": "Absolute time",
+      "applyTime": "Apply time"
+    },
+    "map": {
+      "title": "Select location on map",
+      "subtitle": "Click on map and apply to selected rows.",
+      "close": "Close",
+      "picked": "Picked",
+      "noPick": "No point selected",
+      "applySelected": "Apply to selected"
     }
   }
 }

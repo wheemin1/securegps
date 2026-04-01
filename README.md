@@ -120,5 +120,12 @@
    - 다운로드 권한 허용
 
 
+## ✅ QA 실행 가이드
+
+- 디바이스별 점검표: `QA_DEVICE_MATRIX.md`
+- 테스트 결과 기록 템플릿: `QA_RESULT_TEMPLATE.md`
+- editSummary 시나리오 체크리스트: `EDIT_SUMMARY_CHECKLIST.md`
+
+
 
 **보안과 개인정보 보호를 최우선으로 하는 이미지 메타데이터 제거 도구**

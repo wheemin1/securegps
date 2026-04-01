@@ -16,13 +16,23 @@
     "mainDescription": "GPS स्थान और जियोटैग डेटा तुरंत हटाएं। मुफ्त टूल। फोन और डेस्कटॉप पर काम करता है। शून्य अपलोड।"
   },
   "dropzone": {
-    "title": "तस्वीरों से GPS स्थान और जियोटैग हटाएं",
-    "supportedFormats": "JPEG, PNG, WebP • 100% ऑफलाइन • शून्य अपलोड",
-    "chooseFiles": "तस्वीरें चुनें",
-    "features": {
-      "noUpload": "शून्य अपलोड",
-      "private": "100% ऑफलाइन",
-      "instant": "तुरंतप्रोसेसिंग"
+    "scan": {
+      "readingExif": "EXIF डेटा पढ़ रहे हैं",
+      "detectingGps": "GPS निर्देशांक का पता लगा रहे हैं",
+      "checkingDevice": "डिवाइस विवरण जांच रहे हैं",
+      "buildingReport": "रिपोर्ट तैयार कर रहे हैं",
+      "foundCoords": "⚠️ GPS स्थान पाया गया!",
+      "foundTagsOnly": "GPS टैग पाए गए",
+      "noGps": "✅ कोई GPS डेटा नहीं"
+    },
+    "processing": {
+      "terminalSteps": [
+        "मेटाडेटा स्ट्रिप्स प्रारंभ कर रहे हैं...",
+        "GPS निर्देशांक हटा रहे हैं...",
+        "डिवाइस पहचानकर्ता साफ कर रहे हैं...",
+        "समय डेटा हटा रहे हैं...",
+        "सभी ट्रैकिंग डेटा हटा दिया गया ✓"
+      ]
     }
   },
   "processing": {
@@ -61,26 +71,6 @@
     "foundTagsOnly": "GPS टैग पाए गए (निर्देशांक नहीं)",
     "noGps": "✅ कोई GPS डेटा नहीं पाया गया"
   },
-  "dropzone": {
-    "scan": {
-      "readingExif": "EXIF डेटा पढ़ रहे हैं",
-      "detectingGps": "GPS निर्देशांक का पता लगा रहे हैं",
-      "checkingDevice": "डिवाइस विवरण जांच रहे हैं",
-      "buildingReport": "रिपोर्ट तैयार कर रहे हैं",
-      "foundCoords": "⚠️ GPS स्थान पाया गया!",
-      "foundTagsOnly": "GPS टैग पाए गए",
-      "noGps": "✅ कोई GPS डेटा नहीं"
-    },
-    "processing": {
-      "terminalSteps": [
-        "मेटाडेटा स्ट्रिप्स प्रारंभ कर रहे हैं...",
-        "GPS निर्देशांक हटा रहे हैं...",
-        "डिवाइस पहचानकर्ता साफ कर रहे हैं...",
-        "समय डेटा हटा रहे हैं...",
-        "सभी ट्रैकिंग डेटा हटा दिया गया ✓"
-      ]
-    }
-  },
   "metadata": {
     "title": "🛡️ मेटाडेटा रिपोर्ट",
     "noMetadata": "कोई मेटाडेटा नहीं पाया गया",
@@ -94,7 +84,7 @@
       "viewOnMap": "मानचित्र पर देखें"
     },
     "sections": {
-      "location":  "स्थान जानकारी",
+      "location": "स्थान जानकारी",
       "device": "डिवाइस मेटाडेटा",
       "timestamps": "समय टिकट",
       "other": "अन्य मेटाडेटा"
@@ -208,6 +198,63 @@
         "title": "त्रुटि",
         "description": "क्लिपबोर्ड में कॉपी करने में विफल"
       }
+    }
+  },
+  "table": {
+    "title": "Instant Matrix Editor",
+    "subtitle": "Top 3 first: Location, Time, Device.",
+    "mode": {
+      "remove": "Remove",
+      "edit": "Add / Edit"
+    },
+    "columns": {
+      "file": "File",
+      "location": "Location (GPS)",
+      "time": "Date / Time",
+      "device": "Device",
+      "state": "State",
+      "more": "More"
+    },
+    "details": {
+      "title": "Detailed metadata",
+      "none": "No additional metadata"
+    },
+    "status": {
+      "detected": "Detected",
+      "empty": "Empty",
+      "invalid": "Invalid"
+    },
+    "rowState": {
+      "analyzing": "Analyzing",
+      "ready": "Ready",
+      "processing": "Processing",
+      "done": "Done",
+      "failed": "Failed"
+    },
+    "actions": {
+      "reset": "Reset",
+      "applyEdits": "Apply edits",
+      "removeAll": "Remove metadata"
+    },
+    "quick": {
+      "selected": "Selected {count}",
+      "safeMode": "Safe mode",
+      "clearLocation": "Clear location",
+      "bulkLat": "Bulk latitude",
+      "bulkLng": "Bulk longitude",
+      "applyLocation": "Apply location",
+      "pickOnMap": "Pick on map",
+      "timeOffset": "Time offset",
+      "timeAbsolute": "Absolute time",
+      "applyTime": "Apply time"
+    },
+    "map": {
+      "title": "Select location on map",
+      "subtitle": "Click on map and apply to selected rows.",
+      "close": "Close",
+      "picked": "Picked",
+      "noPick": "No point selected",
+      "applySelected": "Apply to selected"
     }
   }
 }

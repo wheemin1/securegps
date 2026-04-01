@@ -4,7 +4,7 @@
     "description": "Stop Photo Tracking & Remove Location Offline",
     "icons": [
         {
-            "src": "/og-image.svg",
+            "src": "/globe-favicon.svg",
             "sizes": "any",
             "type": "image/svg+xml",
             "purpose": "any"
@@ -25,7 +25,7 @@
             "short_name": "Remove GPS",
             "description": "Remove GPS from photos",
             "url": "/?action=remove",
-            "icons": [{ "src": "/og-image.svg", "sizes": "any", "type": "image/svg+xml" }]
+            "icons": [{ "src": "/globe-favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
         }
     ]
 }
